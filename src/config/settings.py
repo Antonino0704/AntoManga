@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
 
     'publishers',
+    'series'
 ]
 
 MIDDLEWARE = [
@@ -127,7 +128,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-MEDIA_ROOT = BASE_DIR / 'static'
+MEDIA_ROOT = BASE_DIR / 'static/images'
 MEDIA_URL = '/media/'
 
 LOGIN_URL = "/accounts/login/"

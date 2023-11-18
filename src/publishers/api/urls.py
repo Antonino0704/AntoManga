@@ -5,7 +5,7 @@ from publishers.api.views import PublisherViewSet, ImagePublisherViewSet
 
 router = DefaultRouter()
 router.register(r"publishers", PublisherViewSet)
-router.register(r"publishers-image", ImagePublisherViewSet)
+router.register(r"image/publishers", ImagePublisherViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),

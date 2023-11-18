@@ -1,0 +1,21 @@
+from django.db import models
+from publishers.models import Publisher
+
+
+class Typology(models.Model):
+    name = models.CharField(max_length=20)
+
+class Serie(models.Model):
+    name = models.CharField(max_length=50)
+    slug = models.SlugField()
+    image = models.ImageField()
+    n_volumes = models.IntegerField()
+    volumes_bought = models.IntegerField()
+    missed_volumes = models.IntegerField()
+    volumes_read = models.IntegerField()
+    publisher = models.ForeignKey(Publisher,
+                                  on_delete=models.CASCADE,
+                                  related_name="series")
+    typology = models.ForeignKey(Typology,
+                                 on_delete=models.CASCADE,
+                                 related_name="series_typology")
