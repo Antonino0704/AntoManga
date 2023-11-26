@@ -7,6 +7,8 @@ from series.models import Serie
 
 @receiver(pre_save, sender=Serie)
 def add_slug_to_question(sender, instance, *args, **kwargs):
+    if instance.n_volumes <= 0 or instance.volumes_bought < 0 or instance.volumes_read < 0:
+        raise Exception("the volumes can't be negative")
     if instance.n_volumes < instance.volumes_bought:
         raise Exception("the volumes bought can't be more than total volumes")
     if instance.volumes_bought < instance.volumes_read:

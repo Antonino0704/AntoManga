@@ -8,7 +8,3 @@ from publishers.models import Publisher
 @receiver(pre_save, sender=Publisher)
 def add_slug_to_question(sender, instance, *args, **kwargs):
     instance.slug = slugify(instance.name)
-
-@receiver(post_save, sender=Publisher)
-def add_slug_to_question(sender, instance, *args, **kwargs):
-    instance.slug = slugify(instance.name)

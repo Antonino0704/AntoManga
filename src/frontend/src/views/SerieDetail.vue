@@ -1,9 +1,120 @@
 <template>
-    <div class="serie-detail">TO DO</div>
+	<div class="serie-detail container-sm mt-3">
+		<router-link :to="{ name: 'AddSerie' }" class="btn btn-outline-info mb-3"
+				>Add A New Manga
+			</router-link>
+		<div class="card mb-3">
+			<img :src="imageSerie" class="card-img-top image-serie" style="width: 100px; height: 100px" />
+			<div class="card-body">
+				<div class="list-inline-item">
+					<h5 class="card-title list-inline-item">{{ serie.name }}</h5>
+					<router-link
+						:to="{ name: 'SerieEditor', params: { slug: this.serie.slug } }"
+						class="list-inline-item ms-2"
+					>
+						<!--pen logo from bootstrap-->
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="16"
+							height="16"
+							fill="currentColor"
+							class="bi bi-pen"
+							viewBox="0 0 16 16"
+						>
+							<path
+								d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"
+							/>
+						</svg>
+					</router-link>
+
+					<!--bin icon from bootstrap-->
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="20"
+						height="20"
+						fill="currentColor"
+						class="bi bi-trash list-inline-item text-warning"
+						viewBox="0 0 16 16"
+						@click="deleteSerie()"
+					>
+						<path
+							d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
+						/>
+						<path
+							d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
+						/>
+					</svg>
+				</div>
+
+				<p class="card-text">
+					<small class="text-body-secondary">Type: {{ serie.typology_name }}</small>
+				</p>
+			</div>
+		</div>
+
+		<serieDetailStats :slug="slug" />
+
+		<ActionNotification
+			class="position-absolute top-0 start-50 translate-middle-x"
+			ref="actionNotification"
+		/>
+	</div>
 </template>
 
 <script lang="ts">
+import { apiService } from '../utils/APIService';
+import serieDetailStats from '../components/SerieDetailStatistics.vue';
+import ActionNotification from '../components/ActionNotification.vue';
+
 export default {
-    name: 'SerieDetail'
+	name: 'SerieDetail',
+	props: {
+		slug: {
+			type: String,
+			required: true
+		}
+	},
+	data() {
+		return {
+			serie: {},
+			imageSerie: ''
+		};
+	},
+	components: {
+		serieDetailStats,
+		ActionNotification
+	},
+	methods: {
+		getSerieData() {
+			apiService(`series/${this.slug}/`).then((data: object) => {
+				this.serie = data;
+			});
+		},
+		getImageSerie() {
+			apiService(`image/series/${this.slug}/`).then((data: object) => {
+				this.imageSerie = data.image;
+			});
+		},
+		deleteSerie() {
+			this.$refs.actionNotification.sendNotification(
+				'are you sure? you will no longer be able to retrieve the data',
+				`${this.serie.name} deleted`,
+				`series/${this.slug}/`
+			);
+		}
+	},
+	created() {
+		this.getSerieData();
+		this.getImageSerie();
+	}
 };
 </script>
+
+<style>
+.image-serie {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 50%;
+}
+</style>
