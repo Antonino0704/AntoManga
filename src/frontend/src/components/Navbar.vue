@@ -23,6 +23,15 @@
 				/>
 				<button class="btn btn-outline-success" @click="search()">Search</button>
 			</div>
+
+			<router-link
+				:to="{ name: 'TypeView' }"
+				type="button"
+				class="btn btn-outline-secondary me-2 ms-1 mt-2 mb-1"
+				style="--bs-btn-padding-y: 0.25rem; --bs-btn-padding-x: 0.5rem; --bs-btn-font-size: 0.75rem"
+			>
+				Types
+			</router-link>
 		</nav>
 	</div>
 </template>
@@ -48,10 +57,13 @@ export default {
 			});
 		},
 		search() {
-			search(
-				document.getElementById('searchBar').value.toLowerCase(),
-				this.types[this.statusFilter].name.toLowerCase()
-			);
+			let nameLower = '';
+			this.types.forEach((element: Object) => {
+				if (this.statusFilter === element.id) {
+					nameLower = element.name.toLowerCase();
+				}
+			});
+			search(document.getElementById('searchBar').value.toLowerCase(), nameLower);
 		}
 	},
 	created() {
