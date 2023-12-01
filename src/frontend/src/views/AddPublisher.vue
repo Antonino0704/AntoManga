@@ -65,7 +65,6 @@
 <script lang="ts">
 import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
-import slugify from 'slugify';
 
 export default {
 	name: 'AddPublisher',
@@ -77,7 +76,6 @@ export default {
 			},
 			formData: new FormData(),
 			imageUploaded: false,
-			SlugsPublishers: [],
 			error: ''
 		};
 	},
@@ -85,13 +83,6 @@ export default {
 		Notification
 	},
 	methods: {
-		getSlugsPublishers() {
-			apiService('publishers/').then((data: Array<Object>) => {
-				data.forEach((element: object) => {
-					this.SlugsPublishers.push(element.slug);
-				});
-			});
-		},
 		addImage(event: Event) {
 			//doesn't add the image to the server
 			if (event.target.files[0].type.startsWith('image/')) {
@@ -135,8 +126,7 @@ export default {
 				this.error = "title or description can't be blank";
 				return false;
 			}
-			this.error = 'title already exists';
-			return !this.SlugsPublishers.includes(slugify(this.publisher.name, { lower: true }));
+			return true;
 		},
 		showErrors() {
 			if (!this.imageUploaded) {
@@ -149,9 +139,6 @@ export default {
 				document.getElementById('floatingTextarea').className = 'form-control is-invalid';
 			}
 		}
-	},
-	created() {
-		this.getSlugsPublishers();
 	}
 };
 </script>

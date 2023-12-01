@@ -82,7 +82,6 @@ export default {
 		return {
 			serie: {},
 			imageSerie: '',
-			SlugsSeries: [],
 			types: [],
 			publishers: [],
 			error: ''
@@ -96,18 +95,8 @@ export default {
 		getSerieData() {
 			apiService(`series/${this.slug}/`).then((data: object) => {
 				this.serie = data;
-				this.getSlugsSeries();
 				this.getTypes();
 				this.getPublishers();
-			});
-		},
-		getSlugsSeries() {
-			apiService('series/').then((data: Array<Object>) => {
-				data.forEach((element: Object) => {
-					if (element.slug !== this.serie.slug) {
-						this.SlugsSeries.push(element.slug);
-					}
-				});
 			});
 		},
 		getTypes() {
@@ -162,8 +151,7 @@ export default {
 				this.error = "title can't be blank";
 				return false;
 			}
-			this.error = 'title already exists';
-			return !this.SlugsSeries.includes(slugify(this.serie.name, { lower: true }));
+			return true;
 		},
 		updateImage(event: Event) {
 			try {

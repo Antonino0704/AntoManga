@@ -117,7 +117,6 @@
 <script lang="ts">
 import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
-import slugify from 'slugify';
 
 export default {
 	name: 'AddSerie',
@@ -132,7 +131,6 @@ export default {
 			imageUploaded: false,
 			types: [],
 			publishers: [],
-			SlugsSeries: [],
 			error: ''
 		};
 	},
@@ -164,13 +162,6 @@ export default {
 					document.getElementById('publisherSelect')[0].selected = true;
 					document.getElementById('publisherSelect').className = 'form-select-sm';
 				}, 500);
-			});
-		},
-		getSlugsSeries() {
-			apiService('series/').then((data: Array<Object>) => {
-				data.forEach((element: Object) => {
-					this.SlugsSeries.push(element.slug);
-				});
 			});
 		},
 		addImage(event: Event) {
@@ -227,8 +218,7 @@ export default {
 				this.error = 'Errors with numbering';
 				return false;
 			}
-			this.error = 'title already exists';
-			return !this.SlugsSeries.includes(slugify(this.serie.name, { lower: true }));
+			return true;
 		},
 		showErrors() {
 			if (!this.imageUploaded) {
@@ -255,7 +245,6 @@ export default {
 		}
 	},
 	created() {
-		this.getSlugsSeries();
 		this.getTypes();
 		this.getPublishers();
 	}

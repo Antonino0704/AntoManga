@@ -7,7 +7,7 @@ class Typology(models.Model):
 
 class Serie(models.Model):
     name = models.CharField(max_length=50)
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
     image = models.ImageField()
     n_volumes = models.IntegerField()
     volumes_bought = models.IntegerField()

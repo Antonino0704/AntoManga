@@ -51,7 +51,6 @@
 <script lang="ts">
 import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
-import slugify from 'slugify';
 import NotFound from '../views/NotFound.vue';
 
 export default {
@@ -60,7 +59,6 @@ export default {
 		return {
 			publisher: {},
 			imagePublisher: '',
-			SlugsPublishers: [],
 			error: ''
 		};
 	},
@@ -78,21 +76,11 @@ export default {
 		getPublisherData() {
 			apiService(`publishers/${this.slug}/`).then((data: object) => {
 				this.publisher = data;
-				this.getSlugsPublishers();
 			});
 		},
 		getImagePublisherData() {
 			apiService(`image/publishers/${this.slug}/`).then((data: object) => {
 				this.imagePublisher = data.image;
-			});
-		},
-		getSlugsPublishers() {
-			apiService('publishers/').then((data: Array<Object>) => {
-				data.forEach((element: object) => {
-					if (element.slug !== this.publisher.slug) {
-						this.SlugsPublishers.push(element.slug);
-					}
-				});
 			});
 		},
 		Update() {
@@ -120,8 +108,7 @@ export default {
 				this.error = "title or description can't be blank";
 				return false;
 			}
-			this.error = 'title already exists';
-			return !this.SlugsPublishers.includes(slugify(this.publisher.name, { lower: true }));
+			return true;
 		},
 		showErrors() {
 			if (!this.publisher.name) {
