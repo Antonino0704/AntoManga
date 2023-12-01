@@ -1,5 +1,8 @@
 <template>
-	<div class="serie-editor">
+	<div v-if="serie.detail">
+		<NotFound message="SERIE NOT FOUND" />
+	</div>
+	<div v-else class="serie-editor">
 		<form class="list-inline" @submit.prevent="Update">
 			<h1 class="list-inline-item mt-2">EDIT PAGE</h1>
 			<div class="list-inline-item row g-2">
@@ -65,6 +68,7 @@
 import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import slugify from 'slugify';
+import NotFound from '../views/NotFound.vue';
 
 export default {
 	name: 'SerieEditor',
@@ -85,7 +89,8 @@ export default {
 		};
 	},
 	components: {
-		Notification
+		Notification,
+		NotFound
 	},
 	methods: {
 		getSerieData() {
@@ -161,7 +166,7 @@ export default {
 			return !this.SlugsSeries.includes(slugify(this.serie.name, { lower: true }));
 		},
 		updateImage(event: Event) {
-            try {
+			try {
 				if (event.target.files[0].type.startsWith('image/')) {
 					let data = new FormData();
 					data.append('image', event.target.files[0]);
@@ -182,7 +187,7 @@ export default {
 			} catch (error) {
 				console.log(error);
 			}
-        }
+		}
 	},
 	created() {
 		this.getSerieData();

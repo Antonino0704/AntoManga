@@ -1,5 +1,8 @@
 <template>
-	<div class="publisher-detail container-sm">
+	<div v-if="publisher.detail">
+		<NotFound message="PUBLISHER NOT FOUND" />
+	</div>
+	<div v-else class="publisher-detail container-sm">
 		<div class="mt-2">
 			<router-link :to="{ name: 'AddPublisher' }" class="btn btn-outline-info"
 				>Add New Publisher
@@ -77,6 +80,7 @@
 <script lang="ts">
 import { apiService } from '../utils/APIService';
 import ActionNotification from '../components/ActionNotification.vue';
+import NotFound from '../views/NotFound.vue';
 
 export default {
 	name: 'PublisherDetail',
@@ -95,7 +99,8 @@ export default {
 		};
 	},
 	components: {
-		ActionNotification
+		ActionNotification,
+		NotFound
 	},
 	methods: {
 		getPublisherData() {

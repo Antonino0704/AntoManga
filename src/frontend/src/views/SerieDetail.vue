@@ -1,8 +1,11 @@
 <template>
-	<div class="serie-detail container-sm mt-3">
+	<div v-if="serie.detail">
+		<NotFound message="SERIE NOT FOUND" />
+	</div>
+	<div v-else class="serie-detail container-sm mt-3">
 		<router-link :to="{ name: 'AddSerie' }" class="btn btn-outline-info mb-3"
-				>Add A New Manga
-			</router-link>
+			>Add A New Manga
+		</router-link>
 		<div class="card mb-3">
 			<img :src="imageSerie" class="card-img-top image-serie" style="width: 100px; height: 100px" />
 			<div class="card-body">
@@ -65,6 +68,7 @@
 import { apiService } from '../utils/APIService';
 import serieDetailStats from '../components/SerieDetailStatistics.vue';
 import ActionNotification from '../components/ActionNotification.vue';
+import NotFound from '../views/NotFound.vue';
 
 export default {
 	name: 'SerieDetail',
@@ -82,7 +86,8 @@ export default {
 	},
 	components: {
 		serieDetailStats,
-		ActionNotification
+		ActionNotification,
+		NotFound
 	},
 	methods: {
 		getSerieData() {

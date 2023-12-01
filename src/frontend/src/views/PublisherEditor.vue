@@ -1,5 +1,8 @@
 <template>
-	<div class="publisher-editor container-sm mt-3">
+	<div v-if="publisher.detail">
+		<NotFound message="PUBLISHER NOT FOUND" />
+	</div>
+	<div v-else class="publisher-editor container-sm mt-3">
 		<form class="list-inline" @submit.prevent="Update">
 			<h1 class="list-inline-item">EDIT PAGE</h1>
 			<div class="list-inline-item row g-2">
@@ -49,6 +52,7 @@
 import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import slugify from 'slugify';
+import NotFound from '../views/NotFound.vue';
 
 export default {
 	name: 'PublisherEditor',
@@ -61,7 +65,8 @@ export default {
 		};
 	},
 	components: {
-		Notification
+		Notification,
+		NotFound
 	},
 	props: {
 		slug: {

@@ -6,6 +6,8 @@ import AddSerie from '../views/AddSerie.vue';
 import PublisherDetail from '../views/PublisherDetail.vue';
 import PublisherEditor from '../views/PublisherEditor.vue';
 import AddPublisher from '../views/AddPublisher.vue';
+import TypeView from '../views/Types.vue';
+import NotFound from '../views/NotFound.vue';
 
 const router = createRouter({
 	history: createWebHistory('/'),
@@ -30,7 +32,7 @@ const router = createRouter({
 		{
 			path: '/add/serie/',
 			name: 'AddSerie',
-			component: AddSerie,
+			component: AddSerie
 		},
 		{
 			path: '/publisher/:slug',
@@ -48,6 +50,16 @@ const router = createRouter({
 			path: '/add/publisher/',
 			name: 'AddPublisher',
 			component: AddPublisher
+		},
+		{
+			path: '/types/',
+			name: 'TypeView',
+			component: TypeView
+		},
+		{
+			path: '/:pathMatch(.*)*',
+			name: 'NotFound',
+			component: NotFound
 		}
 	]
 });
