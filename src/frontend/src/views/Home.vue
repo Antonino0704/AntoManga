@@ -1,7 +1,6 @@
 <template>
 	<div class="HomeView row justify-content-center">
 		<div class="col-auto">
-			<navbar />
 			<table class="container table">
 				<thead class="fs-1">
 					Series
@@ -41,7 +40,6 @@
 
 <script lang="ts">
 import { apiService } from '../utils/APIService';
-import navbar from '../components/Navbar.vue';
 
 export default {
 	name: 'HomeView',
@@ -50,9 +48,6 @@ export default {
 			series: {},
 			imagesSeries: []
 		};
-	},
-	components: {
-		navbar
 	},
 	methods: {
 		getDataSeries() {
