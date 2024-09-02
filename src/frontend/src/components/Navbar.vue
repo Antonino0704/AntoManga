@@ -2,9 +2,9 @@
 	<div class="navabar row justify-content-center">
 		<div class="col-auto">
 			<nav class="navbar navbar-expand-lg bg-body-tertiary">
-				<router-link class="navbar-brand ms-3 mb-2" :to="{ name: 'Home' }">
+				<a class="navbar-brand ms-3 mb-2" href="/">
 					<img :src="getLogo()" width="30" height="30" alt="logo" />
-				</router-link>
+				</a>
 				<select
 					v-if="isHome"
 					id="selectType"
