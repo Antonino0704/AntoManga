@@ -81,6 +81,7 @@
 import { apiService } from '../utils/APIService';
 import ActionNotification from '../components/ActionNotification.vue';
 import NotFound from '../views/NotFound.vue';
+import type { Series, PublisherDetail } from '../@types/interfaces';
 
 export default {
 	name: 'PublisherDetail',
@@ -92,10 +93,10 @@ export default {
 	},
 	data() {
 		return {
-			publisher: {},
-			series: {},
+			publisher: {} as PublisherDetail,
+			series: [] as Array<Series>,
 			imagePublisher: '',
-			imageSeries: []
+			imageSeries: [] as Array<string>
 		};
 	},
 	components: {
@@ -104,29 +105,29 @@ export default {
 	},
 	methods: {
 		getPublisherData() {
-			apiService(`publishers/${this.slug}/`).then((data: object) => {
+			apiService(`publishers/${this.slug}/`).then((data: PublisherDetail) => {
 				this.publisher = data;
 			});
 		},
 		getImagePublisherData() {
-			apiService(`image/publishers/${this.slug}/`).then((data: object) => {
+			apiService(`image/publishers/${this.slug}/`).then((data: PublisherDetail) => {
 				this.imagePublisher = data.image;
 			});
 		},
 		getseriesData() {
-			apiService(`series-list/${this.slug}/`).then((data: object) => {
+			apiService(`series-list/${this.slug}/`).then((data: Array<Series>) => {
 				this.series = data;
 			});
 		},
 		getImageseriesData() {
-			apiService(`image/series-list/${this.slug}/`).then((data: Array<Object>) => {
+			apiService(`image/series-list/${this.slug}/`).then((data: Array<Series>) => {
 				for (let i = 0; i < data.length; i++) {
 					this.imageSeries.push(data[i].image);
 				}
 			});
 		},
 		deletePublisher() {
-			this.$refs.actionNotification.sendNotification(
+			(<any>this.$refs.actionNotification).sendNotification(
 				'are you sure? you will no longer be able to retrieve the data',
 				'Publisher deleted',
 				`publishers/${this.slug}/`

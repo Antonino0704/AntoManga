@@ -40,23 +40,24 @@
 
 <script lang="ts">
 import { apiService } from '../utils/APIService';
+import type { SeriesViewsetInstance } from '../@types/interfaces';
 
 export default {
 	name: 'HomeView',
 	data() {
 		return {
-			series: {},
-			imagesSeries: []
+			series: [] as Array<SeriesViewsetInstance>,
+			imagesSeries: [] as Array<string>
 		};
 	},
 	methods: {
 		getDataSeries() {
-			apiService('series/').then((data: object) => {
+			apiService('series/').then((data: Array<SeriesViewsetInstance>) => {
 				this.series = data;
 			});
 		},
 		getDataImageSeries() {
-			apiService('image/series/').then((data: Array<Object>) => {
+			apiService('image/series/').then((data: Array<SeriesViewsetInstance>) => {
 				for (let i = 0; i < data.length; i++) {
 					this.imagesSeries.push(data[i].image);
 				}

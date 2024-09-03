@@ -104,7 +104,7 @@
 						</svg>
 					</span>
 					<input
-						:id="'typeID=' + type.id"
+						:id="'typeID' + type.id"
 						type="text"
 						class="form-control"
 						aria-describedby="addon-wrapping"
@@ -122,12 +122,13 @@
 import { apiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import TypesComponent from '../components/TypesComponent.vue';
+import type { Type } from '../@types/interfaces';
 
 export default {
 	name: 'typeView',
 	data() {
 		return {
-			types: [],
+			types: [] as Array<Type>,
 			editIcon: false,
 			loading: false
 		};
@@ -138,14 +139,14 @@ export default {
 	},
 	methods: {
 		getTypesData() {
-			apiService('types/').then((data: Array<object>) => {
+			apiService('types/').then((data: Array<Type>) => {
 				this.types = data;
 			});
 		},
 		edit(disabled = false) {
 			this.changeEditIcon();
 			this.toggleOffList();
-			let statisticsElements = document.getElementsByClassName('statistics');
+			let statisticsElements = document.querySelectorAll('.statistics');
 			let class_ = disabled ? 'list-group-item disabled statistics' : 'list-group-item statistics';
 			for (let i = 0; i < statisticsElements.length; i++) {
 				statisticsElements[i].className = class_;
@@ -156,7 +157,7 @@ export default {
 		},
 		editType() {
 			if (this.checkData()) {
-				let iconType = document.getElementsByClassName('iconType');
+				let iconType = document.querySelectorAll('.iconType');
 
 				for (let i = 0; i < iconType.length; i++) {
 					const id = iconType[i].id.replace('iconTypeId', '');
@@ -164,17 +165,17 @@ export default {
 				}
 				this.edit(true);
 				this.resetErrors();
-				this.$refs.notification.sendNotification('types updated');
+				(<any>this.$refs.notification).sendNotification('types updated');
 			} else {
-				this.$refs.notification.sendNotification('invalid names');
+				(<any>this.$refs.notification).sendNotification('invalid names');
 			}
 		},
 		checkData(): boolean {
 			let feedback = true;
-			this.types.forEach((type: Object) => {
-				document.getElementById('typeID=' + type.id).className = 'form-control';
+			this.types.forEach((type: Type) => {
+				document.querySelector(`#typeID${type.id}`)!.className = 'form-control';
 				if (!type.name || type.name.length > 20) {
-					document.getElementById('typeID=' + type.id).className = 'form-control is-invalid';
+					document.querySelector(`typeID${type.id}`)!.className = 'form-control is-invalid';
 					feedback = false;
 				}
 			});
@@ -186,7 +187,7 @@ export default {
 			this.resetErrors();
 		},
 		toggleOffList() {
-			let iconType = document.getElementsByClassName('iconType');
+			let iconType = document.querySelectorAll<HTMLSpanElement>('.iconType');
 			for (let i = 0; i < iconType.length; i++) {
 				iconType[i].innerHTML =
 					`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-toggle2-off" viewBox="0 0 16 16">
@@ -196,13 +197,13 @@ export default {
 			}
 		},
 		toggleOn(id: number) {
-			let iconType = document.getElementById(`iconTypeId${id}`);
-			if (iconType?.childNodes[0].className.baseVal === 'bi bi-toggle2-off') {
-				iconType.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-toggle-on text-success" viewBox="0 0 16 16">
+			let iconType = document.querySelector<HTMLSpanElement>(`#iconTypeId${id}`);
+			if ((<any>iconType!.childNodes)[0].className.baseVal === 'bi bi-toggle2-off') {
+				iconType!.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-toggle-on text-success" viewBox="0 0 16 16">
                 <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8"/>
                 </svg>`;
 			} else {
-				iconType.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-toggle2-off" viewBox="0 0 16 16">
+				iconType!.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-toggle2-off" viewBox="0 0 16 16">
                     <path d="M9 11c.628-.836 1-1.874 1-3a4.978 4.978 0 0 0-1-3h4a3 3 0 1 1 0 6z"/>
                     <path d="M5 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8m0 1A5 5 0 1 0 5 3a5 5 0 0 0 0 10"/>
                     </svg>`;
@@ -210,19 +211,21 @@ export default {
 		},
 		deleteType() {
 			let checks = false;
-			let iconType = document.getElementsByClassName('iconType');
+			let iconType = document.querySelectorAll<HTMLSpanElement>('.iconType');
 			for (let i = 0; i < iconType.length; i++) {
-				if (iconType[i]?.childNodes[0].className.baseVal === 'bi bi-toggle-on text-success') {
+				if (
+					(<any>iconType[i]!.childNodes)[0].className.baseVal === 'bi bi-toggle-on text-success'
+				) {
 					const id = iconType[i].id.replace('iconTypeId', '');
 					apiService(`types/${id}/`, 'DELETE').then(() => {
 						checks = true;
-						this.$refs.notification.sendNotification('type was deleted');
+						(<any>this.$refs.notification).sendNotification('type was deleted');
 					});
 				}
 			}
 			setTimeout(() => this.$router.go(0), 1000);
 			if (!checks) {
-				this.$refs.notification.sendNotification('nothing was selected');
+				(<any>this.$refs.notification).sendNotification('nothing was selected');
 			}
 		},
 		resetErrors() {

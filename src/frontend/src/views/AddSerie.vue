@@ -117,6 +117,7 @@
 <script lang="ts">
 import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
+import type { Series, Type, Publisher } from '../@types/interfaces';
 
 export default {
 	name: 'AddSerie',
@@ -125,12 +126,14 @@ export default {
 			serie: {
 				n_volumes: 1,
 				volumes_bought: 0,
-				volumes_read: 0
-			},
+				volumes_read: 0,
+				typology: 0,
+				publisher: ''
+			} as Series,
 			formData: new FormData(),
 			imageUploaded: false,
-			types: [],
-			publishers: [],
+			types: [] as Array<Type>,
+			publishers: [] as Array<Publisher>,
 			error: ''
 		};
 	},
@@ -139,15 +142,17 @@ export default {
 	},
 	methods: {
 		getTypes() {
-			apiService('types/').then((data: Array<any>) => {
+			apiService('types/').then((data: Array<Type>) => {
 				for (let i = 0; i < data.length; i++) {
 					this.types.push(data[i]);
 				}
 				//wait for options to load
 				setTimeout(() => {
-					this.serie.typology = document.getElementById('typeSelect')[0].value;
-					document.getElementById('typeSelect')[0].selected = true;
-					document.getElementById('typeSelect').className = 'form-select-sm';
+					this.serie.typology = parseInt(
+						document.querySelector<HTMLOptionElement>('#typeSelect > option')!.value
+					);
+					document.querySelector<HTMLOptionElement>('#typeSelect > option')!.selected = true;
+					document.querySelector<HTMLSelectElement>('#typeSelect')!.className = 'form-select-sm';
 				}, 500);
 			});
 		},
@@ -158,29 +163,32 @@ export default {
 				}
 				//wait for options to load
 				setTimeout(() => {
-					this.serie.publisher = document.getElementById('publisherSelect')[0].value;
-					document.getElementById('publisherSelect')[0].selected = true;
-					document.getElementById('publisherSelect').className = 'form-select-sm';
+					this.serie.publisher = document.querySelector<HTMLOptionElement>(
+						'#publisherSelect > option'
+					)!.value;
+					document.querySelector<HTMLOptionElement>('#publisherSelect > option')!.selected = true;
+					document.querySelector<HTMLSelectElement>('#publisherSelect')!.className =
+						'form-select-sm';
 				}, 500);
 			});
 		},
 		addImage(event: Event) {
 			//doesn't add the image to the server
-			if (event.target.files[0].type.startsWith('image/')) {
-				this.formData.append('image', event.target.files[0]);
-				document.getElementById('file-input').className = 'form-control';
+			if ((<HTMLInputElement>event.target).files![0].type.startsWith('image/')) {
+				this.formData.append('image', (<HTMLInputElement>event.target).files![0]);
+				document.querySelector('#file-input')!.className = 'form-control';
 				this.imageUploaded = true;
 			} else {
-				this.$refs.notification.sendNotification('unsupported image ');
-				document.getElementById('file-input').className = 'form-control is-invalid';
+				(<any>this.$refs.notification).sendNotification('unsupported image ');
+				document.querySelector('#file-input')!.className = 'form-control is-invalid';
 				this.imageUploaded = false;
 			}
 		},
 		addSerie() {
 			if (this.checkData()) {
-				apiService('series/', 'POST', this.serie).then((response: object) => {
+				apiService('series/', 'POST', this.serie).then((response: Series) => {
 					imageApiService(`image/series/${response.slug}/`, 'PUT', this.formData).then(() => {
-						this.$refs.notification.sendNotification('Manga added with success');
+						(<any>this.$refs.notification).sendNotification('Manga added with success');
 						setTimeout(
 							() =>
 								this.$router.push({
@@ -194,7 +202,7 @@ export default {
 			} else {
 				this.resetErrors();
 				this.showErrors();
-				this.$refs.notification.sendNotification(this.error);
+				(<any>this.$refs.notification).sendNotification(this.error);
 			}
 		},
 		checkData() {
@@ -222,26 +230,26 @@ export default {
 		},
 		showErrors() {
 			if (!this.imageUploaded) {
-				document.getElementById('file-input').className = 'form-control is-invalid';
+				document.querySelector('#file-input')!.className = 'form-control is-invalid';
 			}
 			if (this.serie.n_volumes <= 0) {
-				document.getElementById('inputNVol').className = 'form-control is-invalid';
+				document.querySelector('#inputNVol')!.className = 'form-control is-invalid';
 			}
 			if (this.serie.volumes_bought < 0 || this.serie.n_volumes < this.serie.volumes_bought) {
-				document.getElementById('inputBought').className = 'form-control is-invalid';
+				document.querySelector('#inputBought')!.className = 'form-control is-invalid';
 			}
 			if (this.serie.volumes_read < 0 || this.serie.volumes_bought < this.serie.volumes_read) {
-				document.getElementById('inputRead').className = 'form-control is-invalid';
+				document.querySelector('#inputRead')!.className = 'form-control is-invalid';
 			}
 			if (!this.serie.name) {
-				document.getElementById('floatingInputGrid').className = 'form-control is-invalid';
+				document.querySelector('#floatingInputGrid')!.className = 'form-control is-invalid';
 			}
 		},
 		resetErrors() {
-			document.getElementById('inputNVol').className = 'form-control';
-			document.getElementById('inputBought').className = 'form-control';
-			document.getElementById('inputRead').className = 'form-control';
-			document.getElementById('floatingInputGrid').className = 'form-control';
+			document.querySelector('#inputNVol')!.className = 'form-control';
+			document.querySelector('#inputBought')!.className = 'form-control';
+			document.querySelector('#inputRead')!.className = 'form-control';
+			document.querySelector('#floatingInputGrid')!.className = 'form-control';
 		}
 	},
 	created() {

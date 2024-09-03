@@ -1,5 +1,6 @@
 import json
 import os
+import socket
 
 from django import template
 from django.conf import settings
@@ -7,14 +8,15 @@ from django.utils.safestring import mark_safe
 
 register = template.Library()
 
+base_path = socket.gethostbyname(socket.gethostname()) if settings.VITE_NETWORK else "localhost"
 
 @register.simple_tag
 def render_vite_assets():
     if settings.VITE_LIVE_SERVER:
         return mark_safe(
-            """
-            <script type='module' src='http://localhost:5173/@vite/client'>
-            </script><script type='module' src='http://localhost:5173/src/main.ts'></script>
+            f"""
+            <script type='module' src='http://{base_path}:5173/@vite/client'>
+            </script><script type='module' src='http://{base_path}:5173/src/main.ts'></script>
             """
         )
     manifest_json_path = os.path.join(settings.VITE_STATIC_BUNDLE, "manifest.json")

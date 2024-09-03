@@ -52,12 +52,13 @@
 import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import NotFound from '../views/NotFound.vue';
+import type { PublisherDetail } from '../@types/interfaces';
 
 export default {
 	name: 'PublisherEditor',
 	data() {
 		return {
-			publisher: {},
+			publisher: {} as PublisherDetail,
 			imagePublisher: '',
 			error: ''
 		};
@@ -74,33 +75,35 @@ export default {
 	},
 	methods: {
 		getPublisherData() {
-			apiService(`publishers/${this.slug}/`).then((data: object) => {
+			apiService(`publishers/${this.slug}/`).then((data: PublisherDetail) => {
 				this.publisher = data;
 			});
 		},
 		getImagePublisherData() {
-			apiService(`image/publishers/${this.slug}/`).then((data: object) => {
+			apiService(`image/publishers/${this.slug}/`).then((data: PublisherDetail) => {
 				this.imagePublisher = data.image;
 			});
 		},
 		Update() {
 			if (this.checkData()) {
-				apiService(`publishers/${this.slug}/`, 'PUT', this.publisher).then((response: object) => {
-					this.$refs.notification.sendNotification('publisher updated with success');
-					setTimeout(
-						() =>
-							this.$router.push({
-								name: 'PublisherDetail',
-								params: { slug: response.slug }
-							}),
-						1000
-					);
-				});
+				apiService(`publishers/${this.slug}/`, 'PUT', this.publisher).then(
+					(response: PublisherDetail) => {
+						(<any>this.$refs.notification).sendNotification('publisher updated with success');
+						setTimeout(
+							() =>
+								this.$router.push({
+									name: 'PublisherDetail',
+									params: { slug: response.slug }
+								}),
+							1000
+						);
+					}
+				);
 			} else {
-				document.getElementById('floatingInputGrid').className = 'form-control';
-				document.getElementById('floatingTextarea').className = 'form-control';
+				document.querySelector('#floatingInputGrid')!.className = 'form-control';
+				document.querySelector('#floatingTextarea')!.className = 'form-control';
 				this.showErrors();
-				this.$refs.notification.sendNotification(this.error);
+				(<any>this.$refs.notification).sendNotification(this.error);
 			}
 		},
 		checkData(): boolean {
@@ -112,19 +115,21 @@ export default {
 		},
 		showErrors() {
 			if (!this.publisher.name) {
-				document.getElementById('floatingInputGrid').className = 'form-control is-invalid';
+				document.querySelector('#floatingInputGrid')!.className = 'form-control is-invalid';
 			}
 			if (!this.publisher.description) {
-				document.getElementById('floatingTextarea').className = 'form-control is-invalid';
+				document.querySelector('#floatingTextarea')!.className = 'form-control is-invalid';
 			}
 		},
 		updateImage(event: Event) {
 			try {
-				if (event.target.files[0].type.startsWith('image/')) {
+				if ((<HTMLInputElement>event.target).files![0].type.startsWith('image/')) {
 					let data = new FormData();
-					data.append('image', event.target.files[0]);
+					data.append('image', (<HTMLInputElement>event.target).files![0]);
 					imageApiService(`image/publishers/${this.slug}/`, 'PUT', data).then(() => {
-						this.$refs.notification.sendNotification("publisher's image updated with success");
+						(<any>this.$refs.notification).sendNotification(
+							"publisher's image updated with success"
+						);
 						setTimeout(
 							() =>
 								this.$router.push({
@@ -135,7 +140,7 @@ export default {
 						);
 					});
 				} else {
-					this.$refs.notification.sendNotification('unsupported image ');
+					(<any>this.$refs.notification).sendNotification('unsupported image ');
 				}
 			} catch (error) {
 				console.log(error);

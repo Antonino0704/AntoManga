@@ -65,6 +65,7 @@
 <script lang="ts">
 import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
+import type { Publisher } from '../@types/interfaces';
 
 export default {
 	name: 'AddPublisher',
@@ -73,7 +74,7 @@ export default {
 			publisher: {
 				name: '',
 				description: ''
-			},
+			} as Publisher,
 			formData: new FormData(),
 			imageUploaded: false,
 			error: ''
@@ -84,22 +85,21 @@ export default {
 	},
 	methods: {
 		addImage(event: Event) {
-			//doesn't add the image to the server
-			if (event.target.files[0].type.startsWith('image/')) {
-				this.formData.append('image', event.target.files[0]);
-				document.getElementById('file-input').className = 'form-control';
+			if ((<HTMLInputElement>event.target).files![0].type.startsWith('image/')) {
+				this.formData.append('image', (<HTMLInputElement>event.target).files![0]);
+				document.querySelector('#file-input')!.className = 'form-control';
 				this.imageUploaded = true;
 			} else {
-				this.$refs.notification.sendNotification('unsupported image ');
-				document.getElementById('file-input').className = 'form-control is-invalid';
+				(<any>this.$refs.notification).sendNotification('unsupported image ');
+				document.querySelector('#file-input')!.className = 'form-control is-invalid';
 				this.imageUploaded = false;
 			}
 		},
 		addPublisher() {
 			if (this.checkData()) {
-				apiService('publishers/', 'POST', this.publisher).then((response: object) => {
+				apiService('publishers/', 'POST', this.publisher).then((response: Publisher) => {
 					imageApiService(`image/publishers/${response.slug}/`, 'PUT', this.formData).then(() => {
-						this.$refs.notification.sendNotification('publisher added with success');
+						(<any>this.$refs.notification).sendNotification('publisher added with success');
 						setTimeout(
 							() =>
 								this.$router.push({
@@ -111,10 +111,10 @@ export default {
 					});
 				});
 			} else {
-				document.getElementById('floatingInputGrid').className = 'form-control';
-				document.getElementById('floatingTextarea').className = 'form-control';
+				document.querySelector('#floatingInputGrid')!.className = 'form-control';
+				document.querySelector('#floatingTextarea')!.className = 'form-control';
 				this.showErrors();
-				this.$refs.notification.sendNotification(this.error);
+				(<any>this.$refs.notification).sendNotification(this.error);
 			}
 		},
 		checkData(): boolean {
@@ -130,13 +130,13 @@ export default {
 		},
 		showErrors() {
 			if (!this.imageUploaded) {
-				document.getElementById('file-input').className = 'form-control is-invalid';
+				document.querySelector('#file-input')!.className = 'form-control is-invalid';
 			}
 			if (!this.publisher.name) {
-				document.getElementById('floatingInputGrid').className = 'form-control is-invalid';
+				document.querySelector('#floatingInputGrid')!.className = 'form-control is-invalid';
 			}
 			if (!this.publisher.description) {
-				document.getElementById('floatingTextarea').className = 'form-control is-invalid';
+				document.querySelector('#floatingTextarea')!.className = 'form-control is-invalid';
 			}
 		}
 	}

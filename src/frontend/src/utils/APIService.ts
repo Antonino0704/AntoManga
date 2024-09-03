@@ -7,7 +7,7 @@ async function getJSON(response: any) {
 	return response.json();
 }
 
-function apiService(endpoint: string, method = 'GET', data = undefined): object {
+function apiService(endpoint: string, method = 'GET', data: any = undefined): Promise<any> {
 	const config: object = {
 		method: method,
 		body: data !== undefined ? JSON.stringify(data) : null,
@@ -21,7 +21,7 @@ function apiService(endpoint: string, method = 'GET', data = undefined): object 
 		.catch((error) => console.log(error));
 }
 
-function imageApiService(endpoint: string, method = 'GET', data = undefined): object {
+function imageApiService(endpoint: string, method = 'GET', data: any = undefined): Promise<any> {
 	const config: object = {
 		method: method,
 		body: data,

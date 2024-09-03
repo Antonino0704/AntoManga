@@ -53,14 +53,12 @@ export default {
 		},
 		deleteObj() {
 			apiService(this.endpoint, 'DELETE').then(() => {
-				this.$refs.notification.sendNotification(this.confirmMessage);
-				setTimeout(
-					() =>
-						this.$router.push({
-							name: 'Home'
-						}),
-					1000
-				);
+				(<any>this.$refs.notification).sendNotification(this.confirmMessage);
+				setTimeout(() => {
+					return this.$router.push({
+						name: 'Home'
+					});
+				}, 1000);
 			});
 		}
 	}

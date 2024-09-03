@@ -12,7 +12,7 @@
 				<div class="list-inline-item">
 					<h5 class="card-title list-inline-item">{{ serie.name }}</h5>
 					<router-link
-						:to="{ name: 'SerieEditor', params: { slug: this.serie.slug } }"
+						:to="{ name: 'SerieEditor', params: { slug: serie.slug } }"
 						class="list-inline-item ms-2"
 					>
 						<!--pen logo from bootstrap-->
@@ -69,6 +69,7 @@ import { apiService } from '../utils/APIService';
 import serieDetailStats from '../components/SerieDetailStatistics.vue';
 import ActionNotification from '../components/ActionNotification.vue';
 import NotFound from '../views/NotFound.vue';
+import type { SeriesViewsetInstance } from '../@types/interfaces';
 
 export default {
 	name: 'SerieDetail',
@@ -80,7 +81,7 @@ export default {
 	},
 	data() {
 		return {
-			serie: {},
+			serie: {} as SeriesViewsetInstance,
 			imageSerie: ''
 		};
 	},
@@ -91,17 +92,17 @@ export default {
 	},
 	methods: {
 		getSerieData() {
-			apiService(`series/${this.slug}/`).then((data: object) => {
+			apiService(`series/${this.slug}/`).then((data: SeriesViewsetInstance) => {
 				this.serie = data;
 			});
 		},
 		getImageSerie() {
-			apiService(`image/series/${this.slug}/`).then((data: object) => {
+			apiService(`image/series/${this.slug}/`).then((data: SeriesViewsetInstance) => {
 				this.imageSerie = data.image;
 			});
 		},
 		deleteSerie() {
-			this.$refs.actionNotification.sendNotification(
+			(<any>this.$refs.actionNotification).sendNotification(
 				'are you sure? you will no longer be able to retrieve the data',
 				`${this.serie.name} deleted`,
 				`series/${this.slug}/`

@@ -154,6 +154,7 @@
 <script lang="ts">
 import { apiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
+import type { Series } from '../@types/interfaces';
 
 export default {
 	name: 'serieDetailStats',
@@ -165,7 +166,7 @@ export default {
 	},
 	data() {
 		return {
-			serie: {},
+			serie: {} as Series,
 			editIcon: false,
 			errors: ''
 		};
@@ -175,7 +176,7 @@ export default {
 	},
 	methods: {
 		getDataSerie() {
-			apiService(`series/${this.slug}/`).then((data: object) => {
+			apiService(`series/${this.slug}/`).then((data: Series) => {
 				this.serie = data;
 			});
 		},
@@ -199,7 +200,7 @@ export default {
 				statisticsElements[i].className = class_;
 			}
 		},
-		changeEditIcon(): undefined {
+		changeEditIcon() {
 			this.editIcon = !this.editIcon;
 		},
 		cancelOperation() {
@@ -236,34 +237,34 @@ export default {
 		},
 		showErrors() {
 			if (this.serie.n_volumes <= 0) {
-				document.getElementById('inputNVol').className = 'form-control is-invalid';
-				this.$refs.notification.sendNotification("n volumes can't be negative");
+				document.querySelector('#inputNVol')!.className = 'form-control is-invalid';
+				(<any>this.$refs.notification).sendNotification("n volumes can't be negative");
 			}
 			if (this.serie.volumes_bought < 0) {
-				document.getElementById('inputBought').className = 'form-control is-invalid';
-				this.$refs.notification.sendNotification("volumes bought can't be negative");
+				document.querySelector('#inputBought')!.className = 'form-control is-invalid';
+				(<any>this.$refs.notification).sendNotification("volumes bought can't be negative");
 			}
 			if (this.serie.volumes_read < 0) {
-				document.getElementById('inputRead').className = 'form-control is-invalid';
-				this.$refs.notification.sendNotification("volumes read can't be negative");
+				document.querySelector('#inputRead')!.className = 'form-control is-invalid';
+				(<any>this.$refs.notification).sendNotification("volumes read can't be negative");
 			}
 			if (this.serie.n_volumes < this.serie.volumes_bought) {
-				document.getElementById('inputBought').className = 'form-control is-invalid';
-				this.$refs.notification.sendNotification(
+				document.querySelector('#inputBought')!.className = 'form-control is-invalid';
+				(<any>this.$refs.notification).sendNotification(
 					"the volumes bought can't be more than total volumes"
 				);
 			}
 			if (this.serie.volumes_bought < this.serie.volumes_read) {
-				document.getElementById('inputRead').className = 'form-control is-invalid';
-				this.$refs.notification.sendNotification(
+				document.querySelector('#inputRead')!.className = 'form-control is-invalid';
+				(<any>this.$refs.notification).sendNotification(
 					"the volumes read can't be more than total bought"
 				);
 			}
 		},
 		resetErrors() {
-			document.getElementById('inputNVol').className = 'form-control';
-			document.getElementById('inputBought').className = 'form-control';
-			document.getElementById('inputRead').className = 'form-control';
+			document.querySelector('#inputNVol')!.className = 'form-control';
+			document.querySelector('#inputBought')!.className = 'form-control';
+			document.querySelector('#inputRead')!.className = 'form-control';
 		}
 	},
 	created() {

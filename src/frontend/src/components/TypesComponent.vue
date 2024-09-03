@@ -57,15 +57,15 @@ export default {
 		post() {
 			if (this.checkdata()) {
 				apiService('types/', 'POST', this.type).then(() => {
-					this.$refs.notification.sendNotification('type created with success');
+					(<any>this.$refs.notification).sendNotification('type created with success');
 					setTimeout(() => this.$router.go(0), 1000);
 				});
 			}
 		},
 		checkdata() {
 			if (!this.type.name || this.type.name.length > 20) {
-				document.getElementById('titleType').className = 'form-control is-invalid';
-				this.$refs.notification.sendNotification('invalid title');
+				document.querySelector('#titleType')!.className = 'form-control is-invalid';
+				(<any>this.$refs.notification).sendNotification('invalid title');
 				return false;
 			}
 			return true;

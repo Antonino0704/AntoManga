@@ -51,12 +51,13 @@
 <script lang="ts">
 import { apiService } from '../utils/APIService';
 import { search } from '@/utils/search';
+import type { Type } from '../@types/interfaces';
 
 export default {
 	name: 'NavBar',
 	data() {
 		return {
-			types: [{ id: '0', name: 'null' }],
+			types: [{ id: 0, name: 'null' }] as Array<Type>,
 			statusFilter: 0
 		};
 	},
@@ -67,7 +68,7 @@ export default {
 	},
 	methods: {
 		getTypes() {
-			apiService('types/').then((data: Array<any>) => {
+			apiService('types/').then((data: Array<Type>) => {
 				for (let i = 0; i < data.length; i++) {
 					this.types.push(data[i]);
 				}
@@ -75,12 +76,15 @@ export default {
 		},
 		search() {
 			let nameLower = '';
-			this.types.forEach((element: Object) => {
+			this.types.forEach((element: Type) => {
 				if (this.statusFilter === element.id) {
 					nameLower = element.name.toLowerCase();
 				}
 			});
-			search(document.getElementById('searchBar').value.toLowerCase(), nameLower);
+			search(
+				document.querySelector<HTMLInputElement>('#searchBar')!.value.toLowerCase(),
+				nameLower
+			);
 		},
 		getLogo() {
 			return `${document.location.origin}/media/icon.png`;

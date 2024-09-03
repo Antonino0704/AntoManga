@@ -33,7 +33,7 @@
 					aria-hidden="true"
 					v-model="serie.typology"
 				>
-					<option v-for="type in types" :key="type.id" :value="type.id" :id="type.id + type.name">
+					<option v-for="type in types" :key="type.id" :value="type.id" :id="type.name + type.id">
 						{{ type.name }}
 					</option>
 				</select>
@@ -50,7 +50,7 @@
 						v-for="publisher in publishers"
 						:key="publisher.id"
 						:value="publisher.id"
-						:id="publisher.id + publisher.name"
+						:id="publisher.name + publisher.id"
 					>
 						{{ publisher.name }}
 					</option>
@@ -67,8 +67,8 @@
 <script lang="ts">
 import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
-import slugify from 'slugify';
 import NotFound from '../views/NotFound.vue';
+import type { SeriesViewsetInstance, Type, Publisher } from '../@types/interfaces';
 
 export default {
 	name: 'SerieEditor',
@@ -80,10 +80,10 @@ export default {
 	},
 	data() {
 		return {
-			serie: {},
+			serie: {} as SeriesViewsetInstance,
 			imageSerie: '',
-			types: [],
-			publishers: [],
+			types: [] as Array<Type>,
+			publishers: [] as Array<Publisher>,
 			error: ''
 		};
 	},
@@ -93,7 +93,7 @@ export default {
 	},
 	methods: {
 		getSerieData() {
-			apiService(`series/${this.slug}/`).then((data: object) => {
+			apiService(`series/${this.slug}/`).then((data: SeriesViewsetInstance) => {
 				this.serie = data;
 				this.getTypes();
 				this.getPublishers();
@@ -106,8 +106,10 @@ export default {
 				}
 				//wait for options to load
 				setTimeout(() => {
-					document.getElementById(this.serie.typology + this.serie.typology_name).selected = true;
-					document.getElementById('typeSelect').className = 'form-select-sm';
+					document.querySelector<HTMLOptionElement>(
+						`#${this.serie.typology_name}${this.serie.typology}`
+					)!.selected = true;
+					document.querySelector('#typeSelect')!.className = 'form-select-sm';
 				}, 500);
 			});
 		},
@@ -118,32 +120,36 @@ export default {
 				}
 				//wait for options to load
 				setTimeout(() => {
-					document.getElementById(this.serie.publisher + this.serie.publisher_name).selected = true;
-					document.getElementById('publisherSelect').className = 'form-select-sm';
+					document.querySelector<HTMLOptionElement>(
+						`#${this.serie.publisher_name}${this.serie.publisher}`
+					)!.selected = true;
+					document.querySelector('#publisherSelect')!.className = 'form-select-sm';
 				}, 500);
 			});
 		},
 		getImageSerie() {
-			apiService(`image/series/${this.slug}/`).then((data: object) => {
+			apiService(`image/series/${this.slug}/`).then((data: SeriesViewsetInstance) => {
 				this.imageSerie = data.image;
 			});
 		},
 		Update() {
 			if (this.checkData()) {
-				apiService(`series/${this.slug}/`, 'PUT', this.serie).then((response: object) => {
-					this.$refs.notification.sendNotification('serie updated with success');
-					setTimeout(
-						() =>
-							this.$router.push({
-								name: 'SerieDetail',
-								params: { slug: response.slug }
-							}),
-						1000
-					);
-				});
+				apiService(`series/${this.slug}/`, 'PUT', this.serie).then(
+					(response: SeriesViewsetInstance) => {
+						(<any>this.$refs.notification).sendNotification('serie updated with success');
+						setTimeout(
+							() =>
+								this.$router.push({
+									name: 'SerieDetail',
+									params: { slug: response.slug }
+								}),
+							1000
+						);
+					}
+				);
 			} else {
-				document.getElementById('floatingInputGrid').className = 'form-control is-invalid';
-				this.$refs.notification.sendNotification(this.error);
+				document.querySelector('#floatingInputGrid')!.className = 'form-control is-invalid';
+				(<any>this.$refs.notification).sendNotification(this.error);
 			}
 		},
 		checkData(): boolean {
@@ -155,11 +161,11 @@ export default {
 		},
 		updateImage(event: Event) {
 			try {
-				if (event.target.files[0].type.startsWith('image/')) {
+				if ((<HTMLInputElement>event.target).files![0].type.startsWith('image/')) {
 					let data = new FormData();
-					data.append('image', event.target.files[0]);
+					data.append('image', (<HTMLInputElement>event.target).files![0]);
 					imageApiService(`image/series/${this.slug}/`, 'PUT', data).then(() => {
-						this.$refs.notification.sendNotification("serie's image updated with success");
+						(<any>this.$refs.notification).sendNotification("serie's image updated with success");
 						setTimeout(
 							() =>
 								this.$router.push({
@@ -170,7 +176,7 @@ export default {
 						);
 					});
 				} else {
-					this.$refs.notification.sendNotification('unsupported image ');
+					(<any>this.$refs.notification).sendNotification('unsupported image ');
 				}
 			} catch (error) {
 				console.log(error);
