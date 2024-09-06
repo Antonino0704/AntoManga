@@ -33,12 +33,7 @@
 					aria-hidden="true"
 					v-model="serie.typology"
 				>
-					<option
-						v-for="type in types"
-						:key="type.id"
-						:value="type.id"
-						:id="createCorrectedId(type.name, type.id)"
-					>
+					<option v-for="type in types" :key="type.id" :value="type.id" :id="'IDType-' + type.id">
 						{{ type.name }}
 					</option>
 				</select>
@@ -55,7 +50,7 @@
 						v-for="publisher in publishers"
 						:key="publisher.id"
 						:value="publisher.id"
-						:id="createCorrectedId(publisher.name, publisher.id)"
+						:id="'IDPublisher-' + publisher.id"
 					>
 						{{ publisher.name }}
 					</option>
@@ -111,9 +106,8 @@ export default {
 				}
 				//wait for options to load
 				setTimeout(() => {
-					document.querySelector<HTMLOptionElement>(
-						`#${this.serie.typology_name.replace(' ', '')}${this.serie.typology}`
-					)!.selected = true;
+					document.querySelector<HTMLOptionElement>(`#IDType-${this.serie.typology}`)!.selected =
+						true;
 					document.querySelector('#typeSelect')!.className = 'form-select-sm';
 				}, 500);
 			});
@@ -126,7 +120,7 @@ export default {
 				//wait for options to load
 				setTimeout(() => {
 					document.querySelector<HTMLOptionElement>(
-						`#${this.serie.publisher_name.replace(' ', '')}${this.serie.publisher}`
+						`#IDPublisher-${this.serie.publisher}`
 					)!.selected = true;
 					document.querySelector('#publisherSelect')!.className = 'form-select-sm';
 				}, 500);
@@ -186,9 +180,6 @@ export default {
 			} catch (error) {
 				console.log(error);
 			}
-		},
-		createCorrectedId(name: string, id: number): string {
-			return `${name.replace(' ', '')}${id}`;
 		}
 	},
 	created() {

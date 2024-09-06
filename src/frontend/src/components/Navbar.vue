@@ -30,19 +30,43 @@
 					<button class="btn btn-outline-success" @click="search()">Search</button>
 				</div>
 
-				<router-link
-					v-if="isHome"
-					:to="{ name: 'TypeView' }"
-					type="button"
-					class="btn btn-outline-secondary me-2 ms-1 mt-2 mb-1"
-					style="
-						--bs-btn-padding-y: 0.25rem;
-						--bs-btn-padding-x: 0.5rem;
-						--bs-btn-font-size: 0.75rem;
-					"
-				>
-					Types
-				</router-link>
+				<li v-if="isHome" class="nav-item dropdown btn btn-outline-secondary me-2 ms-1 mt-2 mb-2">
+					<a
+						class="nav-link dropdown-toggle"
+						href="#"
+						role="button"
+						data-bs-toggle="dropdown"
+						aria-expanded="false"
+					>
+						Menu
+					</a>
+					<ul class="dropdown-menu">
+						<li>
+							<router-link :to="{ name: 'TypeView' }" type="button" class="dropdown-item">
+								Types
+							</router-link>
+						</li>
+						<li><hr class="dropdown-divider" /></li>
+						<li>
+							<router-link
+								:to="{ name: 'AddPublisher' }"
+								type="button"
+								class="dropdown-item bi bi-plus-circle"
+							>
+								New Publisher
+							</router-link>
+						</li>
+						<li v-if="isTypesPubslihers">
+							<router-link
+								:to="{ name: 'AddSerie' }"
+								type="button"
+								class="dropdown-item bi bi-plus-circle"
+							>
+								New Series
+							</router-link>
+						</li>
+					</ul>
+				</li>
 			</nav>
 		</div>
 	</div>
@@ -51,19 +75,23 @@
 <script lang="ts">
 import { apiService } from '../utils/APIService';
 import { search } from '@/utils/search';
-import type { Type } from '../@types/interfaces';
+import type { Type, Publisher } from '../@types/interfaces';
 
 export default {
 	name: 'NavBar',
 	data() {
 		return {
 			types: [{ id: 0, name: 'null' }] as Array<Type>,
+			publishers: 0,
 			statusFilter: 0
 		};
 	},
 	computed: {
 		isHome() {
 			return this.$route.name === 'Home';
+		},
+		isTypesPubslihers() {
+			return this.types.length > 1 && this.publishers > 0;
 		}
 	},
 	methods: {
@@ -72,6 +100,11 @@ export default {
 				for (let i = 0; i < data.length; i++) {
 					this.types.push(data[i]);
 				}
+			});
+		},
+		getPublishersLength() {
+			apiService('publishers/').then((data: Array<Publisher>) => {
+				this.publishers = data.length;
 			});
 		},
 		search() {
@@ -92,6 +125,7 @@ export default {
 	},
 	created() {
 		this.getTypes();
+		this.getPublishersLength();
 	}
 };
 </script>

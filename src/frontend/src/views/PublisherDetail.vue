@@ -53,6 +53,9 @@
 			</div>
 
 			<h5 class="mt-3">{{ publisher.name.toUpperCase() }}'s manga list</h5>
+			<div class="vr">
+				<p text-body-secondary class="ms-2">Length: {{ series.length }}</p>
+			</div>
 			<ul class="list-group series-group container">
 				<li class="list-group-item" v-for="(serie, index) in series" :key="serie.id">
 					<router-link :to="{ name: 'SerieDetail', params: { slug: serie.slug } }">

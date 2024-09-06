@@ -51,6 +51,12 @@
 
 				<p class="card-text">
 					<small class="text-body-secondary">Type: {{ serie.typology_name }}</small>
+					<br />
+					<router-link
+						class="text-body-secondary"
+						:to="{ name: 'PublisherDetail', params: { slug: serie.publisher_slug } }"
+						>Publisher: {{ serie.publisher_name }}</router-link
+					>
 				</p>
 			</div>
 		</div>

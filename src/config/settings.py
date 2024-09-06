@@ -24,8 +24,9 @@ SECRET_KEY = 'django-insecure-5fl9v7ybymzjz-7@s=p!lym9%0ou_(nea5az=4#l6_jt8(hf9g
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+DEV = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['antomanga.pythonanywhere.com'] if not DEV else ['*']
 
 
 # Application definition
@@ -55,6 +56,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+if not DEV:
+    MIDDLEWARE.append('whitenoise.middleware.WhiteNoiseMiddleware')
 
 ROOT_URLCONF = 'config.urls'
 
