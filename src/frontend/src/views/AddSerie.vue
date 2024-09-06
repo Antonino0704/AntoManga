@@ -47,7 +47,7 @@
 					aria-hidden="true"
 					v-model="serie.typology"
 				>
-					<option v-for="type in types" :key="type.id" :value="type.id" :id="type.id + type.name">
+					<option v-for="type in types" :key="type.id" :value="type.id" :id="'IDType-' + type.id">
 						{{ type.name }}
 					</option>
 				</select>
@@ -59,7 +59,7 @@
 						v-for="publisher in publishers"
 						:key="publisher.id"
 						:value="publisher.id"
-						:id="publisher.id + publisher.name"
+						:id="'IDPublisher-' + publisher.id"
 					>
 						{{ publisher.name }}
 					</option>
