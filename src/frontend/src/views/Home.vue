@@ -6,6 +6,15 @@
 					Series
 				</thead>
 				<tbody>
+					<div>
+						<span class="badge rounded-pill text-bg-info me-2">Length: {{ series.length }}</span>
+						<span class="badge rounded-pill text-bg-info me-2"
+							>Length(Vol. Read): {{ NVolumesRead }}</span
+						>
+						<span class="badge rounded-pill text-bg-info"
+							>Length(Vol. Bought): {{ NVolumesBought }}</span
+						>
+					</div>
 					<tr
 						colspan="2"
 						class="list table-active"
@@ -47,13 +56,19 @@ export default {
 	data() {
 		return {
 			series: [] as Array<SeriesViewsetInstance>,
-			imagesSeries: [] as Array<string>
+			imagesSeries: [] as Array<string>,
+			NVolumesBought: 0,
+			NVolumesRead: 0
 		};
 	},
 	methods: {
 		getDataSeries() {
 			apiService('series/').then((data: Array<SeriesViewsetInstance>) => {
 				this.series = data;
+				for (let i = 0; i <= data.length; i++) {
+					this.NVolumesBought += data[i].volumes_bought;
+					this.NVolumesRead += data[i].volumes_read;
+				}
 			});
 		},
 		getDataImageSeries() {
