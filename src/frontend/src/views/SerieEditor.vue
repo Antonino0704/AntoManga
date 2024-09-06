@@ -180,6 +180,9 @@ export default {
 			} catch (error) {
 				console.log(error);
 			}
+		},
+		createCorrectedId(name: string, id: number): string {
+			return `${name.replace(' ', '')}${id}`;
 		}
 	},
 	created() {
