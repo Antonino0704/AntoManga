@@ -223,7 +223,9 @@ export default {
 			if (
 				this.serie.n_volumes <= 0 ||
 				this.serie.volumes_bought < 0 ||
-				this.serie.volumes_read < 0
+				typeof this.serie.volumes_bought != 'number' ||
+				this.serie.volumes_read < 0 ||
+				typeof this.serie.volumes_read != 'number'
 			) {
 				return false;
 			}
@@ -259,6 +261,14 @@ export default {
 				(<any>this.$refs.notification).sendNotification(
 					"the volumes read can't be more than total bought"
 				);
+			}
+			if (typeof this.serie.volumes_bought != 'number') {
+				document.querySelector('#inputBought')!.className = 'form-control is-invalid';
+				(<any>this.$refs.notification).sendNotification("volumes bought can't be blank");
+			}
+			if (typeof this.serie.volumes_read != 'number') {
+				document.querySelector('#inputRead')!.className = 'form-control is-invalid';
+				(<any>this.$refs.notification).sendNotification("volumes read can't be blank");
 			}
 		},
 		resetErrors() {

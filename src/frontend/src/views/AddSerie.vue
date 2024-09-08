@@ -214,7 +214,9 @@ export default {
 				!this.serie.name ||
 				this.serie.n_volumes <= 0 ||
 				this.serie.volumes_bought < 0 ||
-				this.serie.volumes_read < 0
+				typeof this.serie.volumes_bought != 'number' ||
+				this.serie.volumes_read < 0 ||
+				typeof this.serie.volumes_read != 'number'
 			) {
 				this.error = "The fields can't be blank";
 				return false;
@@ -226,6 +228,14 @@ export default {
 				this.error = 'Errors with numbering';
 				return false;
 			}
+			if (!this.types.length) {
+				this.error = 'there is no type';
+				return false;
+			}
+			if (!this.publishers.length) {
+				this.error = 'there is no publisher';
+				return false;
+			}
 			return true;
 		},
 		showErrors() {
@@ -235,14 +245,29 @@ export default {
 			if (this.serie.n_volumes <= 0) {
 				document.querySelector('#inputNVol')!.className = 'form-control is-invalid';
 			}
-			if (this.serie.volumes_bought < 0 || this.serie.n_volumes < this.serie.volumes_bought) {
+			if (
+				typeof this.serie.volumes_bought != 'number' ||
+				this.serie.volumes_bought < 0 ||
+				this.serie.n_volumes < this.serie.volumes_bought
+			) {
 				document.querySelector('#inputBought')!.className = 'form-control is-invalid';
 			}
-			if (this.serie.volumes_read < 0 || this.serie.volumes_bought < this.serie.volumes_read) {
+			if (
+				typeof this.serie.volumes_read != 'number' ||
+				this.serie.volumes_read < 0 ||
+				this.serie.volumes_bought < this.serie.volumes_read
+			) {
 				document.querySelector('#inputRead')!.className = 'form-control is-invalid';
 			}
 			if (!this.serie.name) {
 				document.querySelector('#floatingInputGrid')!.className = 'form-control is-invalid';
+			}
+			if (!this.types.length) {
+				document.querySelector('#typeSelect')!.className = 'form-select-sm placeholder bg-danger';
+			}
+			if (!this.publishers.length) {
+				document.querySelector('#publisherSelect')!.className =
+					'form-select-sm placeholder bg-danger';
 			}
 		},
 		resetErrors() {
