@@ -4,6 +4,8 @@ __pycache__
 
 migrations/
 
+src/static/admin
+src/static/rest_framework
 src/static/images/*
 !src/static/images/icon.png
 
