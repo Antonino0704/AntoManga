@@ -9,7 +9,7 @@
 					v-if="isHome"
 					id="selectType"
 					name="selectType"
-					class="form-select-sm mb-2 ms-2 select-style badge text-bg text-light"
+					class="form-select-sm mb-2 ms-2 select-style badge text-bg-dark"
 					aria-label="NULL"
 					@change="search()"
 					v-model="statusFilter"
