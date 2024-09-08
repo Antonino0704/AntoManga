@@ -175,7 +175,7 @@ export default {
 			this.types.forEach((type: Type) => {
 				document.querySelector(`#typeID${type.id}`)!.className = 'form-control';
 				if (!type.name || type.name.length > 20) {
-					document.querySelector(`typeID${type.id}`)!.className = 'form-control is-invalid';
+					document.querySelector(`#typeID${type.id}`)!.className = 'form-control is-invalid';
 					feedback = false;
 				}
 			});
