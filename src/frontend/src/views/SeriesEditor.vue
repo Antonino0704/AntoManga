@@ -1,15 +1,15 @@
 <template>
-	<div v-if="serie.detail">
-		<NotFound message="SERIE NOT FOUND" />
+	<div v-if="series.detail">
+		<NotFound message="SERIES NOT FOUND" />
 	</div>
-	<div v-else class="serie-editor">
+	<div v-else class="series-editor">
 		<form class="list-inline" @submit.prevent="Update">
 			<h1 class="list-inline-item mt-2">EDIT PAGE</h1>
 			<div class="list-inline-item row g-2">
 				<div class="col-md">
 					<div class="form-floating list-inline-item">
-						<input type="text" class="form-control" id="floatingInputGrid" v-model="serie.name" />
-						<label for="floatingInputGrid">Serie's Title</label>
+						<input type="text" class="form-control" id="floatingInputGrid" v-model="series.name" />
+						<label for="floatingInputGrid">Series's Title</label>
 						<div class="invalid-feedback">Invalid title</div>
 					</div>
 				</div>
@@ -18,7 +18,7 @@
 			<div class="picture-edit">
 				<label for="file-input">
 					<img
-						:src="imageSerie"
+						:src="imageSeries"
 						class="list-inline-item rounded-circle mt-2"
 						style="width: 200px"
 					/>
@@ -31,7 +31,7 @@
 					id="typeSelect"
 					class="placeholder form-select-sm"
 					aria-hidden="true"
-					v-model="serie.typology"
+					v-model="series.typology"
 				>
 					<option v-for="type in types" :key="type.id" :value="type.id" :id="'IDType-' + type.id">
 						{{ type.name }}
@@ -44,7 +44,7 @@
 					id="publisherSelect"
 					class="placeholder form-select-sm"
 					aria-hidden="true"
-					v-model="serie.publisher"
+					v-model="series.publisher"
 				>
 					<option
 						v-for="publisher in publishers"
@@ -71,7 +71,7 @@ import NotFound from '../views/NotFound.vue';
 import type { SeriesViewsetInstance, Type, Publisher } from '../@types/interfaces';
 
 export default {
-	name: 'SerieEditor',
+	name: 'SeriesEditor',
 	props: {
 		slug: {
 			type: String,
@@ -80,8 +80,8 @@ export default {
 	},
 	data() {
 		return {
-			serie: {} as SeriesViewsetInstance,
-			imageSerie: '',
+			series: {} as SeriesViewsetInstance,
+			imageSeries: '',
 			types: [] as Array<Type>,
 			publishers: [] as Array<Publisher>,
 			error: ''
@@ -92,9 +92,9 @@ export default {
 		NotFound
 	},
 	methods: {
-		getSerieData() {
+		getSeriesData() {
 			apiService(`series/${this.slug}/`).then((data: SeriesViewsetInstance) => {
-				this.serie = data;
+				this.series = data;
 				this.getTypes();
 				this.getPublishers();
 			});
@@ -106,7 +106,7 @@ export default {
 				}
 				//wait for options to load
 				setTimeout(() => {
-					document.querySelector<HTMLOptionElement>(`#IDType-${this.serie.typology}`)!.selected =
+					document.querySelector<HTMLOptionElement>(`#IDType-${this.series.typology}`)!.selected =
 						true;
 					document.querySelector('#typeSelect')!.className = 'form-select-sm';
 				}, 500);
@@ -120,26 +120,26 @@ export default {
 				//wait for options to load
 				setTimeout(() => {
 					document.querySelector<HTMLOptionElement>(
-						`#IDPublisher-${this.serie.publisher}`
+						`#IDPublisher-${this.series.publisher}`
 					)!.selected = true;
 					document.querySelector('#publisherSelect')!.className = 'form-select-sm';
 				}, 500);
 			});
 		},
-		getImageSerie() {
+		getImageSeries() {
 			apiService(`image/series/${this.slug}/`).then((data: SeriesViewsetInstance) => {
-				this.imageSerie = data.image;
+				this.imageSeries = data.image;
 			});
 		},
 		Update() {
 			if (this.checkData()) {
-				apiService(`series/${this.slug}/`, 'PUT', this.serie).then(
+				apiService(`series/${this.slug}/`, 'PUT', this.series).then(
 					(response: SeriesViewsetInstance) => {
-						(<any>this.$refs.notification).sendNotification('serie updated with success');
+						(<any>this.$refs.notification).sendNotification('series updated with success');
 						setTimeout(
 							() =>
 								this.$router.push({
-									name: 'SerieDetail',
+									name: 'SeriesDetail',
 									params: { slug: response.slug }
 								}),
 							1000
@@ -152,7 +152,7 @@ export default {
 			}
 		},
 		checkData(): boolean {
-			if (!this.serie.name) {
+			if (!this.series.name) {
 				this.error = "title can't be blank";
 				return false;
 			}
@@ -164,12 +164,12 @@ export default {
 					let data = new FormData();
 					data.append('image', (<HTMLInputElement>event.target).files![0]);
 					imageApiService(`image/series/${this.slug}/`, 'PUT', data).then(() => {
-						(<any>this.$refs.notification).sendNotification("serie's image updated with success");
+						(<any>this.$refs.notification).sendNotification("series's image updated with success");
 						setTimeout(
 							() =>
 								this.$router.push({
-									name: 'SerieDetail',
-									params: { slug: this.serie.slug }
+									name: 'SeriesDetail',
+									params: { slug: this.series.slug }
 								}),
 							1000
 						);
@@ -183,14 +183,14 @@ export default {
 		}
 	},
 	created() {
-		this.getSerieData();
-		this.getImageSerie();
+		this.getSeriesData();
+		this.getImageSeries();
 	}
 };
 </script>
 
 <style>
-.serie-editor {
+.series-editor {
 	text-align: center;
 }
 </style>

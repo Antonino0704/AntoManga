@@ -1,18 +1,18 @@
 <template>
-	<div v-if="serie.detail">
-		<NotFound message="SERIE NOT FOUND" />
+	<div v-if="series.detail">
+		<NotFound message="SERIES NOT FOUND" />
 	</div>
-	<div v-else class="serie-detail container-sm mt-3">
-		<router-link :to="{ name: 'AddSerie' }" class="btn btn-outline-info mb-3"
+	<div v-else class="series-detail container-sm mt-3">
+		<router-link :to="{ name: 'AddSeries' }" class="btn btn-outline-info mb-3"
 			>Add A New Manga
 		</router-link>
 		<div class="card mb-3">
-			<img :src="imageSerie" class="card-img-top image-serie" style="width: 100px; height: 100px" />
+			<img :src="imageSeries" class="card-img-top image-series" style="width: 100px; height: 100px" />
 			<div class="card-body">
 				<div class="list-inline-item">
-					<h5 class="card-title list-inline-item">{{ serie.name }}</h5>
+					<h5 class="card-title list-inline-item">{{ series.name }}</h5>
 					<router-link
-						:to="{ name: 'SerieEditor', params: { slug: serie.slug } }"
+						:to="{ name: 'SeriesEditor', params: { slug: series.slug } }"
 						class="list-inline-item ms-2"
 					>
 						<!--pen logo from bootstrap-->
@@ -38,7 +38,7 @@
 						fill="currentColor"
 						class="bi bi-trash list-inline-item text-warning"
 						viewBox="0 0 16 16"
-						@click="deleteSerie()"
+						@click="deleteSeries()"
 					>
 						<path
 							d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
@@ -50,18 +50,18 @@
 				</div>
 
 				<p class="card-text">
-					<small class="text-body-secondary">Type: {{ serie.typology_name }}</small>
+					<small class="text-body-secondary">Type: {{ series.typology_name }}</small>
 					<br />
 					<router-link
 						class="text-body-secondary"
-						:to="{ name: 'PublisherDetail', params: { slug: serie.publisher_slug } }"
-						>Publisher: {{ serie.publisher_name }}</router-link
+						:to="{ name: 'PublisherDetail', params: { slug: series.publisher_slug } }"
+						>Publisher: {{ series.publisher_name }}</router-link
 					>
 				</p>
 			</div>
 		</div>
 
-		<serieDetailStats :slug="slug" />
+		<seriesDetailStats :slug="slug" />
 
 		<ActionNotification
 			class="position-absolute top-0 start-50 translate-middle-x"
@@ -72,13 +72,13 @@
 
 <script lang="ts">
 import { apiService } from '../utils/APIService';
-import serieDetailStats from '../components/SerieDetailStatistics.vue';
+import seriesDetailStats from '../components/SeriesDetailStatistics.vue'
 import ActionNotification from '../components/ActionNotification.vue';
 import NotFound from '../views/NotFound.vue';
 import type { SeriesViewsetInstance } from '../@types/interfaces';
 
 export default {
-	name: 'SerieDetail',
+	name: 'SeriesDetail',
 	props: {
 		slug: {
 			type: String,
@@ -87,43 +87,43 @@ export default {
 	},
 	data() {
 		return {
-			serie: {} as SeriesViewsetInstance,
-			imageSerie: ''
+			series: {} as SeriesViewsetInstance,
+			imageSeries: ''
 		};
 	},
 	components: {
-		serieDetailStats,
+		seriesDetailStats,
 		ActionNotification,
 		NotFound
 	},
 	methods: {
-		getSerieData() {
+		getSeriesData() {
 			apiService(`series/${this.slug}/`).then((data: SeriesViewsetInstance) => {
-				this.serie = data;
+				this.series = data;
 			});
 		},
-		getImageSerie() {
+		getImageSeries() {
 			apiService(`image/series/${this.slug}/`).then((data: SeriesViewsetInstance) => {
-				this.imageSerie = data.image;
+				this.imageSeries = data.image;
 			});
 		},
-		deleteSerie() {
+		deleteSeries() {
 			(<any>this.$refs.actionNotification).sendNotification(
 				'are you sure? you will no longer be able to retrieve the data',
-				`${this.serie.name} deleted`,
+				`${this.series.name} deleted`,
 				`series/${this.slug}/`
 			);
 		}
 	},
 	created() {
-		this.getSerieData();
-		this.getImageSerie();
+		this.getSeriesData();
+		this.getImageSeries();
 	}
 };
 </script>
 
 <style>
-.image-serie {
+.image-series {
 	display: block;
 	margin-left: auto;
 	margin-right: auto;

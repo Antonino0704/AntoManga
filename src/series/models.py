@@ -5,7 +5,7 @@ from publishers.models import Publisher
 class Typology(models.Model):
     name = models.CharField(max_length=20)
 
-class Serie(models.Model):
+class Series(models.Model):
     name = models.CharField(max_length=50)
     slug = models.SlugField(unique=True)
     image = models.ImageField()

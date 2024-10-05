@@ -58,7 +58,7 @@
 						</li>
 						<li v-if="isTypesPubslihers">
 							<router-link
-								:to="{ name: 'AddSerie' }"
+								:to="{ name: 'AddSeries' }"
 								type="button"
 								class="dropdown-item bi bi-plus-circle"
 							>
