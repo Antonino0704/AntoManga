@@ -7,7 +7,11 @@
 			>Add A New Manga
 		</router-link>
 		<div class="card mb-3">
-			<img :src="imageSeries" class="card-img-top image-series" style="width: 100px; height: 100px" />
+			<img
+				:src="imageSeries"
+				class="card-img-top image-series"
+				style="width: 100px; height: 100px"
+			/>
 			<div class="card-body">
 				<div class="list-inline-item">
 					<h5 class="card-title list-inline-item">{{ series.name }}</h5>
@@ -72,7 +76,7 @@
 
 <script lang="ts">
 import { apiService } from '../utils/APIService';
-import seriesDetailStats from '../components/SeriesDetailStatistics.vue'
+import seriesDetailStats from '../components/SeriesDetailStatistics.vue';
 import ActionNotification from '../components/ActionNotification.vue';
 import NotFound from '../views/NotFound.vue';
 import type { SeriesViewsetInstance } from '../@types/interfaces';

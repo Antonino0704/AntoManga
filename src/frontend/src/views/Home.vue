@@ -15,7 +15,7 @@
 							>Length(Vol. Bought): {{ NVolumesBought }}</span
 						>
 					</div>
-					
+
 					<tr
 						colspan="2"
 						class="list table-active"
