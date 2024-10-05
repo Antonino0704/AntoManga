@@ -1,13 +1,13 @@
 import { csrftoken } from './csrf_token';
 
-const baseEndpoint = '/api/v1/';
+const baseEndpoint = '/api/';
 
 async function getJSON(response: any) {
 	if (response.status === 204) return '';
 	return response.json();
 }
 
-function apiService(endpoint: string, method = 'GET', data: any = undefined): Promise<any> {
+function apiService(endpoint: string, method = 'GET', data: any = undefined, version: string = "v1/"): Promise<any> {
 	const config: object = {
 		method: method,
 		body: data !== undefined ? JSON.stringify(data) : null,
@@ -16,7 +16,7 @@ function apiService(endpoint: string, method = 'GET', data: any = undefined): Pr
 			'X-CSRFToken': csrftoken
 		}
 	};
-	return fetch(baseEndpoint + endpoint, config)
+	return fetch(baseEndpoint + version + endpoint, config)
 		.then(getJSON)
 		.catch((error) => console.log(error));
 }
