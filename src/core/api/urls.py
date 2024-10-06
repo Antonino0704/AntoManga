@@ -1,9 +1,9 @@
 from django.urls import path
 
-from core.api.views import IsAuthenticateView
+from core.api.views import IsAuthenticatedView
 
 urlpatterns = [
     path("isAuthenticated/",
-         IsAuthenticateView.as_view(),
+         IsAuthenticatedView.as_view(),
          name="isAuthenticated"),
 ]
