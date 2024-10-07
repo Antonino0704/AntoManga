@@ -1,5 +1,5 @@
 <template>
-	<div class="serie-detail-stats container-sm mt-3">
+	<div class="series-detail-stats container-sm mt-3">
 		<div class="list-inline-item">
 			<!--pen logo from bootstrap-->
 			<svg
@@ -61,7 +61,7 @@
 						class="form-control"
 						aria-label="n_volumes"
 						aria-describedby="addon-wrapping"
-						v-model="serie.n_volumes"
+						v-model="series.n_volumes"
 					/>
 				</div>
 			</li>
@@ -76,7 +76,7 @@
 						class="form-control"
 						aria-label="n_volumes"
 						aria-describedby="addon-wrapping"
-						v-model="serie.volumes_bought"
+						v-model="series.volumes_bought"
 					/>
 				</div>
 			</li>
@@ -90,7 +90,7 @@
 						type="number"
 						class="form-control"
 						aria-describedby="addon-wrapping"
-						v-model="serie.volumes_read"
+						v-model="series.volumes_read"
 					/>
 				</div>
 			</li>
@@ -157,7 +157,7 @@ import Notification from '../components/Notification.vue';
 import type { Series } from '../@types/interfaces';
 
 export default {
-	name: 'serieDetailStats',
+	name: 'seriesDetailStats',
 	props: {
 		slug: {
 			type: String,
@@ -166,7 +166,7 @@ export default {
 	},
 	data() {
 		return {
-			serie: {} as Series,
+			series: {} as Series,
 			editIcon: false,
 			errors: ''
 		};
@@ -175,22 +175,22 @@ export default {
 		Notification
 	},
 	methods: {
-		getDataSerie() {
+		getDataSeries() {
 			apiService(`series/${this.slug}/`).then((data: Series) => {
-				this.serie = data;
+				this.series = data;
 			});
 		},
 		getVolumesReadx100(): number {
-			return (100 / this.serie.n_volumes) * this.serie.volumes_read;
+			return (100 / this.series.n_volumes) * this.series.volumes_read;
 		},
 		getVolumesBought100(): number {
-			return (100 / this.serie.n_volumes) * this.serie.volumes_bought;
+			return (100 / this.series.n_volumes) * this.series.volumes_bought;
 		},
 		getMissedVolumesx100(): number {
-			return (100 / this.serie.n_volumes) * this.getMissedVolumes();
+			return (100 / this.series.n_volumes) * this.getMissedVolumes();
 		},
 		getMissedVolumes(): number {
-			return this.serie.n_volumes - this.serie.volumes_bought;
+			return this.series.n_volumes - this.series.volumes_bought;
 		},
 		edit(disabled = false) {
 			this.changeEditIcon();
@@ -206,11 +206,11 @@ export default {
 		cancelOperation() {
 			this.resetErrors();
 			this.edit(true);
-			this.getDataSerie();
+			this.getDataSeries();
 		},
 		sendData() {
 			if (this.checkData()) {
-				apiService(`series/${this.slug}/`, 'PUT', this.serie).then(() => {
+				apiService(`series/${this.slug}/`, 'PUT', this.series).then(() => {
 					this.resetErrors();
 					this.edit(true);
 				});
@@ -221,52 +221,52 @@ export default {
 		},
 		checkData(): boolean {
 			if (
-				this.serie.n_volumes <= 0 ||
-				this.serie.volumes_bought < 0 ||
-				typeof this.serie.volumes_bought != 'number' ||
-				this.serie.volumes_read < 0 ||
-				typeof this.serie.volumes_read != 'number'
+				this.series.n_volumes <= 0 ||
+				this.series.volumes_bought < 0 ||
+				typeof this.series.volumes_bought != 'number' ||
+				this.series.volumes_read < 0 ||
+				typeof this.series.volumes_read != 'number'
 			) {
 				return false;
 			}
 			if (
-				this.serie.n_volumes < this.serie.volumes_bought ||
-				this.serie.volumes_bought < this.serie.volumes_read
+				this.series.n_volumes < this.series.volumes_bought ||
+				this.series.volumes_bought < this.series.volumes_read
 			) {
 				return false;
 			}
 			return true;
 		},
 		showErrors() {
-			if (this.serie.n_volumes <= 0) {
+			if (this.series.n_volumes <= 0) {
 				document.querySelector('#inputNVol')!.className = 'form-control is-invalid';
 				(<any>this.$refs.notification).sendNotification("n volumes can't be negative");
 			}
-			if (this.serie.volumes_bought < 0) {
+			if (this.series.volumes_bought < 0) {
 				document.querySelector('#inputBought')!.className = 'form-control is-invalid';
 				(<any>this.$refs.notification).sendNotification("volumes bought can't be negative");
 			}
-			if (this.serie.volumes_read < 0) {
+			if (this.series.volumes_read < 0) {
 				document.querySelector('#inputRead')!.className = 'form-control is-invalid';
 				(<any>this.$refs.notification).sendNotification("volumes read can't be negative");
 			}
-			if (this.serie.n_volumes < this.serie.volumes_bought) {
+			if (this.series.n_volumes < this.series.volumes_bought) {
 				document.querySelector('#inputBought')!.className = 'form-control is-invalid';
 				(<any>this.$refs.notification).sendNotification(
 					"the volumes bought can't be more than total volumes"
 				);
 			}
-			if (this.serie.volumes_bought < this.serie.volumes_read) {
+			if (this.series.volumes_bought < this.series.volumes_read) {
 				document.querySelector('#inputRead')!.className = 'form-control is-invalid';
 				(<any>this.$refs.notification).sendNotification(
 					"the volumes read can't be more than total bought"
 				);
 			}
-			if (typeof this.serie.volumes_bought != 'number') {
+			if (typeof this.series.volumes_bought != 'number') {
 				document.querySelector('#inputBought')!.className = 'form-control is-invalid';
 				(<any>this.$refs.notification).sendNotification("volumes bought can't be blank");
 			}
-			if (typeof this.serie.volumes_read != 'number') {
+			if (typeof this.series.volumes_read != 'number') {
 				document.querySelector('#inputRead')!.className = 'form-control is-invalid';
 				(<any>this.$refs.notification).sendNotification("volumes read can't be blank");
 			}
@@ -278,7 +278,7 @@ export default {
 		}
 	},
 	created() {
-		this.getDataSerie();
+		this.getDataSeries();
 	}
 };
 </script>

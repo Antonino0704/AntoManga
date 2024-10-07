@@ -1,12 +1,12 @@
 <template>
-	<div class="add-serie container-sm mt-2">
-		<form class="list-inline" @submit.prevent="addSerie">
+	<div class="add-series container-sm mt-2">
+		<form class="list-inline" @submit.prevent="addSeries">
 			<h1 class="list-inline-item">ADD A New Manga</h1>
 			<div class="list-inline-item row g-2">
 				<div class="col-md">
 					<div class="form-floating list-inline-item">
-						<input type="text" class="form-control" id="floatingInputGrid" v-model="serie.name" />
-						<label for="floatingInputGrid">Serie's Title</label>
+						<input type="text" class="form-control" id="floatingInputGrid" v-model="series.name" />
+						<label for="floatingInputGrid">Series's Title</label>
 						<div class="invalid-feedback">Invalid title</div>
 					</div>
 				</div>
@@ -45,7 +45,7 @@
 					id="typeSelect"
 					class="form-select-sm placeholder"
 					aria-hidden="true"
-					v-model="serie.typology"
+					v-model="series.typology"
 				>
 					<option v-for="type in types" :key="type.id" :value="type.id" :id="'IDType-' + type.id">
 						{{ type.name }}
@@ -54,7 +54,7 @@
 			</div>
 
 			<div class="placeholder-glow mt-3">
-				<select id="publisherSelect" class="form-select-sm placeholder" v-model="serie.publisher">
+				<select id="publisherSelect" class="form-select-sm placeholder" v-model="series.publisher">
 					<option
 						v-for="publisher in publishers"
 						:key="publisher.id"
@@ -76,7 +76,7 @@
 							class="form-control"
 							aria-label="n_volumes"
 							aria-describedby="addon-wrapping"
-							v-model="serie.n_volumes"
+							v-model="series.n_volumes"
 						/>
 					</div>
 				</li>
@@ -89,7 +89,7 @@
 							class="form-control"
 							aria-label="n_volumes"
 							aria-describedby="addon-wrapping"
-							v-model="serie.volumes_bought"
+							v-model="series.volumes_bought"
 						/>
 					</div>
 				</li>
@@ -101,7 +101,7 @@
 							type="number"
 							class="form-control"
 							aria-describedby="addon-wrapping"
-							v-model="serie.volumes_read"
+							v-model="series.volumes_read"
 						/>
 					</div>
 				</li>
@@ -120,10 +120,10 @@ import Notification from '../components/Notification.vue';
 import type { Series, Type, Publisher } from '../@types/interfaces';
 
 export default {
-	name: 'AddSerie',
+	name: 'AddSeries',
 	data() {
 		return {
-			serie: {
+			series: {
 				n_volumes: 1,
 				volumes_bought: 0,
 				volumes_read: 0,
@@ -148,7 +148,7 @@ export default {
 				}
 				//wait for options to load
 				setTimeout(() => {
-					this.serie.typology = parseInt(
+					this.series.typology = parseInt(
 						document.querySelector<HTMLOptionElement>('#typeSelect > option')!.value
 					);
 					document.querySelector<HTMLOptionElement>('#typeSelect > option')!.selected = true;
@@ -163,7 +163,7 @@ export default {
 				}
 				//wait for options to load
 				setTimeout(() => {
-					this.serie.publisher = document.querySelector<HTMLOptionElement>(
+					this.series.publisher = document.querySelector<HTMLOptionElement>(
 						'#publisherSelect > option'
 					)!.value;
 					document.querySelector<HTMLOptionElement>('#publisherSelect > option')!.selected = true;
@@ -184,15 +184,15 @@ export default {
 				this.imageUploaded = false;
 			}
 		},
-		addSerie() {
+		addSeries() {
 			if (this.checkData()) {
-				apiService('series/', 'POST', this.serie).then((response: Series) => {
+				apiService('series/', 'POST', this.series).then((response: Series) => {
 					imageApiService(`image/series/${response.slug}/`, 'PUT', this.formData).then(() => {
 						(<any>this.$refs.notification).sendNotification('Manga added with success');
 						setTimeout(
 							() =>
 								this.$router.push({
-									name: 'SerieDetail',
+									name: 'SeriesDetail',
 									params: { slug: response.slug }
 								}),
 							1000
@@ -211,19 +211,19 @@ export default {
 				return false;
 			}
 			if (
-				!this.serie.name ||
-				this.serie.n_volumes <= 0 ||
-				this.serie.volumes_bought < 0 ||
-				typeof this.serie.volumes_bought != 'number' ||
-				this.serie.volumes_read < 0 ||
-				typeof this.serie.volumes_read != 'number'
+				!this.series.name ||
+				this.series.n_volumes <= 0 ||
+				this.series.volumes_bought < 0 ||
+				typeof this.series.volumes_bought != 'number' ||
+				this.series.volumes_read < 0 ||
+				typeof this.series.volumes_read != 'number'
 			) {
 				this.error = "The fields can't be blank";
 				return false;
 			}
 			if (
-				this.serie.n_volumes < this.serie.volumes_bought ||
-				this.serie.volumes_bought < this.serie.volumes_read
+				this.series.n_volumes < this.series.volumes_bought ||
+				this.series.volumes_bought < this.series.volumes_read
 			) {
 				this.error = 'Errors with numbering';
 				return false;
@@ -242,24 +242,24 @@ export default {
 			if (!this.imageUploaded) {
 				document.querySelector('#file-input')!.className = 'form-control is-invalid';
 			}
-			if (this.serie.n_volumes <= 0) {
+			if (this.series.n_volumes <= 0) {
 				document.querySelector('#inputNVol')!.className = 'form-control is-invalid';
 			}
 			if (
-				typeof this.serie.volumes_bought != 'number' ||
-				this.serie.volumes_bought < 0 ||
-				this.serie.n_volumes < this.serie.volumes_bought
+				typeof this.series.volumes_bought != 'number' ||
+				this.series.volumes_bought < 0 ||
+				this.series.n_volumes < this.series.volumes_bought
 			) {
 				document.querySelector('#inputBought')!.className = 'form-control is-invalid';
 			}
 			if (
-				typeof this.serie.volumes_read != 'number' ||
-				this.serie.volumes_read < 0 ||
-				this.serie.volumes_bought < this.serie.volumes_read
+				typeof this.series.volumes_read != 'number' ||
+				this.series.volumes_read < 0 ||
+				this.series.volumes_bought < this.series.volumes_read
 			) {
 				document.querySelector('#inputRead')!.className = 'form-control is-invalid';
 			}
-			if (!this.serie.name) {
+			if (!this.series.name) {
 				document.querySelector('#floatingInputGrid')!.className = 'form-control is-invalid';
 			}
 			if (!this.types.length) {
@@ -285,7 +285,7 @@ export default {
 </script>
 
 <style>
-.add-serie {
+.add-series {
 	text-align: center;
 }
 </style>

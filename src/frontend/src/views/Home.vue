@@ -15,6 +15,7 @@
 							>Length(Vol. Bought): {{ NVolumesBought }}</span
 						>
 					</div>
+
 					<tr
 						colspan="2"
 						class="list table-active"
@@ -22,7 +23,7 @@
 						:key="serie.id"
 					>
 						<div class="card mt-2" style="width: 18rem">
-							<router-link :to="{ name: 'SerieDetail', params: { slug: serie.slug } }">
+							<router-link :to="{ name: 'SeriesDetail', params: { slug: serie.slug } }">
 								<img :src="imagesSeries[index]" class="card-img-top" alt="..." />
 							</router-link>
 

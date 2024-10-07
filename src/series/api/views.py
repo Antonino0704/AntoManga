@@ -1,33 +1,33 @@
 from rest_framework import viewsets
 from rest_framework import generics
 
-from series.models import Typology, Serie
-from series.api.serializers import TypologySerializer, SerieSerializer, ImageSerieSerializer
+from series.models import Typology, Series
+from series.api.serializers import TypologySerializer, SeriesSerializer, ImageSeriesSerializer
 
 class TypologyViewset(viewsets.ModelViewSet):
     queryset = Typology.objects.all()
     serializer_class = TypologySerializer
 
-class SerieViewset(viewsets.ModelViewSet):
-    queryset = Serie.objects.all()
+class SeriesViewset(viewsets.ModelViewSet):
+    queryset = Series.objects.all()
     lookup_field = "slug"
-    serializer_class = SerieSerializer
+    serializer_class = SeriesSerializer
 
-class SerieListView(generics.ListAPIView):
-    serializer_class = SerieSerializer
+class SeriesListView(generics.ListAPIView):
+    serializer_class = SeriesSerializer
 
     def get_queryset(self):
         publisher = self.kwargs.get("publisher")
-        return Serie.objects.filter(publisher__slug=publisher)
+        return Series.objects.filter(publisher__slug=publisher)
     
-class ImageSerieViewset(viewsets.ModelViewSet):
-    queryset = Serie.objects.all()
+class ImageSeriesViewset(viewsets.ModelViewSet):
+    queryset = Series.objects.all()
     lookup_field = "slug"
-    serializer_class = ImageSerieSerializer
+    serializer_class = ImageSeriesSerializer
 
-class ImageSerieListView(generics.ListAPIView):
-    serializer_class = ImageSerieSerializer
+class ImageSeriesListView(generics.ListAPIView):
+    serializer_class = ImageSeriesSerializer
 
     def get_queryset(self):
         publisher = self.kwargs.get("publisher")
-        return Serie.objects.filter(publisher__slug=publisher)
+        return Series.objects.filter(publisher__slug=publisher)

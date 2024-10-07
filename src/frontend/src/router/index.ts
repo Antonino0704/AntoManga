@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/Home.vue';
-import SerieDetail from '../views/SerieDetail.vue';
-import SerieEditor from '../views/SerieEditor.vue';
-import AddSerie from '../views/AddSerie.vue';
+import SeriesDetail from '../views/SeriesDetail.vue';
+import SeriesEditor from '../views/SeriesEditor.vue';
+import AddSeries from '../views/AddSeries.vue';
 import PublisherDetail from '../views/PublisherDetail.vue';
 import PublisherEditor from '../views/PublisherEditor.vue';
 import AddPublisher from '../views/AddPublisher.vue';
@@ -18,21 +18,21 @@ const router = createRouter({
 			component: HomeView
 		},
 		{
-			path: '/serie/:slug',
-			name: 'SerieDetail',
-			component: SerieDetail,
+			path: '/series/:slug',
+			name: 'SeriesDetail',
+			component: SeriesDetail,
 			props: true
 		},
 		{
-			path: '/serie/:slug/edit',
-			name: 'SerieEditor',
-			component: SerieEditor,
+			path: '/series/:slug/edit',
+			name: 'SeriesEditor',
+			component: SeriesEditor,
 			props: true
 		},
 		{
-			path: '/add/serie/',
-			name: 'AddSerie',
-			component: AddSerie
+			path: '/add/series/',
+			name: 'AddSeries',
+			component: AddSeries
 		},
 		{
 			path: '/publisher/:slug',

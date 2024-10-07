@@ -58,7 +58,7 @@
 			</div>
 			<ul class="list-group series-group container">
 				<li class="list-group-item" v-for="(serie, index) in series" :key="serie.id">
-					<router-link :to="{ name: 'SerieDetail', params: { slug: serie.slug } }">
+					<router-link :to="{ name: 'SeriesDetail', params: { slug: serie.slug } }">
 						{{ serie.name }}
 					</router-link>
 					<hr class="dropdown-divider" />
