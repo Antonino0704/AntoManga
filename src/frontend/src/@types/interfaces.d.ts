@@ -16,10 +16,10 @@ export interface Series {
 }
 
 export interface SeriesViewsetInstance extends Series {
-	typology_name: string,
-	publisher_slug: string,
-	publisher_name: string,
-    detail: string
+	typology_name: string;
+	publisher_slug: string;
+	publisher_name: string;
+	detail: string;
 }
 
 export interface Publisher {
@@ -31,5 +31,5 @@ export interface Publisher {
 }
 
 export interface PublisherDetail extends Publisher {
-    detail: string
+	detail: string;
 }

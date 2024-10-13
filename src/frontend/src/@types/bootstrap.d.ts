@@ -1,1 +1,1 @@
-declare module 'bootstrap'
+declare module 'bootstrap';

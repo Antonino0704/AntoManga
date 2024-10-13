@@ -75,18 +75,18 @@ export default {
 	},
 	methods: {
 		getPublisherData() {
-			apiService(`publishers/${this.slug}/`).then((data: PublisherDetail) => {
+			apiService(`v1/publishers/${this.slug}/`).then((data: PublisherDetail) => {
 				this.publisher = data;
 			});
 		},
 		getImagePublisherData() {
-			apiService(`image/publishers/${this.slug}/`).then((data: PublisherDetail) => {
+			apiService(`v1/image/publishers/${this.slug}/`).then((data: PublisherDetail) => {
 				this.imagePublisher = data.image;
 			});
 		},
 		Update() {
 			if (this.checkData()) {
-				apiService(`publishers/${this.slug}/`, 'PUT', this.publisher).then(
+				apiService(`v1/publishers/${this.slug}/`, 'PUT', this.publisher).then(
 					(response: PublisherDetail) => {
 						(<any>this.$refs.notification).sendNotification('publisher updated with success');
 						setTimeout(
@@ -126,7 +126,7 @@ export default {
 				if ((<HTMLInputElement>event.target).files![0].type.startsWith('image/')) {
 					let data = new FormData();
 					data.append('image', (<HTMLInputElement>event.target).files![0]);
-					imageApiService(`image/publishers/${this.slug}/`, 'PUT', data).then(() => {
+					imageApiService(`v1/image/publishers/${this.slug}/`, 'PUT', data).then(() => {
 						(<any>this.$refs.notification).sendNotification(
 							"publisher's image updated with success"
 						);

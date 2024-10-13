@@ -96,14 +96,14 @@ export default {
 	},
 	methods: {
 		getTypes() {
-			apiService('types/').then((data: Array<Type>) => {
+			apiService('v1/types/').then((data: Array<Type>) => {
 				for (let i = 0; i < data.length; i++) {
 					this.types.push(data[i]);
 				}
 			});
 		},
 		getPublishersLength() {
-			apiService('publishers/').then((data: Array<Publisher>) => {
+			apiService('v1/publishers/').then((data: Array<Publisher>) => {
 				this.publishers = data.length;
 			});
 		},

@@ -52,7 +52,7 @@
 				<img :src="imagePublisher" class="card-img-top" alt="logoPublisher" />
 			</div>
 
-			<h5 class="mt-3">{{ publisher.name.toUpperCase() }}'s manga list</h5>
+			<h5 class="mt-3">{{ publisher.name?.toUpperCase() }}'s manga list</h5>
 			<div class="vr">
 				<p text-body-secondary class="ms-2">Length: {{ series.length }}</p>
 			</div>
@@ -73,10 +73,10 @@
 			</ul>
 		</div>
 
-		<ActionNotification
+		<!-- <ActionNotification
 			class="position-absolute top-0 start-50 translate-middle-x"
 			ref="actionNotification"
-		/>
+		/> -->
 	</div>
 </template>
 
@@ -108,22 +108,22 @@ export default {
 	},
 	methods: {
 		getPublisherData() {
-			apiService(`publishers/${this.slug}/`).then((data: PublisherDetail) => {
+			apiService(`v1/publishers/${this.slug}/`).then((data: PublisherDetail) => {
 				this.publisher = data;
 			});
 		},
 		getImagePublisherData() {
-			apiService(`image/publishers/${this.slug}/`).then((data: PublisherDetail) => {
+			apiService(`v1/image/publishers/${this.slug}/`).then((data: PublisherDetail) => {
 				this.imagePublisher = data.image;
 			});
 		},
 		getseriesData() {
-			apiService(`series-list/${this.slug}/`).then((data: Array<Series>) => {
+			apiService(`v1/series-list/${this.slug}/`).then((data: Array<Series>) => {
 				this.series = data;
 			});
 		},
 		getImageseriesData() {
-			apiService(`image/series-list/${this.slug}/`).then((data: Array<Series>) => {
+			apiService(`v1/image/series-list/${this.slug}/`).then((data: Array<Series>) => {
 				for (let i = 0; i < data.length; i++) {
 					this.imageSeries.push(data[i].image);
 				}
@@ -133,7 +133,7 @@ export default {
 			(<any>this.$refs.actionNotification).sendNotification(
 				'are you sure? you will no longer be able to retrieve the data',
 				'Publisher deleted',
-				`publishers/${this.slug}/`
+				`v1/publishers/${this.slug}/`
 			);
 		}
 	},

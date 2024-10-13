@@ -142,7 +142,7 @@ export default {
 	},
 	methods: {
 		getTypes() {
-			apiService('types/').then((data: Array<Type>) => {
+			apiService('v1/types/').then((data: Array<Type>) => {
 				for (let i = 0; i < data.length; i++) {
 					this.types.push(data[i]);
 				}
@@ -157,7 +157,7 @@ export default {
 			});
 		},
 		getPublishers() {
-			apiService('publishers/').then((data: Array<any>) => {
+			apiService('v1/publishers/').then((data: Array<any>) => {
 				for (let i = 0; i < data.length; i++) {
 					this.publishers.push(data[i]);
 				}
@@ -186,8 +186,8 @@ export default {
 		},
 		addSeries() {
 			if (this.checkData()) {
-				apiService('series/', 'POST', this.series).then((response: Series) => {
-					imageApiService(`image/series/${response.slug}/`, 'PUT', this.formData).then(() => {
+				apiService('v1/series/', 'POST', this.series).then((response: Series) => {
+					imageApiService(`v1/image/series/${response.slug}/`, 'PUT', this.formData).then(() => {
 						(<any>this.$refs.notification).sendNotification('Manga added with success');
 						setTimeout(
 							() =>
