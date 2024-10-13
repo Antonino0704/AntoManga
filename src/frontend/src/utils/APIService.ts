@@ -21,7 +21,7 @@ function apiService(endpoint: string, method = 'GET', data: any = undefined, ver
 		.catch((error) => console.log(error));
 }
 
-function imageApiService(endpoint: string, method = 'GET', data: any = undefined): Promise<any> {
+function imageApiService(endpoint: string, method = 'GET', data: any = undefined, version: string = "v1/"): Promise<any> {
 	const config: object = {
 		method: method,
 		body: data,
@@ -30,7 +30,7 @@ function imageApiService(endpoint: string, method = 'GET', data: any = undefined
 			'X-CSRFToken': csrftoken
 		}
 	};
-	return fetch(baseEndpoint + endpoint, config)
+	return fetch(baseEndpoint + version + endpoint, config)
 		.then(getJSON)
 		.catch((error) => console.log(error));
 }
