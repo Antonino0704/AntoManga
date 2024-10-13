@@ -73,10 +73,10 @@
 			</ul>
 		</div>
 
-		<!-- <ActionNotification
+		<ActionNotification
 			class="position-absolute top-0 start-50 translate-middle-x"
 			ref="actionNotification"
-		/> -->
+		/>
 	</div>
 </template>
 
