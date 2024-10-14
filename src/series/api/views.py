@@ -26,7 +26,9 @@ class SeriesListView(generics.ListAPIView):
 
     def get_queryset(self):
         publisher = self.kwargs.get("publisher")
-        return Series.objects.filter(publisher__slug=publisher)
+        if self.request.user.is_anonymous:
+            return Series.objects.filter(publisher__slug=publisher)
+        return Series.objects.filter(publisher__slug=publisher, owner=self.request.user)
     
 class ImageSeriesViewset(viewsets.ModelViewSet):
     queryset = Series.objects.all()
@@ -43,4 +45,6 @@ class ImageSeriesListView(generics.ListAPIView):
 
     def get_queryset(self):
         publisher = self.kwargs.get("publisher")
-        return Series.objects.filter(publisher__slug=publisher)
+        if self.request.user.is_anonymous:
+            return Series.objects.filter(publisher__slug=publisher)
+        return Series.objects.filter(publisher__slug=publisher, owner=self.request.user)
