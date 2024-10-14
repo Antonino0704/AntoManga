@@ -78,14 +78,11 @@ export default {
 			});
 		},
 		mouseEnter(id: string) {
-			let card: any = document.querySelector(`#${id}`);
-			card!.className = 'card mt-2 border border-primary border-3 opacity-75';
-			card.style.width = '20rem';
+			document.querySelector(`#${id}`)!.className =
+				'card mt-2 border border-primary border-3 opacity-50';
 		},
 		mouseLeave(id: string) {
-			let card: any = document.querySelector(`#${id}`);
-			card!.className = 'card mt-2';
-			card.style.width = '18rem';
+			document.querySelector(`#${id}`)!.className = 'card mt-2';
 		}
 	},
 	created() {
