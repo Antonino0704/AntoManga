@@ -56,7 +56,7 @@ export default {
 	methods: {
 		post() {
 			if (this.checkdata()) {
-				apiService('v1/types/', 'POST', this.type).then(() => {
+				apiService('v2/types/', 'POST', this.type).then(() => {
 					(<any>this.$refs.notification).sendNotification('type created with success');
 					setTimeout(() => this.$router.go(0), 1000);
 				});

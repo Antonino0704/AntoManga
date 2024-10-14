@@ -96,7 +96,7 @@ export default {
 	},
 	methods: {
 		getTypes() {
-			apiService('v1/types/').then((data: Array<Type>) => {
+			apiService('v2/types/').then((data: Array<Type>) => {
 				for (let i = 0; i < data.length; i++) {
 					this.types.push(data[i]);
 				}
