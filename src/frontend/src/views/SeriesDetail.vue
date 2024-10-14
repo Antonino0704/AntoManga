@@ -102,12 +102,12 @@ export default {
 	},
 	methods: {
 		getSeriesData() {
-			apiService(`series/${this.slug}/`).then((data: SeriesViewsetInstance) => {
+			apiService(`v1/series/${this.slug}/`).then((data: SeriesViewsetInstance) => {
 				this.series = data;
 			});
 		},
 		getImageSeries() {
-			apiService(`image/series/${this.slug}/`).then((data: SeriesViewsetInstance) => {
+			apiService(`v1/image/series/${this.slug}/`).then((data: SeriesViewsetInstance) => {
 				this.imageSeries = data.image;
 			});
 		},
@@ -115,7 +115,7 @@ export default {
 			(<any>this.$refs.actionNotification).sendNotification(
 				'are you sure? you will no longer be able to retrieve the data',
 				`${this.series.name} deleted`,
-				`series/${this.slug}/`
+				`v1/series/${this.slug}/`
 			);
 		}
 	},

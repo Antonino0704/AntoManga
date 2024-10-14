@@ -7,7 +7,7 @@ async function getJSON(response: any) {
 	return response.json();
 }
 
-function apiService(endpoint: string, method = 'GET', data: any = undefined, version: string = "v1/"): Promise<any> {
+function apiService(endpoint: string, method = 'GET', data: any = undefined): Promise<any> {
 	const config: object = {
 		method: method,
 		body: data !== undefined ? JSON.stringify(data) : null,
@@ -16,12 +16,12 @@ function apiService(endpoint: string, method = 'GET', data: any = undefined, ver
 			'X-CSRFToken': csrftoken
 		}
 	};
-	return fetch(baseEndpoint + version + endpoint, config)
+	return fetch(baseEndpoint + endpoint, config)
 		.then(getJSON)
 		.catch((error) => console.log(error));
 }
 
-function imageApiService(endpoint: string, method = 'GET', data: any = undefined, version: string = "v1/"): Promise<any> {
+function imageApiService(endpoint: string, method = 'GET', data: any = undefined): Promise<any> {
 	const config: object = {
 		method: method,
 		body: data,
@@ -30,7 +30,7 @@ function imageApiService(endpoint: string, method = 'GET', data: any = undefined
 			'X-CSRFToken': csrftoken
 		}
 	};
-	return fetch(baseEndpoint + version + endpoint, config)
+	return fetch(baseEndpoint + endpoint, config)
 		.then(getJSON)
 		.catch((error) => console.log(error));
 }

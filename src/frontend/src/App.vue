@@ -26,7 +26,8 @@ export default {
 	},
 	methods: {
 		isAuthenticated() {
-			apiService('isAuthenticated/', 'GET', undefined, 'v2/').then((response: any) => {
+			console.log('%cNothing to see here', 'color: yellow; font-size: xx-large');
+			apiService('v1/isAuthenticated/', 'GET').then((response: any) => {
 				this.isNotAuthenticatedVar = !response.result;
 			});
 		}

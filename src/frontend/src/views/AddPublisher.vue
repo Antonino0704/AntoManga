@@ -97,18 +97,20 @@ export default {
 		},
 		addPublisher() {
 			if (this.checkData()) {
-				apiService('publishers/', 'POST', this.publisher).then((response: Publisher) => {
-					imageApiService(`image/publishers/${response.slug}/`, 'PUT', this.formData).then(() => {
-						(<any>this.$refs.notification).sendNotification('publisher added with success');
-						setTimeout(
-							() =>
-								this.$router.push({
-									name: 'PublisherDetail',
-									params: { slug: response.slug }
-								}),
-							1000
-						);
-					});
+				apiService('v1/publishers/', 'POST', this.publisher).then((response: Publisher) => {
+					imageApiService(`v1/image/publishers/${response.slug}/`, 'PUT', this.formData).then(
+						() => {
+							(<any>this.$refs.notification).sendNotification('publisher added with success');
+							setTimeout(
+								() =>
+									this.$router.push({
+										name: 'PublisherDetail',
+										params: { slug: response.slug }
+									}),
+								1000
+							);
+						}
+					);
 				});
 			} else {
 				document.querySelector('#floatingInputGrid')!.className = 'form-control';
