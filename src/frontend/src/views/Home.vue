@@ -1,5 +1,11 @@
 <template>
 	<div class="HomeView row justify-content-center">
+		<div
+			v-if="loading"
+			class="spinner-border position-absolute top-50 start-50"
+			style="width: 3rem; height: 3rem"
+			role="status"
+		></div>
 		<div class="col-auto">
 			<div class="container text-center">
 				<div class="fs-1">
@@ -61,7 +67,8 @@ export default {
 			imagesSeries: [] as Array<string>,
 			NVolumesBought: 0,
 			NVolumesRead: 0,
-			grid: false
+			grid: false,
+			loading: false
 		};
 	},
 	methods: {
@@ -75,11 +82,13 @@ export default {
 			});
 		},
 		getDataImageSeries() {
-			apiService('v2/image/series/').then((data: Array<SeriesViewsetInstance>) => {
-				for (let i = 0; i < data.length; i++) {
-					this.imagesSeries.push(data[i].image);
-				}
-			});
+			apiService('v2/image/series/')
+				.then((data: Array<SeriesViewsetInstance>) => {
+					for (let i = 0; i < data.length; i++) {
+						this.imagesSeries.push(data[i].image);
+					}
+				})
+				.then(() => (this.loading = false));
 		},
 		gridClick(load: boolean = false) {
 			const listElement = document.querySelectorAll('.list');
@@ -111,6 +120,7 @@ export default {
 		}
 	},
 	created() {
+		this.loading = true;
 		this.getDataSeries();
 		this.getDataImageSeries();
 	},
