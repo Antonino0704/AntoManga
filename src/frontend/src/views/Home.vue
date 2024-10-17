@@ -2,7 +2,10 @@
 	<div class="HomeView row justify-content-center">
 		<div class="col-auto">
 			<div class="container text-center">
-				<div class="fs-1">Series</div>
+				<div class="fs-1">
+					Series
+					<i id="gridButton" class="bi bi-grid ms-2 fs-5" @click="gridClick()"></i>
+				</div>
 				<div>
 					<span class="badge rounded-pill text-bg-info me-2">Length: {{ series.length }}</span>
 					<span class="badge rounded-pill text-bg-info me-2"
@@ -57,7 +60,8 @@ export default {
 			series: [] as Array<SeriesViewsetInstance>,
 			imagesSeries: [] as Array<string>,
 			NVolumesBought: 0,
-			NVolumesRead: 0
+			NVolumesRead: 0,
+			grid: false
 		};
 	},
 	methods: {
@@ -77,6 +81,27 @@ export default {
 				}
 			});
 		},
+		gridClick(load: boolean = false) {
+			const listElement = document.querySelectorAll('.list');
+			for (let i = 0; i < listElement.length; i++) {
+				listElement[i].querySelector('a > img')!.className = !this.grid
+					? 'card-img-top rounded-pill image-series mt-2'
+					: 'card-img-top';
+			}
+			document.querySelector('#gridButton')!.className = !this.grid
+				? 'bi bi-card-image ms-2 fs-5'
+				: 'bi bi-grid ms-2 fs-5';
+			this.grid = !this.grid;
+			if (!load) this.$cookies.set('grid-cookie', this.grid, 60 * 60 * 24 * 30);
+		},
+		setLayout() {
+			setTimeout(() => {
+				if (this.$cookies.isKey('grid-cookie')) {
+					this.grid = this.$cookies.get('grid-cookie') == 'true' ? false : true;
+					this.gridClick(true);
+				}
+			}, 500);
+		},
 		mouseEnter(id: string) {
 			document.querySelector(`#${id}`)!.className =
 				'card mt-2 border border-primary border-3 opacity-50';
@@ -88,6 +113,7 @@ export default {
 	created() {
 		this.getDataSeries();
 		this.getDataImageSeries();
+		this.setLayout();
 	}
 };
 </script>
