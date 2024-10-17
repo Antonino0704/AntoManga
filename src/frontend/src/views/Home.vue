@@ -100,7 +100,7 @@ export default {
 					this.grid = this.$cookies.get('grid-cookie') == 'true' ? false : true;
 					this.gridClick(true);
 				}
-			}, 500);
+			}, 1000);
 		},
 		mouseEnter(id: string) {
 			document.querySelector(`#${id}`)!.className =
