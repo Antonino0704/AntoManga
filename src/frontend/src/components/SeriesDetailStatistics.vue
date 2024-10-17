@@ -176,7 +176,7 @@ export default {
 	},
 	methods: {
 		getDataSeries() {
-			apiService(`v1/series/${this.slug}/`).then((data: Series) => {
+			apiService(`v2/series/${this.slug}/`).then((data: Series) => {
 				this.series = data;
 			});
 		},
@@ -210,7 +210,7 @@ export default {
 		},
 		sendData() {
 			if (this.checkData()) {
-				apiService(`v1/series/${this.slug}/`, 'PUT', this.series).then(() => {
+				apiService(`v2/series/${this.slug}/`, 'PUT', this.series).then(() => {
 					this.resetErrors();
 					this.edit(true);
 				});

@@ -1,5 +1,6 @@
 from django.db import models
 from publishers.models import Publisher
+from django.contrib.auth.models import User
 
 
 class Typology(models.Model):
@@ -19,3 +20,4 @@ class Series(models.Model):
     typology = models.ForeignKey(Typology,
                                  on_delete=models.CASCADE,
                                  related_name="series_typology")
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="series_list")

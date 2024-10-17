@@ -93,14 +93,14 @@ export default {
 	},
 	methods: {
 		getSeriesData() {
-			apiService(`v1/series/${this.slug}/`).then((data: SeriesViewsetInstance) => {
+			apiService(`v2/series/${this.slug}/`).then((data: SeriesViewsetInstance) => {
 				this.series = data;
 				this.getTypes();
 				this.getPublishers();
 			});
 		},
 		getTypes() {
-			apiService('v1/types/').then((data: Array<any>) => {
+			apiService('v2/types/').then((data: Array<any>) => {
 				for (let i = 0; i < data.length; i++) {
 					this.types.push(data[i]);
 				}
@@ -127,13 +127,13 @@ export default {
 			});
 		},
 		getImageSeries() {
-			apiService(`v1/image/series/${this.slug}/`).then((data: SeriesViewsetInstance) => {
+			apiService(`v2/image/series/${this.slug}/`).then((data: SeriesViewsetInstance) => {
 				this.imageSeries = data.image;
 			});
 		},
 		Update() {
 			if (this.checkData()) {
-				apiService(`v1/series/${this.slug}/`, 'PUT', this.series).then(
+				apiService(`v2/series/${this.slug}/`, 'PUT', this.series).then(
 					(response: SeriesViewsetInstance) => {
 						(<any>this.$refs.notification).sendNotification('series updated with success');
 						setTimeout(
@@ -163,7 +163,7 @@ export default {
 				if ((<HTMLInputElement>event.target).files![0].type.startsWith('image/')) {
 					let data = new FormData();
 					data.append('image', (<HTMLInputElement>event.target).files![0]);
-					imageApiService(`v1/image/series/${this.slug}/`, 'PUT', data).then(() => {
+					imageApiService(`v2/image/series/${this.slug}/`, 'PUT', data).then(() => {
 						(<any>this.$refs.notification).sendNotification("series's image updated with success");
 						setTimeout(
 							() =>

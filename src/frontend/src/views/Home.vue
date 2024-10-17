@@ -62,7 +62,7 @@ export default {
 	},
 	methods: {
 		getDataSeries() {
-			apiService('v1/series/').then((data: Array<SeriesViewsetInstance>) => {
+			apiService('v2/series/').then((data: Array<SeriesViewsetInstance>) => {
 				this.series = data;
 				for (let i = 0; i < data.length; i++) {
 					this.NVolumesBought += data[i].volumes_bought;
@@ -71,7 +71,7 @@ export default {
 			});
 		},
 		getDataImageSeries() {
-			apiService('v1/image/series/').then((data: Array<SeriesViewsetInstance>) => {
+			apiService('v2/image/series/').then((data: Array<SeriesViewsetInstance>) => {
 				for (let i = 0; i < data.length; i++) {
 					this.imagesSeries.push(data[i].image);
 				}

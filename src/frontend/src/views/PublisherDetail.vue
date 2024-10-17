@@ -118,12 +118,12 @@ export default {
 			});
 		},
 		getseriesData() {
-			apiService(`v1/series-list/${this.slug}/`).then((data: Array<Series>) => {
+			apiService(`v2/series-list/${this.slug}/`).then((data: Array<Series>) => {
 				this.series = data;
 			});
 		},
 		getImageseriesData() {
-			apiService(`v1/image/series-list/${this.slug}/`).then((data: Array<Series>) => {
+			apiService(`v2/image/series-list/${this.slug}/`).then((data: Array<Series>) => {
 				for (let i = 0; i < data.length; i++) {
 					this.imageSeries.push(data[i].image);
 				}
