@@ -113,6 +113,8 @@ export default {
 	created() {
 		this.getDataSeries();
 		this.getDataImageSeries();
+	},
+	mounted() {
 		this.setLayout();
 	}
 };
