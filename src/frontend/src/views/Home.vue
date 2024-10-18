@@ -172,8 +172,8 @@ export default {
 			}
 		},
 		async search(type: number, searchBarText: string) {
-			let url = `v2/series/?type=${type}&filterbyname=${searchBarText}`;
-			let imageUrl = `v2/image/series/?type=${type}&filterbyname=${searchBarText}`;
+			let url = `${endpoints.series}?type=${type}&filterbyname=${searchBarText}`;
+			let imageUrl = `${endpoints.imgSeries}?type=${type}&filterbyname=${searchBarText}`;
 			if (type == 0 && searchBarText === '') {
 				this.getDataSeries();
 				this.getDataImageSeries();

@@ -116,7 +116,7 @@ export default {
 			(<any>this.$refs.actionNotification).sendNotification(
 				'are you sure? you will no longer be able to retrieve the data',
 				`${this.series.name} deleted`,
-				`v2/series/${this.slug}/`
+				`${endpoints.series}${this.slug}/`
 			);
 		}
 	},

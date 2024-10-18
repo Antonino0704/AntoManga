@@ -104,22 +104,11 @@ export default {
 			});
 		},
 		search() {
-			this.$emit('myevent');
-			let nameLower = 1;
-			// this.types.forEach((element: Type) => {
-			// 	if (this.statusFilter === element.id) {
-			// 		nameLower = element.name.toLowerCase();
-			// 	}
-			// });
 			this.$emit(
 				'filterEvent',
 				this.statusFilter,
 				document.querySelector<HTMLInputElement>('#searchBar')!.value.toLowerCase()
 			);
-			// search(
-			// 	document.querySelector<HTMLInputElement>('#searchBar')!.value.toLowerCase(),
-			// 	nameLower
-			// );
 		},
 		getLogo() {
 			return `${document.location.origin}/media/icon.png`;

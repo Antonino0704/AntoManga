@@ -158,7 +158,7 @@ export default {
 			(<any>this.$refs.actionNotification).sendNotification(
 				'are you sure? you will no longer be able to retrieve the data',
 				'Publisher deleted',
-				`v1/publishers/${this.slug}/`
+				`${endpoints.publishers}${this.slug}/`
 			);
 		},
 		moreSeries() {
