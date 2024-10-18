@@ -6,7 +6,6 @@
 					<img :src="getLogo()" width="30" height="30" alt="logo" />
 				</a>
 				<select
-					v-if="isHome"
 					id="selectType"
 					name="selectType"
 					class="form-select-sm mb-2 ms-2 select-style badge text-bg-dark"
@@ -18,7 +17,7 @@
 						{{ type.name }}
 					</option>
 				</select>
-				<div class="d-flex ps-2" role="search" v-if="isHome">
+				<div class="d-flex ps-2" role="search">
 					<input
 						id="searchBar"
 						class="form-control me-2"
@@ -30,7 +29,7 @@
 					<button class="btn btn-outline-success" @click="search()">Search</button>
 				</div>
 
-				<li v-if="isHome" class="nav-item dropdown btn btn-outline-secondary me-2 ms-1 mt-2 mb-2">
+				<li class="nav-item dropdown btn btn-outline-secondary me-2 ms-1 mt-2 mb-2">
 					<a
 						class="nav-link dropdown-toggle"
 						href="#"
@@ -87,9 +86,6 @@ export default {
 		};
 	},
 	computed: {
-		isHome() {
-			return this.$route.name === 'Home';
-		},
 		isTypesPubslihers() {
 			return this.types.length > 1 && this.publishers > 0;
 		}
@@ -108,16 +104,18 @@ export default {
 			});
 		},
 		search() {
-			let nameLower = '';
-			this.types.forEach((element: Type) => {
-				if (this.statusFilter === element.id) {
-					nameLower = element.name.toLowerCase();
-				}
-			});
-			search(
-				document.querySelector<HTMLInputElement>('#searchBar')!.value.toLowerCase(),
-				nameLower
-			);
+			this.$emit('myevent');
+			let nameLower = 1;
+			// this.types.forEach((element: Type) => {
+			// 	if (this.statusFilter === element.id) {
+			// 		nameLower = element.name.toLowerCase();
+			// 	}
+			// });
+			this.$emit("filterEvent", this.statusFilter, document.querySelector<HTMLInputElement>('#searchBar')!.value.toLowerCase())
+			// search(
+			// 	document.querySelector<HTMLInputElement>('#searchBar')!.value.toLowerCase(),
+			// 	nameLower
+			// );
 		},
 		getLogo() {
 			return `${document.location.origin}/media/icon.png`;

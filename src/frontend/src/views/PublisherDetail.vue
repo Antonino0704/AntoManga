@@ -60,7 +60,7 @@
 
 			<h5 class="mt-3">{{ publisher.name?.toUpperCase() }}'s manga list</h5>
 			<div class="vr">
-				<p text-body-secondary class="ms-2">Length: {{ series.length }}</p>
+				<p text-body-secondary class="ms-2">Length: {{ seriesLength }}</p>
 			</div>
 			<ul class="list-group series-group container">
 				<li class="list-group-item" v-for="(serie, index) in series" :key="serie.id">
@@ -76,6 +76,14 @@
 						alt="logoPublisher"
 					/>
 				</li>
+				<button
+					v-if="next.nextCard"
+					@click="moreSeries()"
+					type="button"
+					class="btn btn-outline-secondary mt-3"
+				>
+					More
+				</button>
 			</ul>
 		</div>
 
@@ -90,7 +98,7 @@
 import { apiService } from '../utils/APIService';
 import ActionNotification from '../components/ActionNotification.vue';
 import NotFound from '../views/NotFound.vue';
-import type { Series, PublisherDetail } from '../@types/interfaces';
+import type { Series, PublisherDetail, RequestObject } from '../@types/interfaces';
 
 export default {
 	name: 'PublisherDetail',
@@ -106,7 +114,12 @@ export default {
 			series: [] as Array<Series>,
 			imagePublisher: '',
 			imageSeries: [] as Array<string>,
-			loading: true
+			seriesLength: 0,
+			loading: true,
+			next: {
+				nextCard: null as string | null,
+				nextImageCard: null as string | null
+			}
 		};
 	},
 	components: {
@@ -125,14 +138,17 @@ export default {
 			});
 		},
 		getseriesData() {
-			apiService(`v2/series-list/${this.slug}/`).then((data: Array<Series>) => {
-				this.series = data;
+			apiService(`v2/series-list/${this.slug}/`).then((data: RequestObject) => {
+				this.series = data.results;
+				this.seriesLength = data.count;
+				this.next.nextCard = data.next;
 			});
 		},
 		getImageseriesData() {
-			apiService(`v2/image/series-list/${this.slug}/`).then((data: Array<Series>) => {
-				for (let i = 0; i < data.length; i++) {
-					this.imageSeries.push(data[i].image);
+			apiService(`v2/image/series-list/${this.slug}/`).then((data: RequestObject) => {
+				this.next.nextImageCard = data.next;
+				for (let i = 0; i < data.results.length; i++) {
+					this.imageSeries.push(data.results[i].image);
 				}
 				this.loading = false;
 			});
@@ -143,6 +159,30 @@ export default {
 				'Publisher deleted',
 				`v1/publishers/${this.slug}/`
 			);
+		},
+		moreSeries() {
+			if (this.next.nextCard != null) {
+				this.loading = true;
+				apiService(this.next.nextCard.replace(/\S*\/api\//g, ''))
+					.then((data: RequestObject) => {
+						this.series.push(...data.results);
+						this.next.nextCard = data.next;
+					})
+					.then(() => {
+						if (this.next.nextImageCard != null) {
+							apiService(this.next.nextImageCard.replace(/\S*\/api\//g, ''))
+								.then((data: RequestObject) => {
+									this.next.nextImageCard = data.next;
+									for (let i = 0; i < data.results.length; i++) {
+										this.imageSeries.push(data.results[i].image);
+									}
+								})
+								.then(() => {
+									this.loading = false;
+								});
+						}
+					});
+			}
 		}
 	},
 	created() {

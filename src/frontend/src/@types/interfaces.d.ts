@@ -33,3 +33,10 @@ export interface Publisher {
 export interface PublisherDetail extends Publisher {
 	detail: string;
 }
+
+export interface RequestObject {
+	results: Array;
+	count: number;
+	next: string | null;
+	previous: string | null;
+}

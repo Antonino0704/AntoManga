@@ -26,3 +26,11 @@ class ImageSeriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Series
         fields = ["image"]
+
+
+class LegthSeriesSerializer(serializers.ModelSerializer):
+    owner = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = Series
+        fields = ["volumes_bought", "volumes_read", "owner"]

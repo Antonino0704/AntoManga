@@ -1,5 +1,6 @@
 <template>
 	<div class="HomeView row justify-content-center">
+		<navbar @filterEvent="search" />
 		<div
 			v-if="loading"
 			class="spinner-border position-absolute top-50 start-50"
@@ -13,7 +14,7 @@
 					<i id="gridButton" class="bi bi-grid ms-2 fs-5" @click="gridClick()"></i>
 				</div>
 				<div>
-					<span class="badge rounded-pill text-bg-info me-2">Length: {{ series.length }}</span>
+					<span class="badge rounded-pill text-bg-info me-2">Length: {{ seriesLength }}</span>
 					<span class="badge rounded-pill text-bg-info me-2"
 						>Length(Vol. Read): {{ NVolumesRead }}</span
 					>
@@ -50,6 +51,14 @@
 						</div>
 					</div>
 				</div>
+				<button
+					v-if="next.nextCard"
+					@click="moreSeries()"
+					type="button"
+					class="btn btn-outline-secondary mt-3"
+				>
+					More
+				</button>
 			</div>
 		</div>
 	</div>
@@ -57,7 +66,9 @@
 
 <script lang="ts">
 import { apiService } from '../utils/APIService';
-import type { SeriesViewsetInstance } from '../@types/interfaces';
+import type { SeriesViewsetInstance, RequestObject } from '../@types/interfaces';
+import navbar from '../components/Navbar.vue';
+import { search } from '@/utils/search';
 
 export default {
 	name: 'HomeView',
@@ -67,31 +78,45 @@ export default {
 			imagesSeries: [] as Array<string>,
 			NVolumesBought: 0,
 			NVolumesRead: 0,
+			seriesLength: 0,
 			grid: false,
-			loading: true
+			loading: true,
+			next: {
+				nextCard: null as string | null,
+				nextImageCard: null as string | null
+			}
 		};
+	},
+	components: {
+		navbar
 	},
 	methods: {
 		getDataSeries() {
-			apiService('v2/series/').then((data: Array<SeriesViewsetInstance>) => {
-				this.series = data;
-				for (let i = 0; i < data.length; i++) {
-					this.NVolumesBought += data[i].volumes_bought;
-					this.NVolumesRead += data[i].volumes_read;
-				}
+			apiService('v2/series/').then((data: RequestObject) => {
+				this.series = data.results;
+				this.seriesLength = data.count;
+				this.next.nextCard = data.next;
 			});
 		},
 		getDataImageSeries() {
 			apiService('v2/image/series/')
-				.then((data: Array<SeriesViewsetInstance>) => {
-					for (let i = 0; i < data.length; i++) {
-						this.imagesSeries.push(data[i].image);
+				.then((data: RequestObject) => {
+					this.next.nextImageCard = data.next;
+					this.imagesSeries = [];
+					for (let i = 0; i < data.results.length; i++) {
+						this.imagesSeries.push(data.results[i].image);
 					}
 				})
 				.then(() => {
 					this.loading = false;
 					this.setLayout();
 				});
+		},
+		getLength() {
+			apiService('v2/series-length/').then((data: any) => {
+				this.NVolumesRead = data.volumes_read_tot;
+				this.NVolumesBought = data.volumes_bought_tot;
+			});
 		},
 		gridClick(load: boolean = false) {
 			const listElement = document.querySelectorAll('.list');
@@ -120,11 +145,68 @@ export default {
 		},
 		mouseLeave(id: string) {
 			document.querySelector(`#${id}`)!.className = 'card mt-2';
+		},
+		moreSeries() {
+			if (this.next.nextCard != null) {
+				this.loading = true;
+				apiService(this.next.nextCard.replace(/\S*\/api\//g, ''))
+					.then((data: RequestObject) => {
+						this.series.push(...data.results);
+						this.next.nextCard = data.next;
+					})
+					.then(() => {
+						if (this.next.nextImageCard != null) {
+							apiService(this.next.nextImageCard.replace(/\S*\/api\//g, ''))
+								.then((data: RequestObject) => {
+									this.next.nextImageCard = data.next;
+									for (let i = 0; i < data.results.length; i++) {
+										this.imagesSeries.push(data.results[i].image);
+									}
+								})
+								.then(() => {
+									this.loading = false;
+									this.setLayout();
+								});
+						}
+					});
+			}
+		},
+		async search(type: number, searchBarText: string) {
+			let url = `v2/series/?type=${type}&filterbyname=${searchBarText}`;
+			let imageUrl = `v2/image/series/?type=${type}&filterbyname=${searchBarText}`;
+			if (type == 0 && searchBarText === '') {
+				this.getDataSeries();
+				this.getDataImageSeries();
+				return;
+			} else if (type == 0) {
+				url = `v2/series/?filterbyname=${searchBarText}`;
+				imageUrl = `v2/image/series/?filterbyname=${searchBarText}`;
+			}
+			apiService(url)
+				.then((data: RequestObject) => {
+					this.series = data.results;
+					this.next.nextCard = data.next;
+				})
+				.then(() => {
+					apiService(imageUrl)
+						.then((data: RequestObject) => {
+							this.next.nextImageCard = data.next;
+							this.imagesSeries = [];
+							for (let i = 0; i < data.results.length; i++) {
+								this.imagesSeries.push(data.results[i].image);
+							}
+						})
+						.then(() => {
+							this.loading = false;
+							this.setLayout();
+						});
+				});
 		}
 	},
 	created() {
 		this.getDataSeries();
 		this.getDataImageSeries();
+		this.getLength();
 	}
 };
 </script>
