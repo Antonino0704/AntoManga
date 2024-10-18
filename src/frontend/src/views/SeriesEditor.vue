@@ -69,6 +69,7 @@ import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import NotFound from '../views/NotFound.vue';
 import type { SeriesViewsetInstance, Type, Publisher } from '../@types/interfaces';
+import { endpoints } from '@/@types/endpoints';
 
 export default {
 	name: 'SeriesEditor',
@@ -93,14 +94,14 @@ export default {
 	},
 	methods: {
 		getSeriesData() {
-			apiService(`v2/series/${this.slug}/`).then((data: SeriesViewsetInstance) => {
+			apiService(`${endpoints.series}${this.slug}/`).then((data: SeriesViewsetInstance) => {
 				this.series = data;
 				this.getTypes();
 				this.getPublishers();
 			});
 		},
 		getTypes() {
-			apiService('v2/types/').then((data: Array<any>) => {
+			apiService(endpoints.types).then((data: Array<any>) => {
 				for (let i = 0; i < data.length; i++) {
 					this.types.push(data[i]);
 				}
@@ -113,7 +114,7 @@ export default {
 			});
 		},
 		getPublishers() {
-			apiService('v1/publishers/').then((data: Array<any>) => {
+			apiService(endpoints.publishers).then((data: Array<any>) => {
 				for (let i = 0; i < data.length; i++) {
 					this.publishers.push(data[i]);
 				}
@@ -127,13 +128,13 @@ export default {
 			});
 		},
 		getImageSeries() {
-			apiService(`v2/image/series/${this.slug}/`).then((data: SeriesViewsetInstance) => {
+			apiService(`${endpoints.imgSeries}${this.slug}/`).then((data: SeriesViewsetInstance) => {
 				this.imageSeries = data.image;
 			});
 		},
 		Update() {
 			if (this.checkData()) {
-				apiService(`v2/series/${this.slug}/`, 'PUT', this.series).then(
+				apiService(`${endpoints.series}${this.slug}/`, 'PUT', this.series).then(
 					(response: SeriesViewsetInstance) => {
 						(<any>this.$refs.notification).sendNotification('series updated with success');
 						setTimeout(
@@ -163,7 +164,7 @@ export default {
 				if ((<HTMLInputElement>event.target).files![0].type.startsWith('image/')) {
 					let data = new FormData();
 					data.append('image', (<HTMLInputElement>event.target).files![0]);
-					imageApiService(`v2/image/series/${this.slug}/`, 'PUT', data).then(() => {
+					imageApiService(`${endpoints.imgSeries}${this.slug}/`, 'PUT', data).then(() => {
 						(<any>this.$refs.notification).sendNotification("series's image updated with success");
 						setTimeout(
 							() =>

@@ -53,6 +53,7 @@ import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import NotFound from '../views/NotFound.vue';
 import type { PublisherDetail } from '../@types/interfaces';
+import { endpoints } from '@/@types/endpoints';
 
 export default {
 	name: 'PublisherEditor',
@@ -75,18 +76,18 @@ export default {
 	},
 	methods: {
 		getPublisherData() {
-			apiService(`v1/publishers/${this.slug}/`).then((data: PublisherDetail) => {
+			apiService(`${endpoints.publishers}${this.slug}/`).then((data: PublisherDetail) => {
 				this.publisher = data;
 			});
 		},
 		getImagePublisherData() {
-			apiService(`v1/image/publishers/${this.slug}/`).then((data: PublisherDetail) => {
+			apiService(`${endpoints.imgPublishers}${this.slug}/`).then((data: PublisherDetail) => {
 				this.imagePublisher = data.image;
 			});
 		},
 		Update() {
 			if (this.checkData()) {
-				apiService(`v1/publishers/${this.slug}/`, 'PUT', this.publisher).then(
+				apiService(`${endpoints.publishers}${this.slug}/`, 'PUT', this.publisher).then(
 					(response: PublisherDetail) => {
 						(<any>this.$refs.notification).sendNotification('publisher updated with success');
 						setTimeout(

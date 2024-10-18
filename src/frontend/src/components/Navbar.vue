@@ -73,8 +73,8 @@
 
 <script lang="ts">
 import { apiService } from '../utils/APIService';
-import { search } from '@/utils/search';
 import type { Type, Publisher } from '../@types/interfaces';
+import { endpoints } from '@/@types/endpoints';
 
 export default {
 	name: 'NavBar',
@@ -92,14 +92,14 @@ export default {
 	},
 	methods: {
 		getTypes() {
-			apiService('v2/types/').then((data: Array<Type>) => {
+			apiService(endpoints.types).then((data: Array<Type>) => {
 				for (let i = 0; i < data.length; i++) {
 					this.types.push(data[i]);
 				}
 			});
 		},
 		getPublishersLength() {
-			apiService('v1/publishers/').then((data: Array<Publisher>) => {
+			apiService(endpoints.publishers).then((data: Array<Publisher>) => {
 				this.publishers = data.length;
 			});
 		},
@@ -111,7 +111,11 @@ export default {
 			// 		nameLower = element.name.toLowerCase();
 			// 	}
 			// });
-			this.$emit("filterEvent", this.statusFilter, document.querySelector<HTMLInputElement>('#searchBar')!.value.toLowerCase())
+			this.$emit(
+				'filterEvent',
+				this.statusFilter,
+				document.querySelector<HTMLInputElement>('#searchBar')!.value.toLowerCase()
+			);
 			// search(
 			// 	document.querySelector<HTMLInputElement>('#searchBar')!.value.toLowerCase(),
 			// 	nameLower

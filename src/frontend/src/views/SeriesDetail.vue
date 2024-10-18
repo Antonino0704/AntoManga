@@ -80,6 +80,7 @@ import seriesDetailStats from '../components/SeriesDetailStatistics.vue';
 import ActionNotification from '../components/ActionNotification.vue';
 import NotFound from '../views/NotFound.vue';
 import type { SeriesViewsetInstance } from '../@types/interfaces';
+import { endpoints } from '@/@types/endpoints';
 
 export default {
 	name: 'SeriesDetail',
@@ -102,12 +103,12 @@ export default {
 	},
 	methods: {
 		getSeriesData() {
-			apiService(`v2/series/${this.slug}/`).then((data: SeriesViewsetInstance) => {
+			apiService(`${endpoints.series}${this.slug}/`).then((data: SeriesViewsetInstance) => {
 				this.series = data;
 			});
 		},
 		getImageSeries() {
-			apiService(`v2/image/series/${this.slug}/`).then((data: SeriesViewsetInstance) => {
+			apiService(`${endpoints.imgSeries}${this.slug}/`).then((data: SeriesViewsetInstance) => {
 				this.imageSeries = data.image;
 			});
 		},

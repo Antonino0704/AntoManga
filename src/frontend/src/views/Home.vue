@@ -68,7 +68,7 @@
 import { apiService } from '../utils/APIService';
 import type { SeriesViewsetInstance, RequestObject } from '../@types/interfaces';
 import navbar from '../components/Navbar.vue';
-import { search } from '@/utils/search';
+import { endpoints } from '@/@types/endpoints';
 
 export default {
 	name: 'HomeView',
@@ -92,14 +92,14 @@ export default {
 	},
 	methods: {
 		getDataSeries() {
-			apiService('v2/series/').then((data: RequestObject) => {
+			apiService(endpoints.series).then((data: RequestObject) => {
 				this.series = data.results;
 				this.seriesLength = data.count;
 				this.next.nextCard = data.next;
 			});
 		},
 		getDataImageSeries() {
-			apiService('v2/image/series/')
+			apiService(endpoints.imgSeries)
 				.then((data: RequestObject) => {
 					this.next.nextImageCard = data.next;
 					this.imagesSeries = [];
@@ -113,7 +113,7 @@ export default {
 				});
 		},
 		getLength() {
-			apiService('v2/series-length/').then((data: any) => {
+			apiService(endpoints.seriesLength).then((data: any) => {
 				this.NVolumesRead = data.volumes_read_tot;
 				this.NVolumesBought = data.volumes_bought_tot;
 			});
@@ -179,8 +179,8 @@ export default {
 				this.getDataImageSeries();
 				return;
 			} else if (type == 0) {
-				url = `v2/series/?filterbyname=${searchBarText}`;
-				imageUrl = `v2/image/series/?filterbyname=${searchBarText}`;
+				url = `${endpoints.series}?filterbyname=${searchBarText}`;
+				imageUrl = `${endpoints.imgSeries}?filterbyname=${searchBarText}`;
 			}
 			apiService(url)
 				.then((data: RequestObject) => {

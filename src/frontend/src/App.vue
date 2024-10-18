@@ -17,6 +17,7 @@
 import toggleTheme from './components/ToggleTheme.vue';
 import isNotAuthenticated from './components/IsNotAuthenticated.vue';
 import { apiService } from './utils/APIService';
+import { endpoints } from '@/@types/endpoints';
 
 export default {
 	name: 'App',
@@ -37,7 +38,7 @@ export default {
 	methods: {
 		isAuthenticated() {
 			console.log('%cNothing to see here', 'color: yellow; font-size: xx-large');
-			apiService('v1/isAuthenticated/', 'GET').then((response: any) => {
+			apiService(endpoints.isAuthenticated, 'GET').then((response: any) => {
 				this.isNotAuthenticatedVar = !response.result;
 			});
 		},

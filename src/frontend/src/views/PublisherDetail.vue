@@ -99,6 +99,7 @@ import { apiService } from '../utils/APIService';
 import ActionNotification from '../components/ActionNotification.vue';
 import NotFound from '../views/NotFound.vue';
 import type { Series, PublisherDetail, RequestObject } from '../@types/interfaces';
+import { endpoints } from '@/@types/endpoints';
 
 export default {
 	name: 'PublisherDetail',
@@ -128,24 +129,24 @@ export default {
 	},
 	methods: {
 		getPublisherData() {
-			apiService(`v1/publishers/${this.slug}/`).then((data: PublisherDetail) => {
+			apiService(`${endpoints.publishers}${this.slug}/`).then((data: PublisherDetail) => {
 				this.publisher = data;
 			});
 		},
 		getImagePublisherData() {
-			apiService(`v1/image/publishers/${this.slug}/`).then((data: PublisherDetail) => {
+			apiService(`${endpoints.imgPublishers}${this.slug}/`).then((data: PublisherDetail) => {
 				this.imagePublisher = data.image;
 			});
 		},
 		getseriesData() {
-			apiService(`v2/series-list/${this.slug}/`).then((data: RequestObject) => {
+			apiService(`${endpoints.seriesList}${this.slug}/`).then((data: RequestObject) => {
 				this.series = data.results;
 				this.seriesLength = data.count;
 				this.next.nextCard = data.next;
 			});
 		},
 		getImageseriesData() {
-			apiService(`v2/image/series-list/${this.slug}/`).then((data: RequestObject) => {
+			apiService(`${endpoints.imgSeriesList}${this.slug}/`).then((data: RequestObject) => {
 				this.next.nextImageCard = data.next;
 				for (let i = 0; i < data.results.length; i++) {
 					this.imageSeries.push(data.results[i].image);
