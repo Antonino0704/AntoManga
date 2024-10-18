@@ -3,6 +3,12 @@
 		<NotFound message="PUBLISHER NOT FOUND" />
 	</div>
 	<div v-else class="publisher-detail container-sm">
+		<div
+			v-if="loading"
+			class="spinner-border position-absolute top-50 start-50"
+			style="width: 3rem; height: 3rem"
+			role="status"
+		></div>
 		<div class="mt-2">
 			<router-link :to="{ name: 'AddPublisher' }" class="btn btn-outline-info"
 				>Add New Publisher
@@ -99,7 +105,8 @@ export default {
 			publisher: {} as PublisherDetail,
 			series: [] as Array<Series>,
 			imagePublisher: '',
-			imageSeries: [] as Array<string>
+			imageSeries: [] as Array<string>,
+			loading: true
 		};
 	},
 	components: {
@@ -127,6 +134,7 @@ export default {
 				for (let i = 0; i < data.length; i++) {
 					this.imageSeries.push(data[i].image);
 				}
+				this.loading = false;
 			});
 		},
 		deletePublisher() {

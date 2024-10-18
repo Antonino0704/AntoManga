@@ -68,7 +68,7 @@ export default {
 			NVolumesBought: 0,
 			NVolumesRead: 0,
 			grid: false,
-			loading: false
+			loading: true
 		};
 	},
 	methods: {
@@ -88,7 +88,10 @@ export default {
 						this.imagesSeries.push(data[i].image);
 					}
 				})
-				.then(() => (this.loading = false));
+				.then(() => {
+					this.loading = false;
+					this.setLayout();
+				});
 		},
 		gridClick(load: boolean = false) {
 			const listElement = document.querySelectorAll('.list');
@@ -109,7 +112,7 @@ export default {
 					this.grid = this.$cookies.get('grid-cookie') == 'true' ? false : true;
 					this.gridClick(true);
 				}
-			}, 1000);
+			}, 500);
 		},
 		mouseEnter(id: string) {
 			document.querySelector(`#${id}`)!.className =
@@ -120,12 +123,8 @@ export default {
 		}
 	},
 	created() {
-		this.loading = true;
 		this.getDataSeries();
 		this.getDataImageSeries();
-	},
-	mounted() {
-		this.setLayout();
 	}
 };
 </script>
