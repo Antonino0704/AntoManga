@@ -1,8 +1,17 @@
 <template>
 	<div class="HomeView row justify-content-center">
+		<div
+			v-if="loading"
+			class="spinner-border position-absolute top-50 start-50"
+			style="width: 3rem; height: 3rem"
+			role="status"
+		></div>
 		<div class="col-auto">
 			<div class="container text-center">
-				<div class="fs-1">Series</div>
+				<div class="fs-1">
+					Series
+					<i id="gridButton" class="bi bi-grid ms-2 fs-5" @click="gridClick()"></i>
+				</div>
 				<div>
 					<span class="badge rounded-pill text-bg-info me-2">Length: {{ series.length }}</span>
 					<span class="badge rounded-pill text-bg-info me-2"
@@ -57,7 +66,9 @@ export default {
 			series: [] as Array<SeriesViewsetInstance>,
 			imagesSeries: [] as Array<string>,
 			NVolumesBought: 0,
-			NVolumesRead: 0
+			NVolumesRead: 0,
+			grid: false,
+			loading: false
 		};
 	},
 	methods: {
@@ -71,11 +82,34 @@ export default {
 			});
 		},
 		getDataImageSeries() {
-			apiService('v2/image/series/').then((data: Array<SeriesViewsetInstance>) => {
-				for (let i = 0; i < data.length; i++) {
-					this.imagesSeries.push(data[i].image);
+			apiService('v2/image/series/')
+				.then((data: Array<SeriesViewsetInstance>) => {
+					for (let i = 0; i < data.length; i++) {
+						this.imagesSeries.push(data[i].image);
+					}
+				})
+				.then(() => (this.loading = false));
+		},
+		gridClick(load: boolean = false) {
+			const listElement = document.querySelectorAll('.list');
+			for (let i = 0; i < listElement.length; i++) {
+				listElement[i].querySelector('a > img')!.className = !this.grid
+					? 'card-img-top rounded-pill image-series mt-2'
+					: 'card-img-top';
+			}
+			document.querySelector('#gridButton')!.className = !this.grid
+				? 'bi bi-card-image ms-2 fs-5'
+				: 'bi bi-grid ms-2 fs-5';
+			this.grid = !this.grid;
+			if (!load) this.$cookies.set('grid-cookie', this.grid, 60 * 60 * 24 * 30);
+		},
+		setLayout() {
+			setTimeout(() => {
+				if (this.$cookies.isKey('grid-cookie')) {
+					this.grid = this.$cookies.get('grid-cookie') == 'true' ? false : true;
+					this.gridClick(true);
 				}
-			});
+			}, 1000);
 		},
 		mouseEnter(id: string) {
 			document.querySelector(`#${id}`)!.className =
@@ -86,8 +120,12 @@ export default {
 		}
 	},
 	created() {
+		this.loading = true;
 		this.getDataSeries();
 		this.getDataImageSeries();
+	},
+	mounted() {
+		this.setLayout();
 	}
 };
 </script>
