@@ -1,5 +1,5 @@
 {% load render_vite_assets %}
-
+{% load render_settings_value %}
 <!DOCTYPE html>
 <html data-bs-theme="dark">
 <head>
@@ -16,6 +16,6 @@
     {% render_vite_assets %}
 </head>
 <body>
-    <div id="app"></div>
+    {% render_settings_value %}<div id="app"></div>
 </body>
 </html>
