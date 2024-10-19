@@ -4,6 +4,7 @@ from django.utils.safestring import mark_safe
 
 register = template.Library()
 
+
 @register.simple_tag
 def render_settings_value():
     if settings.BETA:

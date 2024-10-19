@@ -8,7 +8,12 @@ from django.utils.safestring import mark_safe
 
 register = template.Library()
 
-base_path = socket.gethostbyname_ex(socket.gethostname())[2][1] if  settings.VITE_NETWORK else "localhost"
+base_path = (
+    socket.gethostbyname_ex(socket.gethostname())[2][1]
+    if settings.VITE_NETWORK
+    else "localhost"
+)
+
 
 @register.simple_tag
 def render_vite_assets():
