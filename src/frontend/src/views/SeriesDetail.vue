@@ -80,7 +80,7 @@ import seriesDetailStats from '../components/SeriesDetailStatistics.vue';
 import ActionNotification from '../components/ActionNotification.vue';
 import NotFound from '../views/NotFound.vue';
 import type { SeriesViewsetInstance } from '../@types/interfaces';
-import { endpoints } from '@/@types/endpoints';
+import { endpoints } from '@/utils/endpoints';
 
 export default {
 	name: 'SeriesDetail',

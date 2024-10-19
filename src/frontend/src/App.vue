@@ -17,7 +17,7 @@
 import toggleTheme from './components/ToggleTheme.vue';
 import isNotAuthenticated from './components/IsNotAuthenticated.vue';
 import { apiService } from './utils/APIService';
-import { endpoints } from '@/@types/endpoints';
+import { endpoints } from '@/utils/endpoints';
 
 export default {
 	name: 'App',

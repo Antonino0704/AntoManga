@@ -68,7 +68,7 @@
 import { apiService } from '../utils/APIService';
 import type { SeriesViewsetInstance, RequestObject } from '../@types/interfaces';
 import navbar from '../components/Navbar.vue';
-import { endpoints } from '@/@types/endpoints';
+import { endpoints } from '@/utils/endpoints';
 
 export default {
 	name: 'HomeView',
@@ -164,24 +164,27 @@ export default {
 									}
 								})
 								.then(() => {
-									this.loading = false;
 									this.setLayout();
+									this.loading = false;
 								});
 						}
 					});
 			}
 		},
 		async search(type: number, searchBarText: string) {
-			let url = `${endpoints.series}?type=${type}&filterbyname=${searchBarText}`;
-			let imageUrl = `${endpoints.imgSeries}?type=${type}&filterbyname=${searchBarText}`;
 			if (type == 0 && searchBarText === '') {
 				this.getDataSeries();
 				this.getDataImageSeries();
 				return;
-			} else if (type == 0) {
-				url = `${endpoints.series}?filterbyname=${searchBarText}`;
-				imageUrl = `${endpoints.imgSeries}?filterbyname=${searchBarText}`;
 			}
+			let url =
+				type == 0
+					? `${endpoints.series}?filterbyname=${searchBarText}`
+					: `${endpoints.series}?type=${type}&filterbyname=${searchBarText}`;
+			let imageUrl =
+				type == 0
+					? `${endpoints.imgSeries}?filterbyname=${searchBarText}`
+					: `${endpoints.imgSeries}?type=${type}&filterbyname=${searchBarText}`;
 			apiService(url)
 				.then((data: RequestObject) => {
 					this.series = data.results;

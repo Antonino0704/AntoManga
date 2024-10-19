@@ -99,7 +99,7 @@ import { apiService } from '../utils/APIService';
 import ActionNotification from '../components/ActionNotification.vue';
 import NotFound from '../views/NotFound.vue';
 import type { Series, PublisherDetail, RequestObject } from '../@types/interfaces';
-import { endpoints } from '@/@types/endpoints';
+import { endpoints } from '@/utils/endpoints';
 
 export default {
 	name: 'PublisherDetail',

@@ -53,7 +53,7 @@ import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import NotFound from '../views/NotFound.vue';
 import type { PublisherDetail } from '../@types/interfaces';
-import { endpoints } from '@/@types/endpoints';
+import { endpoints } from '@/utils/endpoints';
 
 export default {
 	name: 'PublisherEditor',

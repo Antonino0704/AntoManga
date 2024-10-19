@@ -155,7 +155,7 @@
 import { apiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import type { Series } from '../@types/interfaces';
-import { endpoints } from '@/@types/endpoints';
+import { endpoints } from '@/utils/endpoints';
 
 export default {
 	name: 'seriesDetailStats',

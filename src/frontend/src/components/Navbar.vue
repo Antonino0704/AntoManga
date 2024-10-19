@@ -1,10 +1,16 @@
 <template>
 	<div class="navabar row justify-content-center">
+		<a
+			class="bi bi-box-arrow-right mb-2"
+			style="text-align: right"
+			href="/accounts/login/?next=/"
+		></a>
 		<div class="col-auto">
 			<nav class="navbar navbar-expand-lg bg-body-tertiary">
 				<a class="navbar-brand ms-3 mb-2" href="/">
 					<img :src="getLogo()" width="30" height="30" alt="logo" />
 				</a>
+
 				<select
 					id="selectType"
 					name="selectType"
@@ -74,7 +80,7 @@
 <script lang="ts">
 import { apiService } from '../utils/APIService';
 import type { Type, Publisher } from '../@types/interfaces';
-import { endpoints } from '@/@types/endpoints';
+import { endpoints } from '@/utils/endpoints';
 
 export default {
 	name: 'NavBar',

@@ -40,7 +40,7 @@
 <script lang="ts">
 import { apiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
-import { endpoints } from '@/@types/endpoints';
+import { endpoints } from '@/utils/endpoints';
 
 export default {
 	name: 'TypesComponent',

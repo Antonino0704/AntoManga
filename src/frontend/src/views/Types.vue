@@ -123,7 +123,7 @@ import { apiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import TypesComponent from '../components/TypesComponent.vue';
 import type { Type } from '../@types/interfaces';
-import { endpoints } from '@/@types/endpoints';
+import { endpoints } from '@/utils/endpoints';
 
 export default {
 	name: 'typeView',
