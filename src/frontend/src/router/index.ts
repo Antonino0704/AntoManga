@@ -70,7 +70,7 @@ const router = createRouter({
 				} else if (savedPosition) {
 					return resolve(savedPosition);
 				}
-			}, 500);
+			}, 1200);
 		});
 	}
 });
