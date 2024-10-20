@@ -91,12 +91,45 @@ export default {
 		navbar
 	},
 	methods: {
+		getData(dataset: number, current: number) {
+			if ((current >= dataset && dataset != -1) || this.next.nextCard == null) {
+				this.setLayout();
+				this.loading = false;
+				return;
+			}
+			apiService(this.next.nextCard.replace(/\S*\/api\//g, ''))
+				.then((data: RequestObject) => {
+					this.series.push(...data.results);
+					this.next.nextCard = data.next;
+				})
+				.then(() => {
+					if (this.next.nextImageCard != null) {
+						apiService(this.next.nextImageCard.replace(/\S*\/api\//g, ''))
+							.then((data: RequestObject) => {
+								this.next.nextImageCard = data.next;
+								for (let i = 0; i < data.results.length; i++) {
+									this.imagesSeries.push(data.results[i].image);
+								}
+							})
+							.then(() => {
+								this.getData(dataset, current + 1);
+							});
+					}
+				});
+		},
 		getDataSeries() {
-			apiService(endpoints.series).then((data: RequestObject) => {
-				this.series = data.results;
-				this.seriesLength = data.count;
-				this.next.nextCard = data.next;
-			});
+			apiService(endpoints.series)
+				.then((data: RequestObject) => {
+					this.series = data.results;
+					this.seriesLength = data.count;
+					this.next.nextCard = data.next;
+				})
+				.then(() => {
+					if (this.$route.query.dataset != undefined) {
+						this.loading = true;
+						this.getData(Number(this.$route.query.dataset), 1);
+					}
+				});
 		},
 		getDataImageSeries() {
 			apiService(endpoints.imgSeries)
@@ -165,10 +198,22 @@ export default {
 								})
 								.then(() => {
 									this.setLayout();
+									this.changeUrl();
 									this.loading = false;
 								});
 						}
 					});
+			}
+		},
+		changeUrl() {
+			if (this.next.nextCard != null) {
+				this.$router.replace({
+					query: { dataset: Number(this.next.nextCard.replace(/\S*page=/g, '')) - 1 }
+				});
+			} else {
+				this.$router.replace({
+					query: { dataset: -1 }
+				});
 			}
 		},
 		async search(type: number, searchBarText: string) {
