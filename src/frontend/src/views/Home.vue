@@ -118,7 +118,7 @@ export default {
 				});
 		},
 		getDataSeries() {
-			apiService(endpoints.series)
+			apiService(endpoints.series + this.filter())
 				.then((data: RequestObject) => {
 					this.series = data.results;
 					this.seriesLength = data.count;
@@ -132,7 +132,7 @@ export default {
 				});
 		},
 		getDataImageSeries() {
-			apiService(endpoints.imgSeries)
+			apiService(endpoints.imgSeries + this.filter())
 				.then((data: RequestObject) => {
 					this.next.nextImageCard = data.next;
 					this.imagesSeries = [];
@@ -198,28 +198,43 @@ export default {
 								})
 								.then(() => {
 									this.setLayout();
-									this.changeUrl();
+									if (!isNaN(Number(this.$route.query.type)))
+										this.changeUrl(Number(this.$route.query.type));
+									else this.changeUrl();
 									this.loading = false;
 								});
 						}
 					});
 			}
 		},
-		changeUrl() {
+		changeUrl(type: number = 0, search: string = '') {
 			if (this.next.nextCard != null) {
 				this.$router.replace({
-					query: { dataset: Number(this.next.nextCard.replace(/\S*page=/g, '')) - 1 }
+					query: {
+						dataset: Number(this.next.nextCard.replace(/\S*page=/g, '').replace(/&\S*/g, '')) - 1,
+						type: type != 0 ? type : undefined,
+						filterbyname: search != '' ? search : undefined
+					}
 				});
 			} else {
 				this.$router.replace({
-					query: { dataset: -1 }
+					query: {
+						dataset: -1,
+						type: type != 0 ? type : undefined,
+						filterbyname: search != '' ? search : undefined
+					}
 				});
 			}
 		},
 		async search(type: number, searchBarText: string) {
 			if (type == 0 && searchBarText === '') {
-				this.getDataSeries();
-				this.getDataImageSeries();
+				this.$router.replace({
+					query: {}
+				});
+				setTimeout(() => {
+					this.getDataSeries();
+					this.getDataImageSeries();
+				}, 100);
 				return;
 			}
 			let url =
@@ -245,10 +260,22 @@ export default {
 							}
 						})
 						.then(() => {
-							this.loading = false;
 							this.setLayout();
+							this.changeUrl(type, searchBarText);
+							this.loading = false;
 						});
 				});
+		},
+		filter() {
+			let filter = '?';
+			if (this.$route.query.type != undefined) {
+				filter += 'type=' + this.$route.query.type;
+				filter += '&';
+			}
+			if (this.$route.query.filterbyname != undefined) {
+				filter += 'filterbyname=' + this.$route.query.filterbyname;
+			}
+			return filter;
 		}
 	},
 	created() {
