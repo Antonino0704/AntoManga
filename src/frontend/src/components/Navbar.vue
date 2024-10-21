@@ -98,11 +98,20 @@ export default {
 	},
 	methods: {
 		getTypes() {
-			apiService(endpoints.types).then((data: Array<Type>) => {
-				for (let i = 0; i < data.length; i++) {
-					this.types.push(data[i]);
-				}
-			});
+			apiService(endpoints.types)
+				.then((data: Array<Type>) => {
+					for (let i = 0; i < data.length; i++) {
+						this.types.push(data[i]);
+					}
+				})
+				.then(() => {
+					if (this.$route.query.type != undefined)
+						this.statusFilter = Number(this.$route.query.type);
+					if (this.$route.query.filterbyname != undefined)
+						document.querySelector<HTMLInputElement>('#searchBar')!.value = String(
+							this.$route.query.filterbyname
+						);
+				});
 		},
 		getPublishersLength() {
 			apiService(endpoints.publishers).then((data: Array<Publisher>) => {
