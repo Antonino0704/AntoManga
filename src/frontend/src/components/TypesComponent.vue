@@ -40,6 +40,7 @@
 <script lang="ts">
 import { apiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
+import { endpoints } from '@/utils/endpoints';
 
 export default {
 	name: 'TypesComponent',
@@ -56,7 +57,7 @@ export default {
 	methods: {
 		post() {
 			if (this.checkdata()) {
-				apiService('v2/types/', 'POST', this.type).then(() => {
+				apiService(endpoints.types, 'POST', this.type).then(() => {
 					(<any>this.$refs.notification).sendNotification('type created with success');
 					setTimeout(() => this.$router.go(0), 1000);
 				});

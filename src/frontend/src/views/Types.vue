@@ -123,6 +123,7 @@ import { apiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import TypesComponent from '../components/TypesComponent.vue';
 import type { Type } from '../@types/interfaces';
+import { endpoints } from '@/utils/endpoints';
 
 export default {
 	name: 'typeView',
@@ -139,7 +140,7 @@ export default {
 	},
 	methods: {
 		getTypesData() {
-			apiService('v2/types/').then((data: Array<Type>) => {
+			apiService(endpoints.types).then((data: Array<Type>) => {
 				this.types = data;
 			});
 		},
@@ -161,7 +162,7 @@ export default {
 
 				for (let i = 0; i < iconType.length; i++) {
 					const id = iconType[i].id.replace('iconTypeId', '');
-					apiService(`v2/types/${id}/`, 'PUT', this.types[i]);
+					apiService(`${endpoints.types}${id}/`, 'PUT', this.types[i]);
 				}
 				this.edit(true);
 				this.resetErrors();
@@ -217,7 +218,7 @@ export default {
 					(<any>iconType[i]!.childNodes)[0].className.baseVal === 'bi bi-toggle-on text-success'
 				) {
 					const id = iconType[i].id.replace('iconTypeId', '');
-					apiService(`v2/types/${id}/`, 'DELETE').then(() => {
+					apiService(`${endpoints.types}${id}/`, 'DELETE').then(() => {
 						checks = true;
 						(<any>this.$refs.notification).sendNotification('type was deleted');
 					});

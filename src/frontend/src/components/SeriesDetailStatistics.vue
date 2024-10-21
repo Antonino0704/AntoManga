@@ -155,6 +155,7 @@
 import { apiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import type { Series } from '../@types/interfaces';
+import { endpoints } from '@/utils/endpoints';
 
 export default {
 	name: 'seriesDetailStats',
@@ -176,7 +177,7 @@ export default {
 	},
 	methods: {
 		getDataSeries() {
-			apiService(`v2/series/${this.slug}/`).then((data: Series) => {
+			apiService(`${endpoints.series}${this.slug}/`).then((data: Series) => {
 				this.series = data;
 			});
 		},
@@ -210,7 +211,7 @@ export default {
 		},
 		sendData() {
 			if (this.checkData()) {
-				apiService(`v2/series/${this.slug}/`, 'PUT', this.series).then(() => {
+				apiService(`${endpoints.series}${this.slug}/`, 'PUT', this.series).then(() => {
 					this.resetErrors();
 					this.edit(true);
 				});

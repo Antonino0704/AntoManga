@@ -1,12 +1,17 @@
 <template>
 	<div class="navabar row justify-content-center">
+		<a
+			class="bi bi-box-arrow-right mb-2"
+			style="text-align: right"
+			href="/accounts/login/?next=/"
+		></a>
 		<div class="col-auto">
 			<nav class="navbar navbar-expand-lg bg-body-tertiary">
 				<a class="navbar-brand ms-3 mb-2" href="/">
 					<img :src="getLogo()" width="30" height="30" alt="logo" />
 				</a>
+
 				<select
-					v-if="isHome"
 					id="selectType"
 					name="selectType"
 					class="form-select-sm mb-2 ms-2 select-style badge text-bg-dark"
@@ -18,7 +23,7 @@
 						{{ type.name }}
 					</option>
 				</select>
-				<div class="d-flex ps-2" role="search" v-if="isHome">
+				<div class="d-flex ps-2" role="search">
 					<input
 						id="searchBar"
 						class="form-control me-2"
@@ -30,7 +35,7 @@
 					<button class="btn btn-outline-success" @click="search()">Search</button>
 				</div>
 
-				<li v-if="isHome" class="nav-item dropdown btn btn-outline-secondary me-2 ms-1 mt-2 mb-2">
+				<li class="nav-item dropdown btn btn-outline-secondary me-2 ms-1 mt-2 mb-2">
 					<a
 						class="nav-link dropdown-toggle"
 						href="#"
@@ -74,8 +79,8 @@
 
 <script lang="ts">
 import { apiService } from '../utils/APIService';
-import { search } from '@/utils/search';
 import type { Type, Publisher } from '../@types/interfaces';
+import { endpoints } from '@/utils/endpoints';
 
 export default {
 	name: 'NavBar',
@@ -87,36 +92,37 @@ export default {
 		};
 	},
 	computed: {
-		isHome() {
-			return this.$route.name === 'Home';
-		},
 		isTypesPubslihers() {
 			return this.types.length > 1 && this.publishers > 0;
 		}
 	},
 	methods: {
 		getTypes() {
-			apiService('v2/types/').then((data: Array<Type>) => {
-				for (let i = 0; i < data.length; i++) {
-					this.types.push(data[i]);
-				}
-			});
+			apiService(endpoints.types)
+				.then((data: Array<Type>) => {
+					for (let i = 0; i < data.length; i++) {
+						this.types.push(data[i]);
+					}
+				})
+				.then(() => {
+					if (this.$route.query.type != undefined)
+						this.statusFilter = Number(this.$route.query.type);
+					if (this.$route.query.filterbyname != undefined)
+						document.querySelector<HTMLInputElement>('#searchBar')!.value = String(
+							this.$route.query.filterbyname
+						);
+				});
 		},
 		getPublishersLength() {
-			apiService('v1/publishers/').then((data: Array<Publisher>) => {
+			apiService(endpoints.publishers).then((data: Array<Publisher>) => {
 				this.publishers = data.length;
 			});
 		},
 		search() {
-			let nameLower = '';
-			this.types.forEach((element: Type) => {
-				if (this.statusFilter === element.id) {
-					nameLower = element.name.toLowerCase();
-				}
-			});
-			search(
-				document.querySelector<HTMLInputElement>('#searchBar')!.value.toLowerCase(),
-				nameLower
+			this.$emit(
+				'filterEvent',
+				this.statusFilter,
+				document.querySelector<HTMLInputElement>('#searchBar')!.value.toLowerCase()
 			);
 		},
 		getLogo() {

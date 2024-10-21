@@ -3,6 +3,12 @@
 		<NotFound message="PUBLISHER NOT FOUND" />
 	</div>
 	<div v-else class="publisher-detail container-sm">
+		<div
+			v-if="loading"
+			class="spinner-border position-absolute top-50 start-50"
+			style="width: 3rem; height: 3rem"
+			role="status"
+		></div>
 		<div class="mt-2">
 			<router-link :to="{ name: 'AddPublisher' }" class="btn btn-outline-info"
 				>Add New Publisher
@@ -54,7 +60,7 @@
 
 			<h5 class="mt-3">{{ publisher.name?.toUpperCase() }}'s manga list</h5>
 			<div class="vr">
-				<p text-body-secondary class="ms-2">Length: {{ series.length }}</p>
+				<p text-body-secondary class="ms-2">Length: {{ seriesLength }}</p>
 			</div>
 			<ul class="list-group series-group container">
 				<li class="list-group-item" v-for="(serie, index) in series" :key="serie.id">
@@ -70,6 +76,14 @@
 						alt="logoPublisher"
 					/>
 				</li>
+				<button
+					v-if="next.nextCard"
+					@click="moreSeries()"
+					type="button"
+					class="btn btn-outline-secondary mt-3"
+				>
+					More
+				</button>
 			</ul>
 		</div>
 
@@ -84,7 +98,8 @@
 import { apiService } from '../utils/APIService';
 import ActionNotification from '../components/ActionNotification.vue';
 import NotFound from '../views/NotFound.vue';
-import type { Series, PublisherDetail } from '../@types/interfaces';
+import type { Series, PublisherDetail, RequestObject } from '../@types/interfaces';
+import { endpoints } from '@/utils/endpoints';
 
 export default {
 	name: 'PublisherDetail',
@@ -99,7 +114,13 @@ export default {
 			publisher: {} as PublisherDetail,
 			series: [] as Array<Series>,
 			imagePublisher: '',
-			imageSeries: [] as Array<string>
+			imageSeries: [] as Array<string>,
+			seriesLength: 0,
+			loading: true,
+			next: {
+				nextCard: null as string | null,
+				nextImageCard: null as string | null
+			}
 		};
 	},
 	components: {
@@ -107,34 +128,110 @@ export default {
 		NotFound
 	},
 	methods: {
+		getData(dataset: number, current: number) {
+			if ((current >= dataset && dataset != -1) || this.next.nextCard == null) {
+				this.loading = false;
+				return;
+			}
+			apiService(this.next.nextCard.replace(/\S*\/api\//g, ''))
+				.then((data: RequestObject) => {
+					this.series.push(...data.results);
+					this.next.nextCard = data.next;
+				})
+				.then(() => {
+					if (this.next.nextImageCard != null) {
+						apiService(this.next.nextImageCard.replace(/\S*\/api\//g, ''))
+							.then((data: RequestObject) => {
+								this.next.nextImageCard = data.next;
+								for (let i = 0; i < data.results.length; i++) {
+									this.imageSeries.push(data.results[i].image);
+								}
+							})
+							.then(() => {
+								this.getData(dataset, current + 1);
+							});
+					}
+				});
+		},
 		getPublisherData() {
-			apiService(`v1/publishers/${this.slug}/`).then((data: PublisherDetail) => {
+			apiService(`${endpoints.publishers}${this.slug}/`).then((data: PublisherDetail) => {
 				this.publisher = data;
 			});
 		},
 		getImagePublisherData() {
-			apiService(`v1/image/publishers/${this.slug}/`).then((data: PublisherDetail) => {
+			apiService(`${endpoints.imgPublishers}${this.slug}/`).then((data: PublisherDetail) => {
 				this.imagePublisher = data.image;
 			});
 		},
 		getseriesData() {
-			apiService(`v2/series-list/${this.slug}/`).then((data: Array<Series>) => {
-				this.series = data;
-			});
+			apiService(`${endpoints.seriesList}${this.slug}/`)
+				.then((data: RequestObject) => {
+					this.series = data.results;
+					this.seriesLength = data.count;
+					this.next.nextCard = data.next;
+				})
+				.then(() => {
+					if (this.$route.query.dataset != undefined) {
+						this.loading = true;
+						this.getData(Number(this.$route.query.dataset), 1);
+					}
+				});
 		},
 		getImageseriesData() {
-			apiService(`v2/image/series-list/${this.slug}/`).then((data: Array<Series>) => {
-				for (let i = 0; i < data.length; i++) {
-					this.imageSeries.push(data[i].image);
+			apiService(`${endpoints.imgSeriesList}${this.slug}/`).then((data: RequestObject) => {
+				this.next.nextImageCard = data.next;
+				for (let i = 0; i < data.results.length; i++) {
+					this.imageSeries.push(data.results[i].image);
 				}
+				this.loading = false;
 			});
 		},
 		deletePublisher() {
 			(<any>this.$refs.actionNotification).sendNotification(
 				'are you sure? you will no longer be able to retrieve the data',
 				'Publisher deleted',
-				`v1/publishers/${this.slug}/`
+				`${endpoints.publishers}${this.slug}/`
 			);
+		},
+		moreSeries() {
+			if (this.next.nextCard != null) {
+				this.loading = true;
+				apiService(this.next.nextCard.replace(/\S*\/api\//g, ''))
+					.then((data: RequestObject) => {
+						this.series.push(...data.results);
+						this.next.nextCard = data.next;
+					})
+					.then(() => {
+						if (this.next.nextImageCard != null) {
+							apiService(this.next.nextImageCard.replace(/\S*\/api\//g, ''))
+								.then((data: RequestObject) => {
+									this.next.nextImageCard = data.next;
+									for (let i = 0; i < data.results.length; i++) {
+										this.imageSeries.push(data.results[i].image);
+									}
+								})
+								.then(() => {
+									this.changeUrl();
+									this.loading = false;
+								});
+						}
+					});
+			}
+		},
+		changeUrl() {
+			if (this.next.nextCard != null) {
+				this.$router.replace({
+					query: {
+						dataset: Number(this.next.nextCard.replace(/\S*page=/g, '').replace(/&\S*/g, '')) - 1
+					}
+				});
+			} else {
+				this.$router.replace({
+					query: {
+						dataset: -1
+					}
+				});
+			}
 		}
 	},
 	created() {

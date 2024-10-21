@@ -118,6 +118,7 @@
 import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import type { Series, Type, Publisher } from '../@types/interfaces';
+import { endpoints } from '@/utils/endpoints';
 
 export default {
 	name: 'AddSeries',
@@ -142,7 +143,7 @@ export default {
 	},
 	methods: {
 		getTypes() {
-			apiService('v2/types/').then((data: Array<Type>) => {
+			apiService(endpoints.types).then((data: Array<Type>) => {
 				for (let i = 0; i < data.length; i++) {
 					this.types.push(data[i]);
 				}
@@ -157,7 +158,7 @@ export default {
 			});
 		},
 		getPublishers() {
-			apiService('v1/publishers/').then((data: Array<any>) => {
+			apiService(endpoints.publishers).then((data: Array<any>) => {
 				for (let i = 0; i < data.length; i++) {
 					this.publishers.push(data[i]);
 				}
@@ -186,18 +187,20 @@ export default {
 		},
 		addSeries() {
 			if (this.checkData()) {
-				apiService('v2/series/', 'POST', this.series).then((response: Series) => {
-					imageApiService(`v2/image/series/${response.slug}/`, 'PUT', this.formData).then(() => {
-						(<any>this.$refs.notification).sendNotification('Manga added with success');
-						setTimeout(
-							() =>
-								this.$router.push({
-									name: 'SeriesDetail',
-									params: { slug: response.slug }
-								}),
-							1000
-						);
-					});
+				apiService(endpoints.series, 'POST', this.series).then((response: Series) => {
+					imageApiService(`${endpoints.imgSeries}${response.slug}/`, 'PUT', this.formData).then(
+						() => {
+							(<any>this.$refs.notification).sendNotification('Manga added with success');
+							setTimeout(
+								() =>
+									this.$router.push({
+										name: 'SeriesDetail',
+										params: { slug: response.slug }
+									}),
+								1000
+							);
+						}
+					);
 				});
 			} else {
 				this.resetErrors();

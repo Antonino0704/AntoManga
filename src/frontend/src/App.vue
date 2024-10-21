@@ -1,16 +1,23 @@
 <template>
 	<isNotAuthenticated v-if="isNotAuthenticatedVar" />
-	<navbar />
+	<nav class="navabar row justify-content-center mt-2" v-if="isHome">
+		<div class="col-auto">
+			<a class="navbar-brand mb-2" href="/">
+				<img :src="getLogo()" alt="logo" width="30" height="30" />
+			</a>
+		</div>
+	</nav>
+
 	<div id="app"></div>
 	<router-view />
 	<toggleTheme />
 </template>
 
 <script lang="ts">
-import navbar from './components/Navbar.vue';
 import toggleTheme from './components/ToggleTheme.vue';
 import isNotAuthenticated from './components/IsNotAuthenticated.vue';
 import { apiService } from './utils/APIService';
+import { endpoints } from '@/utils/endpoints';
 
 export default {
 	name: 'App',
@@ -20,16 +27,23 @@ export default {
 		};
 	},
 	components: {
-		navbar,
 		toggleTheme,
 		isNotAuthenticated
+	},
+	computed: {
+		isHome() {
+			return this.$route.name !== 'Home';
+		}
 	},
 	methods: {
 		isAuthenticated() {
 			console.log('%cNothing to see here', 'color: yellow; font-size: xx-large');
-			apiService('v1/isAuthenticated/', 'GET').then((response: any) => {
+			apiService(endpoints.isAuthenticated, 'GET').then((response: any) => {
 				this.isNotAuthenticatedVar = !response.result;
 			});
+		},
+		getLogo() {
+			return `${document.location.origin}/media/icon.png`;
 		}
 	},
 	created() {

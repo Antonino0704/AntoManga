@@ -80,6 +80,7 @@ import seriesDetailStats from '../components/SeriesDetailStatistics.vue';
 import ActionNotification from '../components/ActionNotification.vue';
 import NotFound from '../views/NotFound.vue';
 import type { SeriesViewsetInstance } from '../@types/interfaces';
+import { endpoints } from '@/utils/endpoints';
 
 export default {
 	name: 'SeriesDetail',
@@ -102,12 +103,12 @@ export default {
 	},
 	methods: {
 		getSeriesData() {
-			apiService(`v2/series/${this.slug}/`).then((data: SeriesViewsetInstance) => {
+			apiService(`${endpoints.series}${this.slug}/`).then((data: SeriesViewsetInstance) => {
 				this.series = data;
 			});
 		},
 		getImageSeries() {
-			apiService(`v2/image/series/${this.slug}/`).then((data: SeriesViewsetInstance) => {
+			apiService(`${endpoints.imgSeries}${this.slug}/`).then((data: SeriesViewsetInstance) => {
 				this.imageSeries = data.image;
 			});
 		},
@@ -115,7 +116,7 @@ export default {
 			(<any>this.$refs.actionNotification).sendNotification(
 				'are you sure? you will no longer be able to retrieve the data',
 				`${this.series.name} deleted`,
-				`v2/series/${this.slug}/`
+				`${endpoints.series}${this.slug}/`
 			);
 		}
 	},

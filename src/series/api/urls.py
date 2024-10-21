@@ -1,8 +1,14 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from series.api.views import (TypologyViewset, SeriesViewset, 
-                             SeriesListView , ImageSeriesViewset, ImageSeriesListView)
+from series.api.views import (
+    TypologyViewset,
+    SeriesViewset,
+    SeriesListView,
+    ImageSeriesViewset,
+    ImageSeriesListView,
+    LengthView,
+)
 
 router = DefaultRouter()
 router.register("types", TypologyViewset)
@@ -11,12 +17,11 @@ router.register("image/series", ImageSeriesViewset)
 
 urlpatterns = [
     path("", include(router.urls)),
-
-    path("series-list/<slug:publisher>/",
-         SeriesListView.as_view(),
-         name="series-list"),
-
-    path("image/series-list/<slug:publisher>/",
-         ImageSeriesListView.as_view(),
-         name="image-series-list")
+    path("series-list/<slug:publisher>/", SeriesListView.as_view(), name="series-list"),
+    path(
+        "image/series-list/<slug:publisher>/",
+        ImageSeriesListView.as_view(),
+        name="image-series-list",
+    ),
+    path("series-length/", LengthView.as_view(), name="length-view"),
 ]

@@ -66,6 +66,7 @@
 import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import type { Publisher } from '../@types/interfaces';
+import { endpoints } from '@/utils/endpoints';
 
 export default {
 	name: 'AddPublisher',
@@ -97,8 +98,8 @@ export default {
 		},
 		addPublisher() {
 			if (this.checkData()) {
-				apiService('v1/publishers/', 'POST', this.publisher).then((response: Publisher) => {
-					imageApiService(`v1/image/publishers/${response.slug}/`, 'PUT', this.formData).then(
+				apiService(endpoints.publishers, 'POST', this.publisher).then((response: Publisher) => {
+					imageApiService(`${endpoints.imgPublishers}${response.slug}/`, 'PUT', this.formData).then(
 						() => {
 							(<any>this.$refs.notification).sendNotification('publisher added with success');
 							setTimeout(
