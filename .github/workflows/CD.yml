@@ -1,0 +1,40 @@
+name: Build
+
+on:
+    push:
+        branches: 
+            - main
+        paths: 
+            - './src/frontend/**'
+
+jobs:
+    build:
+        name: Build
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Project
+              uses: actions/checkout@v4
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                cache-dependency-path: ./src/frontend/package-lock.json
+
+            - name: Install dependencies
+              uses: bahmutov/npm-install@v1
+              with:
+                working-directory: ./src/frontend
+
+            - name: Build project
+              run: npm run build
+              working-directory: ./src/frontend
+
+            - name: Create Pull Request
+              uses: peter-evans/create-pull-request@v7
+              with:
+                token: ${{ secrets.GITHUB_TOKEN }}
+                commit-message: "build: static js and css files"
+                title: "build: static js and css files"
+                body: Automated build
+                path: ./src/frontend
+                branch: build-branch

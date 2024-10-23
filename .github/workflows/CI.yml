@@ -1,0 +1,17 @@
+name: Black Format
+on: 
+    pull_request:
+        paths: 
+            - '**.py'
+
+jobs:
+  formatCheck:
+    name: Black Format
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Black Check
+        uses: psf/black@stable
