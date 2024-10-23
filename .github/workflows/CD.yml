@@ -25,9 +25,8 @@ jobs:
           working-directory: ./src/frontend
 
       - name: Build project
-        run: npm run build
-        working-directory: ./src/frontend
-
-      - name: test git
         run: |
-         git status
+          npm run build
+          git status
+          ls
+        working-directory: ./src/frontend
