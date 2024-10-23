@@ -24,7 +24,7 @@ jobs:
         with:
           working-directory: ./src/frontend
 
-      - name: Build project
+      - name: Lint check and Format
         run: |
          npm run lint
          npm run format
