@@ -91,7 +91,7 @@ export default {
 			types: [{ id: 0, name: 'null' }] as Array<Type>,
 			publishers: 0,
 			statusFilter: 0,
-			isAuthenticatedVar: true
+			isAuthenticatedVar: false
 		};
 	},
 	computed: {
@@ -135,9 +135,6 @@ export default {
 			apiService(endpoints.isAuthenticated, 'GET').then((response: any) => {
 				this.isAuthenticatedVar = response.result;
 			});
-		},
-		sendNotification() {
-			this.$emit('logoutEvent');
 		}
 	},
 	created() {
