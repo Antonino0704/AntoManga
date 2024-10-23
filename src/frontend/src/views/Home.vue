@@ -8,7 +8,7 @@
 			role="status"
 		></div>
 		<div class="col-auto">
-			<div class="container text-center">
+			<div class="container text-center a">
 				<div class="fs-1">
 					Series
 					<i id="gridButton" class="bi bi-grid ms-2 fs-5" @click="gridClick()"></i>
