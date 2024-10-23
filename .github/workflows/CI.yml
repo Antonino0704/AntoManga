@@ -1,8 +1,5 @@
 name: Black and Prettier Format, Lint 
-on: 
-    pull_request:
-        paths: 
-            - '**.py'
+on: [pull_request]
 
 jobs:
   formatCheck:
