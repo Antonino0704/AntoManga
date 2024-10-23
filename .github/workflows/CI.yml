@@ -1,4 +1,4 @@
-name: Black Format
+name: Black and Prettier Format, Lint 
 on: 
     pull_request:
         paths: 
@@ -6,12 +6,29 @@ on:
 
 jobs:
   formatCheck:
-    name: Black Format
+    name: Black and Prettier Format, Lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Project
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - name: Black Check
         uses: psf/black@stable
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          cache-dependency-path: ./src/frontend/package-lock.json
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+        with:
+          working-directory: ./src/frontend
+
+      - name: Build project
+        run: |
+         npm run lint
+         npm run format
+        working-directory: ./src/frontend
