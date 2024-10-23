@@ -3,9 +3,9 @@ name: Build
 on:
     push:
         branches: 
-            - main
+            - Test
         paths: 
-            - './src/frontend/**'
+            - './src/frontend/'
 
 jobs:
     build:
