@@ -27,5 +27,10 @@ jobs:
       - name: Build project
         run: npm run build
         working-directory: ./src/frontend
-      - name: git check
-        run: git status
+        
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: pull request test
+          title: pull request test
