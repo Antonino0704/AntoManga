@@ -38,3 +38,6 @@ jobs:
                 body: Automated build
                 path: ./src/frontend
                 branch: build-branch
+                labels: |
+                  automated pr
+                  prod
