@@ -37,3 +37,4 @@ jobs:
                 title: "build: static js and css files"
                 body: Automated build
                 path: ./src/frontend
+                branch: build-branch
