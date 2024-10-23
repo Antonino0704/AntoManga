@@ -4,6 +4,8 @@ on:
     push:
         branches: 
             - Test
+        paths: 
+            - src/frontend/**
 
 jobs:
     build:
