@@ -2,7 +2,6 @@
 	<div class="navabar row justify-content-center">
 		<a
 			v-if="isAuthenticatedVar"
-			@click="sendNotification()"
 			class="bi bi-box-arrow-right mb-2"
 			style="text-align: right"
 			href="/accounts/logout/"
