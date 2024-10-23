@@ -1,9 +1,11 @@
 <template>
 	<div class="navabar row justify-content-center">
 		<a
+			v-if="isAuthenticatedVar"
+			@click="sendNotification()"
 			class="bi bi-box-arrow-right mb-2"
 			style="text-align: right"
-			href="/accounts/login/?next=/"
+			href="/accounts/logout/"
 		></a>
 		<div class="col-auto">
 			<nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -88,7 +90,8 @@ export default {
 		return {
 			types: [{ id: 0, name: 'null' }] as Array<Type>,
 			publishers: 0,
-			statusFilter: 0
+			statusFilter: 0,
+			isAuthenticatedVar: true
 		};
 	},
 	computed: {
@@ -127,11 +130,20 @@ export default {
 		},
 		getLogo() {
 			return `${document.location.origin}/media/icon.png`;
+		},
+		isAuthenticated() {
+			apiService(endpoints.isAuthenticated, 'GET').then((response: any) => {
+				this.isAuthenticatedVar = response.result;
+			});
+		},
+		sendNotification() {
+			this.$emit('logoutEvent');
 		}
 	},
 	created() {
 		this.getTypes();
 		this.getPublishersLength();
+		this.isAuthenticated();
 	}
 };
 </script>
