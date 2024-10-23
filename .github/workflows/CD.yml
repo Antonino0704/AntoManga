@@ -36,5 +36,4 @@ jobs:
                 commit-message: "build: static js and css files"
                 title: "build: static js and css files"
                 body: Automated build
-                path: ./src/frontend
                 branch: build-branch
