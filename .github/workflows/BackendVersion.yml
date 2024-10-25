@@ -1,0 +1,30 @@
+name: Backend Version Check
+on: 
+  pull_request:
+    paths:
+      - src/**
+      - "!src/frontend/**"
+
+jobs:
+  versionCheck:
+    name: Version Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          cache-dependency-path: ./src/frontend/package-lock.json
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+        with:
+          working-directory: ./src/frontend
+
+      - name: Backend Version Check
+        run: npm run bumpedbackend-check
+        working-directory: ./src/frontend

@@ -24,8 +24,14 @@ jobs:
         with:
           working-directory: ./src/frontend
 
-      - name: Lint check and Format
-        run: |
-         npm run format-check
-         npm run lint
+      - name: Type Check
+        run: npm run type-check
+        working-directory: ./src/frontend
+
+      - name: Format Check
+        run: npm run format-check
+        working-directory: ./src/frontend
+
+      - name: Lint
+        run: npm run lint
         working-directory: ./src/frontend

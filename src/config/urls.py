@@ -29,7 +29,7 @@ urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     path("api/v1/", include("publishers.api.urls")),
     path("api/v3/", include("series.api.urls")),
-    path("api/v1/", include("core.api.urls")),
+    path("api/v2/", include("core.api.urls")),
 ]
 
 if settings.DEBUG:
