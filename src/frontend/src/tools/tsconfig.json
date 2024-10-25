@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+		"useUnknownInCatchVariables": false,
+		"module": "ESNext",
+		"allowSyntheticDefaultImports": true,
+		"moduleResolution": "node",
+		"strict": true,
+		"rootDir": "./"
+	}
+}
