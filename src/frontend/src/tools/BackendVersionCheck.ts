@@ -5,7 +5,7 @@ import { compare } from 'semver';
 const require = createRequire(import.meta.url);
 
 const versionjsonServerFile = require('../../../version.json');
-fetch('http://localhost:8000/api/v2/version/')
+fetch('https://antomanga.pythonanywhere.com/api/v2/version/')
 	.then((res) => res.json())
 	.then((res) => {
 		if (compare(versionjsonServerFile.version, res.serverVersion) > 0) {
