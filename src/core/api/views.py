@@ -1,6 +1,7 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from config import settings
 import json
 
 
@@ -12,12 +13,21 @@ class IsAuthenticatedView(APIView):
         return Response({"result": True}, status=status.HTTP_202_ACCEPTED)
 
 
-class ReadVersinAPIView(APIView):
+class ReadVersionAPIView(APIView):
 
     def get(self, request):
-        with open("version.json", "r") as server_file:
+        settings.DEBUG
+        with open(
+            ("" if settings.DEBUG else "/home/AntoManga/AntoManga/src/")
+            + "version.json",
+            "r",
+        ) as server_file:
             server_data = json.load(server_file)
-        with open("frontend/package.json", "r") as frontend_file:
+        with open(
+            ("" if settings.DEBUG else "/home/AntoManga/AntoManga/src/")
+            + "frontend/package.json",
+            "r",
+        ) as frontend_file:
             frontend_data = json.load(frontend_file)
         return Response(
             {
