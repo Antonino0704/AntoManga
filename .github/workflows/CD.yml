@@ -6,6 +6,8 @@ on:
             - main
         paths: 
             - src/frontend/**
+            - "!src/frontend/package.json"
+            - "!src/frontend/package-lock.json"
 
 jobs:
     build:
