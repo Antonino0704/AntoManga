@@ -20,7 +20,7 @@ writeFile(
 	)
 )
 	.then(() => actions.info('frontend bumped'))
-	.catch((err) => actions.error(err));
+	.catch((err) => actions.setFailed(err));
 
 writeFile(
 	'../version.json',
@@ -34,4 +34,4 @@ writeFile(
 	)
 )
 	.then(() => actions.info('backend bumped'))
-	.catch((err) => actions.error(err));
+	.catch((err) => actions.setFailed(err));

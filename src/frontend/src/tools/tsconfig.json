@@ -1,5 +1,5 @@
 {
-    "compilerOptions": {
+	"compilerOptions": {
 		"useUnknownInCatchVariables": false,
 		"module": "ESNext",
 		"allowSyntheticDefaultImports": true,
