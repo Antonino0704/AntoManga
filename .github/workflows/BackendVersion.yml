@@ -26,5 +26,7 @@ jobs:
           working-directory: ./src/frontend
 
       - name: Backend Version Check
-        run: npm run lint-check
+        env:
+          architecture: backend
+        run: npm run bumpedbackend-check
         working-directory: ./src/frontend
