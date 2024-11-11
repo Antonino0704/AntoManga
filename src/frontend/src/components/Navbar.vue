@@ -1,11 +1,8 @@
 <template>
 	<div class="navabar row justify-content-center">
-		<a
-			v-if="isAuthenticatedVar"
-			class="bi bi-box-arrow-right mb-2"
-			style="text-align: right"
-			href="/accounts/logout/"
-		></a>
+		<div style="text-align: right">
+			<a v-if="isAuthenticatedVar" class="bi bi-box-arrow-right mb-2" href="/accounts/logout/"></a>
+		</div>
 		<div class="col-auto">
 			<nav class="navbar navbar-expand-lg bg-body-tertiary">
 				<a class="navbar-brand ms-3 mb-2" href="/">
