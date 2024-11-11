@@ -31,7 +31,7 @@ class ReadVersionAPIView(APIView):
             frontend_data = json.load(frontend_file)
         return Response(
             {
-                "serverVersion": server_data["version"],
+                "backendVersion": server_data["version"],
                 "frontendVersion": frontend_data["version"],
             }
         )

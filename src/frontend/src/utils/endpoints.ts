@@ -4,11 +4,11 @@ const endpoints = {
 	series: 'v3/series/',
 	imgSeries: 'v3/image/series/',
 	types: 'v3/types/',
-	isAuthenticated: 'v2/isAuthenticated/',
+	isAuthenticated: 'v3/isAuthenticated/',
 	seriesLength: 'v3/series-length/',
 	seriesList: 'v3/series-list/',
 	imgSeriesList: 'v3/image/series-list/',
-	version: 'v2/version/'
+	version: 'v3/version/'
 };
 
 export { endpoints };

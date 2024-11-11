@@ -12,8 +12,8 @@
 		"format": "prettier --write src/",
 		"format-check": "prettier --check src/",
 		"bump-version": "tsc -p src/tools/tsconfig.json && node src/tools/BumpVersion.js",
-		"bumpedfrontend-check": "tsc -p src/tools/tsconfig.json && node src/tools/FrontendVersionCheck.js",
-		"bumpedbackend-check": "tsc -p src/tools/tsconfig.json && node src/tools/BackendVersionCheck.js"
+		"bumpedfrontend-check": "tsc -p src/tools/tsconfig.json && node src/tools/VersionCheck.js frontend",
+		"bumpedbackend-check": "tsc -p src/tools/tsconfig.json && node src/tools/VersionCheck.js backend"
 	},
 	"dependencies": {
 		"bootstrap": "^5.3.2",
