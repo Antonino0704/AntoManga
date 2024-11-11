@@ -91,7 +91,7 @@ export default {
 		navbar
 	},
 	methods: {
-		getData(dataset: number, current: number) {
+		moreData(dataset: number, current: number) {
 			if ((current >= dataset && dataset != -1) || this.next.nextCard == null) {
 				this.setLayout();
 				this.loading = false;
@@ -112,7 +112,7 @@ export default {
 								}
 							})
 							.then(() => {
-								this.getData(dataset, current + 1);
+								this.moreData(dataset, current + 1);
 							});
 					}
 				});
@@ -127,7 +127,7 @@ export default {
 				.then(() => {
 					if (this.$route.query.dataset != undefined) {
 						this.loading = true;
-						this.getData(Number(this.$route.query.dataset), 1);
+						this.moreData(Number(this.$route.query.dataset), 1);
 					}
 				});
 		},

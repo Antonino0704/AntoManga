@@ -9,7 +9,7 @@
 			style="width: 3rem; height: 3rem"
 			role="status"
 		></div>
-		<div class="mt-2">
+		<div class="mt-3">
 			<router-link :to="{ name: 'AddPublisher' }" class="btn btn-outline-info"
 				>Add New Publisher
 			</router-link>
@@ -128,7 +128,7 @@ export default {
 		NotFound
 	},
 	methods: {
-		getData(dataset: number, current: number) {
+		moreData(dataset: number, current: number) {
 			if ((current >= dataset && dataset != -1) || this.next.nextCard == null) {
 				this.loading = false;
 				return;
@@ -148,7 +148,7 @@ export default {
 								}
 							})
 							.then(() => {
-								this.getData(dataset, current + 1);
+								this.moreData(dataset, current + 1);
 							});
 					}
 				});
@@ -173,7 +173,7 @@ export default {
 				.then(() => {
 					if (this.$route.query.dataset != undefined) {
 						this.loading = true;
-						this.getData(Number(this.$route.query.dataset), 1);
+						this.moreData(Number(this.$route.query.dataset), 1);
 					}
 				});
 		},
