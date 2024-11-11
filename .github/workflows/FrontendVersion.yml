@@ -25,6 +25,8 @@ jobs:
           working-directory: ./src/frontend
 
       - name: Frontend Version Check
+        env:
+          ${{ frontend }}
         run: |
           npm run bumpedfrontend-check
           npm run bumpedbackend-check
