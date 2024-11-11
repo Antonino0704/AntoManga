@@ -1,6 +1,6 @@
 {
 	"name": "frontend",
-	"version": "2.2.7",
+	"version": "2.2.8",
 	"private": true,
 	"scripts": {
 		"dev": "vite",
@@ -12,8 +12,8 @@
 		"format": "prettier --write src/",
 		"format-check": "prettier --check src/",
 		"bump-version": "tsc -p src/tools/tsconfig.json && node src/tools/BumpVersion.js",
-		"bumpedfrontend-check": "tsc -p src/tools/tsconfig.json && node src/tools/VersionCheck.js frontend",
-		"bumpedbackend-check": "tsc -p src/tools/tsconfig.json && node src/tools/VersionCheck.js backend"
+		"bumpedfrontend-check": "tsc -p src/tools/tsconfig.json && node src/tools/VersionCheck.js",
+		"bumpedbackend-check": "tsc -p src/tools/tsconfig.json && node src/tools/VersionCheck.js"
 	},
 	"dependencies": {
 		"bootstrap": "^5.3.2",
