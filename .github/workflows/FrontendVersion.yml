@@ -26,7 +26,7 @@ jobs:
 
       - name: Frontend Version Check
         env:
-          ${{ frontend }}
+          frontend: frontend
         run: |
           npm run bumpedfrontend-check
           npm run bumpedbackend-check
