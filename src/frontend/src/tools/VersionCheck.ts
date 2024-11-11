@@ -30,3 +30,4 @@ if (process.env[2] == 'frontend') {
 		})
 		.catch((err) => actions.setFailed(`server off:  ${err}`));
 }
+console.log(process.env[2] == 'frontend')
