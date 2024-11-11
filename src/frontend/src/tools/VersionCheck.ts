@@ -3,7 +3,6 @@ import actions from '@actions/core';
 import { compare } from 'semver';
 
 const require = createRequire(import.meta.url);
-console.log(process.argv[2]);
 
 if (process.env[2] == 'frontend') {
 	const packagejsonFile = require('../../package.json');
