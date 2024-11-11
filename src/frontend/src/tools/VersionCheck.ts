@@ -3,10 +3,11 @@ import actions from '@actions/core';
 import { compare } from 'semver';
 
 const require = createRequire(import.meta.url);
+const url = 'https://antomanga.pythonanywhere.com/api/v3/version/'
 
 if (process.env[2] == 'frontend') {
 	const packagejsonFile = require('../../package.json');
-	fetch('https://antomanga.pythonanywhere.com/api/v2/version/')
+	fetch(url)
 		.then((res) => res.json())
 		.then((res) => {
 			if (compare(packagejsonFile.version, res.frontendVersion) > 0) {
@@ -18,7 +19,7 @@ if (process.env[2] == 'frontend') {
 		.catch((err) => actions.setFailed(`server off:  ${err}`));
 } else if (process.env[2] == 'backend') {
 	const versionjsonServerFile = require('../../../version.json');
-	fetch('https://antomanga.pythonanywhere.com/api/v2/version/')
+	fetch(url)
 		.then((res) => res.json())
 		.then((res) => {
 			if (compare(versionjsonServerFile.version, res.backendVersion) > 0) {
