@@ -14,7 +14,7 @@
 					<i id="gridButton" class="bi bi-grid ms-2 fs-5" @click="gridClick()"></i>
 				</div>
 				<div>
-					<span class="badge rounded-pill text-bg-info me-2">Length: {{ seriesLength }}</span>
+					<span class="badge rounded-pill text-ebg-info me-2">Length: {{ seriesLength }}</span>
 					<span class="badge rounded-pill text-bg-info me-2"
 						>Length(Vol. Read): {{ NVolumesRead }}</span
 					>
