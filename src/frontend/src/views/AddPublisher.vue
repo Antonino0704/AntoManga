@@ -4,7 +4,7 @@
 			<h1 class="list-inline-item">ADD A New Publisher</h1>
 			<div class="list-inline-item row g-2">
 				<div class="col-md">
-					<div class="form-floating list-inline-item">
+					<div class="form-floating list-inline-item a">
 						<input
 							type="text"
 							class="form-control"
