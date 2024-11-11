@@ -25,5 +25,7 @@ jobs:
           working-directory: ./src/frontend
 
       - name: Frontend Version Check
+        env:
+          architecture: frontend
         run: npm run bumpedfrontend-check
         working-directory: ./src/frontend

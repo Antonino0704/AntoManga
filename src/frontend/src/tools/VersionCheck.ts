@@ -3,9 +3,9 @@ import actions from '@actions/core';
 import { compare } from 'semver';
 
 const require = createRequire(import.meta.url);
-const url = 'https://antomanga.pythonanywhere.com/api/v3/version/'
+const url = 'https://antomanga.pythonanywhere.com/api/v3/version/';
 
-if (process.env[2] == 'frontend') {
+if (process.env.architecture == 'frontend') {
 	const packagejsonFile = require('../../package.json');
 	fetch(url)
 		.then((res) => res.json())
@@ -17,7 +17,7 @@ if (process.env[2] == 'frontend') {
 			}
 		})
 		.catch((err) => actions.setFailed(`server off:  ${err}`));
-} else if (process.env[2] == 'backend') {
+} else if (process.env.architecture == 'backend') {
 	const versionjsonServerFile = require('../../../version.json');
 	fetch(url)
 		.then((res) => res.json())
@@ -29,4 +29,6 @@ if (process.env[2] == 'frontend') {
 			}
 		})
 		.catch((err) => actions.setFailed(`server off:  ${err}`));
+} else {
+	actions.setFailed('something went wrong');
 }
