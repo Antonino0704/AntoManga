@@ -84,7 +84,10 @@ export default {
 	name: 'NavBar',
 	data() {
 		return {
-			types: [{ id: 0, name: 'null' }] as Array<Type>,
+			types: [
+				{ id: 0, name: 'null' },
+				{ id: -1, name: 'incomplete' }
+			] as Array<Type>,
 			publishers: 0,
 			statusFilter: 0,
 			isAuthenticatedVar: false
