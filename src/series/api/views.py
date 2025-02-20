@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.db.models import F
 
 from series.models import Typology, Series
 from series.api.serializers import (
@@ -26,8 +27,10 @@ class SeriesViewset(viewsets.ModelViewSet):
     def get_queryset(self):
         seriesObjects = Series.objects.all()
         if "type" in self.request.query_params:
-            seriesObjects = seriesObjects.filter(
-                typology=int(self.request.query_params["type"])
+            seriesObjects = (
+                seriesObjects.filter(typology=int(self.request.query_params["type"]))
+                if int(self.request.query_params["type"]) > 0
+                else seriesObjects.exclude(n_volumes=F("volumes_bought"))
             )
         if "filterbyname" in self.request.query_params:
             seriesObjects = seriesObjects.filter(
@@ -59,8 +62,10 @@ class ImageSeriesViewset(viewsets.ModelViewSet):
     def get_queryset(self):
         seriesObjects = Series.objects.all()
         if "type" in self.request.query_params:
-            seriesObjects = seriesObjects.filter(
-                typology=int(self.request.query_params["type"])
+            seriesObjects = (
+                seriesObjects.filter(typology=int(self.request.query_params["type"]))
+                if int(self.request.query_params["type"]) > 0
+                else seriesObjects.exclude(n_volumes=F("volumes_bought"))
             )
         if "filterbyname" in self.request.query_params:
             seriesObjects = seriesObjects.filter(
