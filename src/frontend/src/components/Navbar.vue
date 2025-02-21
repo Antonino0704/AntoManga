@@ -95,7 +95,7 @@ export default {
 	},
 	computed: {
 		isTypesPubslihers() {
-			return this.types.length > 1 && this.publishers > 0;
+			return this.types.length > 2 && this.publishers > 0;
 		}
 	},
 	methods: {
