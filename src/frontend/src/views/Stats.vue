@@ -71,6 +71,9 @@ export default {
 		},
 		previous() {
 			this.current--;
+			if (this.current == 0) {
+				this.getStats();
+			}
 			apiService(`${endpoints.seriesLength}?type=${this.types[this.current].id}`).then(
 				(data: any) => {
 					this.stats = {
