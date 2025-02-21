@@ -40,3 +40,9 @@ export interface RequestObject {
 	next: string | null;
 	previous: string | null;
 }
+
+export interface Stats {
+	type: Type;
+	volumes_bought: number;
+	volumes_read: number;
+}

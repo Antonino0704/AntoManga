@@ -15,12 +15,8 @@
 				</div>
 				<div>
 					<span class="badge rounded-pill text-bg-info me-2">Length: {{ seriesLength }}</span>
-					<span class="badge rounded-pill text-bg-info me-2"
-						>Length(Vol. Read): {{ NVolumesRead }}</span
-					>
-					<span class="badge rounded-pill text-bg-info mt-2"
-						>Length(Vol. Bought): {{ NVolumesBought }}</span
-					>
+					<router-link :to="{ name: 'StatsView' }" type="button" class="bi bi-bar-chart-line">
+					</router-link>
 				</div>
 				<div class="row">
 					<div colspan="2" class="list col mt-3" v-for="(serie, index) in series" :key="serie.id">
@@ -76,8 +72,6 @@ export default {
 		return {
 			series: [] as Array<SeriesViewsetInstance>,
 			imagesSeries: [] as Array<string>,
-			NVolumesBought: 0,
-			NVolumesRead: 0,
 			seriesLength: 0,
 			grid: false,
 			loading: true,
@@ -144,14 +138,6 @@ export default {
 					this.loading = false;
 					this.setLayout();
 				});
-		},
-		getLength(typeFilter = '') {
-			apiService(`${endpoints.seriesLength}${typeFilter ? `?type=${typeFilter}` : ''}`).then(
-				(data: any) => {
-					this.NVolumesRead = data.volumes_read_tot;
-					this.NVolumesBought = data.volumes_bought_tot;
-				}
-			);
 		},
 		gridClick(load: boolean = false) {
 			const listElement = document.querySelectorAll('.list');
@@ -236,7 +222,6 @@ export default {
 				setTimeout(() => {
 					this.getDataSeries();
 					this.getDataImageSeries();
-					this.getLength();
 				}, 100);
 				return;
 			}
@@ -253,7 +238,6 @@ export default {
 					this.series = data.results;
 					this.seriesLength = data.count;
 					this.next.nextCard = data.next;
-					this.getLength(type.toString());
 				})
 				.then(() => {
 					apiService(imageUrl)
@@ -286,7 +270,6 @@ export default {
 	created() {
 		this.getDataSeries();
 		this.getDataImageSeries();
-		this.getLength(this.$route.query.type?.toString());
 	}
 };
 </script>
