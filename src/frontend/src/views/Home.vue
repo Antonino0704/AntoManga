@@ -145,11 +145,13 @@ export default {
 					this.setLayout();
 				});
 		},
-		getLength() {
-			apiService(endpoints.seriesLength).then((data: any) => {
-				this.NVolumesRead = data.volumes_read_tot;
-				this.NVolumesBought = data.volumes_bought_tot;
-			});
+		getLength(typeFilter = '') {
+			apiService(`${endpoints.seriesLength}${typeFilter ? `?type=${typeFilter}` : ''}`).then(
+				(data: any) => {
+					this.NVolumesRead = data.volumes_read_tot;
+					this.NVolumesBought = data.volumes_bought_tot;
+				}
+			);
 		},
 		gridClick(load: boolean = false) {
 			const listElement = document.querySelectorAll('.list');
@@ -234,6 +236,7 @@ export default {
 				setTimeout(() => {
 					this.getDataSeries();
 					this.getDataImageSeries();
+					this.getLength();
 				}, 100);
 				return;
 			}
@@ -248,7 +251,9 @@ export default {
 			apiService(url)
 				.then((data: RequestObject) => {
 					this.series = data.results;
+					this.seriesLength = data.count;
 					this.next.nextCard = data.next;
+					this.getLength(type.toString());
 				})
 				.then(() => {
 					apiService(imageUrl)
@@ -281,7 +286,7 @@ export default {
 	created() {
 		this.getDataSeries();
 		this.getDataImageSeries();
-		this.getLength();
+		this.getLength(this.$route.query.type?.toString());
 	}
 };
 </script>
