@@ -7,6 +7,7 @@ import PublisherDetail from '../views/PublisherDetail.vue';
 import PublisherEditor from '../views/PublisherEditor.vue';
 import AddPublisher from '../views/AddPublisher.vue';
 import TypeView from '../views/Types.vue';
+import StatsView from '../views/Stats.vue';
 import NotFound from '../views/NotFound.vue';
 
 const router = createRouter({
@@ -55,6 +56,11 @@ const router = createRouter({
 			path: '/types/',
 			name: 'TypeView',
 			component: TypeView
+		},
+		{
+			path: '/stats/',
+			name: 'StatsView',
+			component: StatsView
 		},
 		{
 			path: '/:pathMatch(.*)*',
