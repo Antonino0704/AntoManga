@@ -181,14 +181,14 @@ export default {
 				this.series = data;
 			});
 		},
-		getVolumesReadx100(): number {
-			return (100 / this.series.n_volumes) * this.series.volumes_read;
+		getVolumesReadx100(): string {
+			return ((100 / this.series.n_volumes) * this.series.volumes_read).toFixed(2);
 		},
-		getVolumesBought100(): number {
-			return (100 / this.series.n_volumes) * this.series.volumes_bought;
+		getVolumesBought100(): string {
+			return ((100 / this.series.n_volumes) * this.series.volumes_bought).toFixed(2);
 		},
-		getMissedVolumesx100(): number {
-			return (100 / this.series.n_volumes) * this.getMissedVolumes();
+		getMissedVolumesx100(): string {
+			return ((100 / this.series.n_volumes) * this.getMissedVolumes()).toFixed(2);
 		},
 		getMissedVolumes(): number {
 			return this.series.n_volumes - this.series.volumes_bought;
