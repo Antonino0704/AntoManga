@@ -15,7 +15,9 @@
 				</div>
 				<div>
 					<span class="badge rounded-pill text-bg-info me-2">Length: {{ seriesLength }}</span>
-					<router-link :to="{ name: 'StatsView' }" type="button" class="bi bi-bar-chart-line">
+					<router-link :to="{ name: 'StatsView' }" type="button" class="bi bi-bar-chart-line me-2">
+					</router-link>
+					<router-link :to="{ name: 'InfoView' }" type="button" class="bi bi-info-circle">
 					</router-link>
 				</div>
 				<div class="row">
