@@ -41,6 +41,6 @@ class getLicenseView(APIView):
 
     def get(self, request):
         with open(
-            ("" if settings.DEBUG else "/home/AntoManga/AntoManga/") + "../LICENSE", "r"
+            ("../" if settings.DEBUG else "/home/AntoManga/AntoManga/") + "LICENSE", "r"
         ) as license:
             return Response(license.read())
