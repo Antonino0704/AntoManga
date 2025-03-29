@@ -54,7 +54,11 @@
 					</li>
 				</ul>
 				<div class="form-floating">
-					<textarea class="form-control" style="height: 20rem; width: 20rem"></textarea>
+					<textarea
+						class="form-control"
+						style="height: 20rem; width: 20rem"
+						:value="license"
+					></textarea>
 					<label for="floatingTextarea2">LICENSE</label>
 				</div>
 			</div>
@@ -73,7 +77,8 @@ export default {
 			version: {
 				backendVersion: null,
 				frontendVersion: null
-			}
+			},
+			license: ''
 		};
 	},
 	methods: {
@@ -81,10 +86,16 @@ export default {
 			apiService(endpoints.version).then((result: any) => {
 				this.version = result;
 			});
+		},
+		getLicense() {
+			apiService(endpoints.license).then((license: string) => {
+				this.license = license;
+			});
 		}
 	},
 	created() {
 		this.getBackendVersion();
+		this.getLicense();
 	}
 };
 </script>

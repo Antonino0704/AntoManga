@@ -35,3 +35,10 @@ class ReadVersionAPIView(APIView):
                 "frontendVersion": frontend_data["version"],
             }
         )
+
+
+class getLicenseView(APIView):
+
+    def get(self, request):
+        with open("../LICENSE", "r") as license:
+            return Response(license.read())

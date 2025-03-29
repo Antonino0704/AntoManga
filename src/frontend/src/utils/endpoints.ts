@@ -8,7 +8,8 @@ const endpoints = {
 	seriesLength: 'v3/series-length/',
 	seriesList: 'v3/series-list/',
 	imgSeriesList: 'v3/image/series-list/',
-	version: 'v3/version/'
+	version: 'v3/version/',
+	license: 'v3/license/'
 };
 
 export { endpoints };
