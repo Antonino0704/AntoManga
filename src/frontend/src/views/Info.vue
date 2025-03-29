@@ -54,7 +54,8 @@
 					</li>
 				</ul>
 				<div class="form-floating">
-					<textarea readonly
+					<textarea
+						readonly
 						class="form-control"
 						style="height: 20rem; width: 20rem"
 						:value="license"
