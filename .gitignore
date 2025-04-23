@@ -10,3 +10,5 @@ src/static/images/*
 !src/static/images/icon.png
 
 db.sqlite3
+
+.env
