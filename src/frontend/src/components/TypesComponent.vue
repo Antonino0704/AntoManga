@@ -58,7 +58,9 @@ export default {
 		post() {
 			if (this.checkdata()) {
 				apiService(endpoints.types, 'POST', this.type).then(() => {
-					(<any>this.$refs.notification).sendNotification('type created with success');
+					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+						'type created with success'
+					);
 					setTimeout(() => this.$router.go(0), 1000);
 				});
 			}
@@ -66,7 +68,9 @@ export default {
 		checkdata() {
 			if (!this.type.name || this.type.name.length > 20) {
 				document.querySelector('#titleType')!.className = 'form-control is-invalid';
-				(<any>this.$refs.notification).sendNotification('invalid title');
+				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+					'invalid title'
+				);
 				return false;
 			}
 			return true;

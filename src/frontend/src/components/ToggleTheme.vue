@@ -42,7 +42,9 @@ export default {
 			console.log('a');
 			if (document.documentElement.getAttribute('data-bs-theme') == 'dark') {
 				this.toggle('light');
-				(<any>this.$refs.notification).sendNotification('are you crazy?');
+				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+					'are you crazy?'
+				);
 			} else this.toggle();
 		},
 		saveCoockie(theme: string) {

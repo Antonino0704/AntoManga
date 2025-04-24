@@ -136,7 +136,9 @@ export default {
 			if (this.checkData()) {
 				apiService(`${endpoints.series}${this.slug}/`, 'PUT', this.series).then(
 					(response: SeriesViewsetInstance) => {
-						(<any>this.$refs.notification).sendNotification('series updated with success');
+						(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+							'series updated with success'
+						);
 						setTimeout(
 							() =>
 								this.$router.push({
@@ -149,7 +151,7 @@ export default {
 				);
 			} else {
 				document.querySelector('#floatingInputGrid')!.className = 'form-control is-invalid';
-				(<any>this.$refs.notification).sendNotification(this.error);
+				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(this.error);
 			}
 		},
 		checkData(): boolean {
@@ -161,11 +163,17 @@ export default {
 		},
 		updateImage(event: Event) {
 			try {
-				if ((<HTMLInputElement>event.target).files![0].type.startsWith('image/')) {
+				if (
+					(event.target as InstanceType<typeof HTMLInputElement>).files![0].type.startsWith(
+						'image/'
+					)
+				) {
 					let data = new FormData();
-					data.append('image', (<HTMLInputElement>event.target).files![0]);
+					data.append('image', (event.target as InstanceType<typeof HTMLInputElement>).files![0]);
 					imageApiService(`${endpoints.imgSeries}${this.slug}/`, 'PUT', data).then(() => {
-						(<any>this.$refs.notification).sendNotification("series's image updated with success");
+						(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+							"series's image updated with success"
+						);
 						setTimeout(
 							() =>
 								this.$router.push({
@@ -176,7 +184,9 @@ export default {
 						);
 					});
 				} else {
-					(<any>this.$refs.notification).sendNotification('unsupported image ');
+					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+						'unsupported image '
+					);
 				}
 			} catch (error) {
 				console.log(error);

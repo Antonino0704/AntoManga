@@ -53,7 +53,9 @@ export default {
 		},
 		deleteObj() {
 			apiService(this.endpoint, 'DELETE').then(() => {
-				(<any>this.$refs.notification).sendNotification(this.confirmMessage);
+				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+					this.confirmMessage
+				);
 				setTimeout(() => {
 					return this.$router.push({
 						name: 'Home'

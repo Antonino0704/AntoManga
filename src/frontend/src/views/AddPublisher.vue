@@ -27,19 +27,7 @@
 						@change="addImage($event)"
 					/>
 					<label class="input-group-text" for="file-input">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="16"
-							height="16"
-							fill="currentColor"
-							class="bi bi-images"
-							viewBox="0 0 16 16"
-						>
-							<path d="M4.502 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3" />
-							<path
-								d="M14.002 13a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2V5A2 2 0 0 1 2 3a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-1.998 2M14 2H4a1 1 0 0 0-1 1h9.002a2 2 0 0 1 2 2v7A1 1 0 0 0 15 11V3a1 1 0 0 0-1-1M2.002 4a1 1 0 0 0-1 1v8l2.646-2.354a.5.5 0 0 1 .63-.062l2.66 1.773 3.71-3.71a.5.5 0 0 1 .577-.094l1.777 1.947V5a1 1 0 0 0-1-1h-10"
-							/>
-						</svg>
+						<i class="bi bi-images" fill="currentColor"></i>
 					</label>
 					<div class="invalid-feedback">Invalid image</div>
 				</div>
@@ -86,12 +74,19 @@ export default {
 	},
 	methods: {
 		addImage(event: Event) {
-			if ((<HTMLInputElement>event.target).files![0].type.startsWith('image/')) {
-				this.formData.append('image', (<HTMLInputElement>event.target).files![0]);
+			if (
+				(event.target as InstanceType<typeof HTMLInputElement>).files![0].type.startsWith('image/')
+			) {
+				this.formData.append(
+					'image',
+					(event.target as InstanceType<typeof HTMLInputElement>).files![0]
+				);
 				document.querySelector('#file-input')!.className = 'form-control';
 				this.imageUploaded = true;
 			} else {
-				(<any>this.$refs.notification).sendNotification('unsupported image ');
+				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+					'unsupported image '
+				);
 				document.querySelector('#file-input')!.className = 'form-control is-invalid';
 				this.imageUploaded = false;
 			}
@@ -101,7 +96,9 @@ export default {
 				apiService(endpoints.publishers, 'POST', this.publisher).then((response: Publisher) => {
 					imageApiService(`${endpoints.imgPublishers}${response.slug}/`, 'PUT', this.formData).then(
 						() => {
-							(<any>this.$refs.notification).sendNotification('publisher added with success');
+							(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+								'publisher added with success'
+							);
 							setTimeout(
 								() =>
 									this.$router.push({
@@ -117,7 +114,7 @@ export default {
 				document.querySelector('#floatingInputGrid')!.className = 'form-control';
 				document.querySelector('#floatingTextarea')!.className = 'form-control';
 				this.showErrors();
-				(<any>this.$refs.notification).sendNotification(this.error);
+				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(this.error);
 			}
 		},
 		checkData(): boolean {
