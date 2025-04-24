@@ -8,6 +8,10 @@ on:
             - src/frontend/**
             - "!src/frontend/package.json"
             - "!src/frontend/package-lock.json"
+            - "!.vscode/**"
+            - "!src/frontend/index.html"
+            - "!src/frontend/README.md"
+            - "!src/frontend/.gitignore"
 
 jobs:
     build:
