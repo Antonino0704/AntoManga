@@ -1,3 +1,15 @@
+# AntoManga Project Description
+```
+An website to save all owned manga, the site allows you manage (add, edit or delete) your manga/light novels.
+
+You can visit the site either anonymously or have an account so you can add your personal manga/novels (in which case you will only see your manga/novels)
+```
+
+
+# Setup Project
+Fork and clone the repository 
+
+Enter into AntoManga Folder
 # Create and set the virtual environment
 ```
 python -m venv venv
@@ -10,13 +22,8 @@ pip install -r requirements.txt
 ## ! Don't change anything before this
 ```
 cd src/
-```
-
-You need do that for all your apps except the django default 
-
-(If you have a custom user, i think you need to do as well)
-```
-python manager.py makemigrations YourApp
+python manager.py makemigrations series
+python manager.py makemigrations publishers
 ```
 Just one time
 ```
@@ -27,30 +34,47 @@ Create the superuser
 ```
 python manage.py createsuperuser
 ```
-
 ```diff
 - After doing so, you'll be able to create new apps or edit models
+
 ```
-Run server
+# Run Project
+## Run setup script
+```
+python core/setup.py
+```
+## For Production
+Change ALLOWED_HOSTS
+```diff
+- ALLOWED_HOSTS = ["antomanga.pythonanywhere.com"] if not DEBUG else ["*"]
+
++ ALLOWED_HOSTS = ["YourDomain"] if not DEBUG else ["*"]
+```
+## For Devs
+in .env file change:
+```diff
+- DEBUG=False
++ DEBUG=True
+
+- VITE_LIVE_SERVER=False
++ VITE_LIVE_SERVER=True
+```
+## Run server
 ```
 python manager.py runserver
 ```
+### For devs
+You need to run the vite server as well
 
-# Update Database
-if git pull changes some model
+Anyway you will always connect to the django server
 
-...and you already have a database and you don't want to remove it, before git pull, you can run 
-```
-python manager.py makemigrations AppToUpdate
-python manage.py migrate  
-```
-Now you can change the model with git pull and run again makemigrations and migrate
-
-# For devs
 Open another terminal
 
 ```
-change VITE_LIVE_SERVER = True in settings.py 
+cd src/frontend
+npm run dev
 ```
+#### More Information
+VITE_NETWORK allows the server to be used for lan
 
-[Read this](https://github.com/Antonino0704/AntoManga/blob/main/src/frontend/README.md)
+[Frontend README](https://github.com/Antonino0704/AntoManga/blob/main/src/frontend/README.md)
