@@ -54,11 +54,6 @@
 				:key="type.id"
 			>
 				<div class="input-group flex-nowrap">
-					<!-- <span
-						class="input-group-text iconType"
-						:id="'iconTypeId' + type.id"
-						@click="toggleOn(type.id)"
-					> -->
 					<i
 						fill="currentColor"
 						class="input-group-text iconType bi bi-lock-fill text-danger"
@@ -66,7 +61,6 @@
 						@click="toggleOn(type.id)"
 					>
 					</i>
-					<!-- </span> -->
 					<input
 						:id="'typeID' + type.id"
 						type="text"
