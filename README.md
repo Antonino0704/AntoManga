@@ -72,6 +72,7 @@ Open another terminal
 
 ```
 cd src/frontend
+npm install
 npm run dev
 ```
 #### More Information
