@@ -79,3 +79,15 @@ npm run dev
 VITE_NETWORK allows the server to be used for lan
 
 [Frontend README](https://github.com/Antonino0704/AntoManga/blob/main/src/frontend/README.md)
+
+# Contribute
+If you find any bugs or want to contribute, open a pull request 
+
+Run
+```
+Black .
+npm run lint
+npm run format
+```
+...And follow the [Angular Conventional Commit](https://www.conventionalcommits.org/en/v1.0.0-beta.4/). Remember to bump the version.json version and package.json version following the [semantic versioning standards](https://semver.org/)
+
