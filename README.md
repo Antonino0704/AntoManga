@@ -85,7 +85,7 @@ If you find any bugs or want to contribute, open a pull request
 
 Run
 ```
-Black .
+black .
 npm run lint
 npm run format
 ```
