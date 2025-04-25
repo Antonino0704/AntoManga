@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 from dotenv import load_dotenv
 import os
+from scripts.setup import get_bool
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +27,7 @@ load_dotenv()
 SECRET_KEY = os.getenv("secret_key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = get_bool(os.getenv("DEBUG"))
 
 ALLOWED_HOSTS = ["antomanga.pythonanywhere.com"] if not DEBUG else ["*"]
 
@@ -167,6 +168,6 @@ REST_FRAMEWORK = {
 # vite conf
 VITE_BUILD_DIRNAME = "build"
 VITE_STATIC_BUNDLE = BASE_DIR / f"static/{VITE_BUILD_DIRNAME}"
-VITE_LIVE_SERVER = False
-VITE_NETWORK = False
-BETA = False
+VITE_LIVE_SERVER = get_bool(os.getenv("VITE_LIVE_SERVER"))
+VITE_NETWORK = get_bool(os.getenv("VITE_NETWORK")) #it allows the server to be used for lan
+BETA = get_bool(os.getenv("BETA"))
