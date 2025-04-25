@@ -1,9 +1,9 @@
 # AntoManga Project Description
-```
+
 An website to save all owned manga, the site allows you manage (add, edit or delete) your manga/light novels.
 
 You can visit the site either anonymously or have an account so you can add your personal manga/novels (in which case you will only see your manga/novels)
-```
+
 
 
 # Setup Project
