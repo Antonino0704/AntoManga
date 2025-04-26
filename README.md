@@ -16,12 +16,16 @@ python -m venv venv
 venv/Scripts/activate or source venv/bin/activate
 pip install -r requirements.txt
 ```
+# Run setup script
+```
+cd src/
+python core/setup.py
+```
 
 # Create Database  
 
 ## ! Don't change anything before this
 ```
-cd src/
 python manager.py makemigrations series
 python manager.py makemigrations publishers
 ```
@@ -39,10 +43,7 @@ python manage.py createsuperuser
 
 ```
 # Run Project
-## Run setup script
-```
-python core/setup.py
-```
+
 ## For Production
 Change ALLOWED_HOSTS
 ```diff
@@ -50,6 +51,7 @@ Change ALLOWED_HOSTS
 
 + ALLOWED_HOSTS = ["YourDomain"] if not DEBUG else ["*"]
 ```
+[Set prod server](https://github.com/Antonino0704/AntoManga/blob/main/docs/setProdServer.md)
 ## For Devs
 in .env file change:
 ```diff
@@ -59,11 +61,10 @@ in .env file change:
 - VITE_LIVE_SERVER=False
 + VITE_LIVE_SERVER=True
 ```
-## Run server
+### Run server
 ```
 python manager.py runserver
 ```
-### For devs
 You need to run the vite server as well
 
 Anyway you will always connect to the django server
