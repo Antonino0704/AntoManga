@@ -58,9 +58,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-if not DEBUG:
-    MIDDLEWARE.append("whitenoise.middleware.WhiteNoiseMiddleware")
-
 ROOT_URLCONF = "config.urls"
 
 TEMPLATES = [
