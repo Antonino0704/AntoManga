@@ -61,25 +61,7 @@ in .env file change:
 - VITE_LIVE_SERVER=False
 + VITE_LIVE_SERVER=True
 ```
-### Run server
-```
-python manager.py runserver
-```
-You need to run the vite server as well
-
-Anyway you will always connect to the django server
-
-Open another terminal
-
-```
-cd src/frontend
-npm install
-npm run dev
-```
-#### More Information
-VITE_NETWORK allows the server to be used for lan
-
-[Frontend README](https://github.com/Antonino0704/AntoManga/blob/main/src/frontend/README.md)
+[Set dev server](https://github.com/Antonino0704/AntoManga/blob/main/docs/setDevServer.md)
 
 # Contribute
 If you find any bugs or want to contribute, open a pull request 
