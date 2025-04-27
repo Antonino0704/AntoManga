@@ -8,7 +8,7 @@ venv/Scripts/activate or source venv/bin/activate
 Collects static files
 ```
 cd src/
-python manager.py collectstatic
+python manage.py collectstatic
 ```
 You can delete the rest_framework folder
 
