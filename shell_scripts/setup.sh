@@ -1,7 +1,5 @@
 #!/bin/bash
 
-cd ../
-
 # install env
 python -m venv venv
 source venv/bin/activate
