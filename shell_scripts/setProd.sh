@@ -8,8 +8,6 @@ fi
 
 if [[ $port =~ ^[0-9]+$ ]]; then
 
-	cd ../
-
 	# active env
 	source venv/bin/activate
 
