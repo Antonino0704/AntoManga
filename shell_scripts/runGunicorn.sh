@@ -1,7 +1,5 @@
 #!/bin/bash
 
-cd ../
-
 # Activate env
 source venv/bin/activate
 
