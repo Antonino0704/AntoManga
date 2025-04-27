@@ -26,8 +26,8 @@ python core/setup.py
 
 ## ! Don't change anything before this
 ```
-python manager.py makemigrations series
-python manager.py makemigrations publishers
+python manage.py makemigrations series
+python manage.py makemigrations publishers
 ```
 Just one time
 ```
