@@ -10,6 +10,10 @@ You can visit the site either anonymously or have an account so you can add your
 Fork and clone the repository 
 
 Enter into AntoManga Folder
+
+Follow the guide or run the script (debian-like only) 
+
+```./shell_scripts/setup.sh``` (if it doesn't work you use ```chmod +x shell_scripts/setup.sh``` first)
 # Create and set the virtual environment
 ```
 python -m venv venv
