@@ -10,7 +10,7 @@ venv/Scripts/activate or source venv/bin/activate
 ```
 Run the django server
 ```
-python manager.py runserver
+python manage.py runserver
 ```
 
 # Run Vite Server
