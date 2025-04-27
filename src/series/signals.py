@@ -8,7 +8,7 @@ from core.randomString import generate_random_string
 
 
 @receiver(pre_save, sender=Series)
-def add_slug_to_question(sender, instance, *args, **kwargs):
+def add_slug_to_series(sender, instance, *args, **kwargs):
     if (
         instance.n_volumes <= 0
         or instance.volumes_bought < 0
