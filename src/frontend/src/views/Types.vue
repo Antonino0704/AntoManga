@@ -170,11 +170,19 @@ export default {
 			for (let i = 0; i < iconType.length; i++) {
 				if (iconType[i]!.className === 'input-group-text iconType bi bi-toggle-on text-success') {
 					const id = iconType[i].id.replace('iconTypeId', '');
-					apiService(`${endpoints.types}${id}/`, 'DELETE').then(() => {
-						checks = true;
-						(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-							'type was deleted'
-						);
+					apiService(`${endpoints.types}${id}/`, 'DELETE').then((reason) => {
+						if (reason.protectedErrorDetail) {
+							checks = true;
+							(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+								"Cannot delete some instances of 'Type'"
+							);
+						}
+						if (!checks) {
+							checks = true;
+							(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+								'type was deleted'
+							);
+						}
 					});
 				}
 			}

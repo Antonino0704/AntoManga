@@ -2,7 +2,9 @@ from rest_framework import viewsets
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
 from django.db.models import F
+from django.db.models.deletion import ProtectedError
 
 from series.models import Typology, Series
 from series.api.serializers import (
@@ -17,6 +19,17 @@ class TypologyViewset(viewsets.ModelViewSet):
     queryset = Typology.objects.all()
     serializer_class = TypologySerializer
     pagination_class = None
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        try:
+            self.perform_destroy(instance)
+        except ProtectedError:
+            return Response(
+                {"protectedErrorDetail": "impossible to delete this object"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class SeriesViewset(viewsets.ModelViewSet):

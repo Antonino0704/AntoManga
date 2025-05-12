@@ -16,10 +16,10 @@ class Series(models.Model):
     missed_volumes = models.IntegerField()
     volumes_read = models.IntegerField()
     publisher = models.ForeignKey(
-        Publisher, on_delete=models.CASCADE, related_name="series"
+        Publisher, on_delete=models.PROTECT, related_name="series"
     )
     typology = models.ForeignKey(
-        Typology, on_delete=models.CASCADE, related_name="series_typology"
+        Typology, on_delete=models.PROTECT, related_name="series_typology"
     )
     owner = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="series_list"
