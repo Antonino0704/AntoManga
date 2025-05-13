@@ -3,7 +3,7 @@
 		<div ref="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
 			<div class="toast-body">
 				{{ msgNotification }}
-				<div class="mt-2 pt-2 border-top">
+				<div class="mt-4 pt-2 border-top">
 					<button type="button" class="btn btn-outline-warning btn-sm" @click="deleteObj()">
 						Confirm
 					</button>
@@ -52,15 +52,22 @@ export default {
 			toast.show();
 		},
 		deleteObj() {
-			apiService(this.endpoint, 'DELETE').then(() => {
-				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-					this.confirmMessage
-				);
-				setTimeout(() => {
-					return this.$router.push({
-						name: 'Home'
-					});
-				}, 1000);
+			apiService(this.endpoint, 'DELETE').then((reason) => {
+				if (reason.protectedErrorDetail) {
+					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+						reason.protectedErrorDetail
+					);
+				} else {
+					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+						this.confirmMessage
+					);
+
+					setTimeout(() => {
+						return this.$router.push({
+							name: 'Home'
+						});
+					}, 1000);
+				}
 			});
 		}
 	}

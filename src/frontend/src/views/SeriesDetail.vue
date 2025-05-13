@@ -3,7 +3,10 @@
 		<NotFound message="SERIES NOT FOUND" />
 	</div>
 	<div v-else class="series-detail container-sm mt-3">
-		<router-link :to="{ name: 'AddSeries' }" class="btn btn-outline-info mb-3"
+		<router-link
+			:to="{ name: 'AddSeries' }"
+			class="btn btn-outline-info mb-3"
+			v-if="isAuthenticatedVar"
 			>Add A New Manga
 		</router-link>
 		<div class="card mb-3">
@@ -18,6 +21,7 @@
 					<router-link
 						:to="{ name: 'SeriesEditor', params: { slug: series.slug } }"
 						class="list-inline-item ms-2"
+						v-if="isAuthenticatedVar"
 					>
 						<!--pen logo from bootstrap-->
 						<i class="bi bi-pen fs-6" fill="currentColor"></i>
@@ -28,6 +32,7 @@
 						fill="currentColor"
 						class="bi bi-trash list-inline-item text-warning fs-5"
 						@click="deleteSeries()"
+						v-if="isAuthenticatedVar"
 					>
 					</i>
 				</div>
@@ -72,7 +77,8 @@ export default {
 	data() {
 		return {
 			series: {} as SeriesViewsetInstance,
-			imageSeries: ''
+			imageSeries: '',
+			isAuthenticatedVar: false
 		};
 	},
 	components: {
@@ -97,11 +103,17 @@ export default {
 				`${this.series.name} deleted`,
 				`${endpoints.series}${this.slug}/`
 			);
+		},
+		isAuthenticated() {
+			apiService(endpoints.isAuthenticated, 'GET').then((response: any) => {
+				this.isAuthenticatedVar = response.result;
+			});
 		}
 	},
 	created() {
 		this.getSeriesData();
 		this.getImageSeries();
+		this.isAuthenticated();
 	}
 };
 </script>

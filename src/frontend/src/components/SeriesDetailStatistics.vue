@@ -1,6 +1,6 @@
 <template>
 	<div class="series-detail-stats container-sm mt-3">
-		<div class="list-inline-item">
+		<div class="list-inline-item" v-if="isAuthenticatedVar">
 			<!--pen logo from bootstrap-->
 			<i
 				class="bi bi-pen list-inline-item fs-6"
@@ -147,7 +147,8 @@ export default {
 		return {
 			series: {} as Series,
 			editIcon: false,
-			errors: ''
+			errors: '',
+			isAuthenticatedVar: false
 		};
 	},
 	components: {
@@ -264,10 +265,16 @@ export default {
 			document.querySelector('#inputNVol')!.className = 'form-control';
 			document.querySelector('#inputBought')!.className = 'form-control';
 			document.querySelector('#inputRead')!.className = 'form-control';
+		},
+		isAuthenticated() {
+			apiService(endpoints.isAuthenticated, 'GET').then((response: any) => {
+				this.isAuthenticatedVar = response.result;
+			});
 		}
 	},
 	created() {
 		this.getDataSeries();
+		this.isAuthenticated();
 	}
 };
 </script>

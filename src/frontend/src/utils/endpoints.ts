@@ -1,13 +1,13 @@
 const endpoints = {
-	publishers: 'v1/publishers/',
-	imgPublishers: 'v1/image/publishers/',
-	series: 'v3/series/',
-	imgSeries: 'v3/image/series/',
-	types: 'v3/types/',
+	publishers: 'v2/publishers/',
+	imgPublishers: 'v2/image/publishers/',
+	series: 'v4/series/',
+	imgSeries: 'v4/image/series/',
+	types: 'v4/types/',
 	isAuthenticated: 'v3/isAuthenticated/',
-	seriesLength: 'v3/series-length/',
-	seriesList: 'v3/series-list/',
-	imgSeriesList: 'v3/image/series-list/',
+	seriesLength: 'v4/series-length/',
+	seriesList: 'v4/series-list/',
+	imgSeriesList: 'v4/image/series-list/',
 	version: 'v3/version/',
 	license: 'v3/license/'
 };

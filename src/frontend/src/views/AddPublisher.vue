@@ -72,6 +72,15 @@ export default {
 	components: {
 		Notification
 	},
+	beforeRouteEnter(to, from, next) {
+		apiService(endpoints.isAuthenticated, 'GET').then((response: any) => {
+			if (response.result) {
+				next();
+			} else {
+				next('/not-found');
+			}
+		});
+	},
 	methods: {
 		addImage(event: Event) {
 			if (

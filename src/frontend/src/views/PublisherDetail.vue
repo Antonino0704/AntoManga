@@ -10,10 +10,18 @@
 			role="status"
 		></div>
 		<div class="mt-3">
-			<router-link :to="{ name: 'AddPublisher' }" class="btn btn-outline-info"
+			<router-link
+				:to="{ name: 'AddPublisher' }"
+				class="btn btn-outline-info"
+				v-if="isAuthenticatedVar"
 				>Add New Publisher
 			</router-link>
-			<button @click="deletePublisher()" type="button" class="btn btn-outline-warning ms-2">
+			<button
+				@click="deletePublisher()"
+				type="button"
+				class="btn btn-outline-warning ms-2"
+				v-if="isAuthenticatedVar"
+			>
 				Delete
 			</button>
 		</div>
@@ -30,7 +38,10 @@
 					>
 						<strong> {{ publisher.name }} </strong>
 						<div class="ms-1">
-							<router-link :to="{ name: 'PublisherEditor', params: { slug: publisher.slug } }">
+							<router-link
+								:to="{ name: 'PublisherEditor', params: { slug: publisher.slug } }"
+								v-if="isAuthenticatedVar"
+							>
 								<!--pen logo from bootstrap-->
 								<i class="bi bi-pen" fill="currentColor"></i>
 							</router-link>
@@ -109,7 +120,8 @@ export default {
 			next: {
 				nextCard: null as string | null,
 				nextImageCard: null as string | null
-			}
+			},
+			isAuthenticatedVar: false
 		};
 	},
 	components: {
@@ -221,6 +233,11 @@ export default {
 					}
 				});
 			}
+		},
+		isAuthenticated() {
+			apiService(endpoints.isAuthenticated, 'GET').then((response: any) => {
+				this.isAuthenticatedVar = response.result;
+			});
 		}
 	},
 	created() {
@@ -228,6 +245,7 @@ export default {
 		this.getImagePublisherData();
 		this.getseriesData();
 		this.getImageseriesData();
+		this.isAuthenticated();
 	}
 };
 </script>
