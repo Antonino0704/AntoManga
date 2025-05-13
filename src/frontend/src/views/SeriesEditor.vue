@@ -92,6 +92,15 @@ export default {
 		Notification,
 		NotFound
 	},
+	beforeRouteEnter(to, from, next) {
+		apiService(endpoints.isAuthenticated, 'GET').then((response: any) => {
+			if (response.result) {
+				next();
+			} else {
+				next('/not-found');
+			}
+		});
+	},
 	methods: {
 		getSeriesData() {
 			apiService(`${endpoints.series}${this.slug}/`).then((data: SeriesViewsetInstance) => {

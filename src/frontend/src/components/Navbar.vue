@@ -49,8 +49,8 @@
 								Types
 							</router-link>
 						</li>
-						<li><hr class="dropdown-divider" /></li>
-						<li>
+						<li v-if="isAuthenticatedVar"><hr class="dropdown-divider" /></li>
+						<li v-if="isAuthenticatedVar">
 							<router-link
 								:to="{ name: 'AddPublisher' }"
 								type="button"
@@ -95,7 +95,7 @@ export default {
 	},
 	computed: {
 		isTypesPubslihers() {
-			return this.types.length > 2 && this.publishers > 0;
+			return this.types.length > 2 && this.publishers > 0 && this.isAuthenticatedVar;
 		}
 	},
 	methods: {
