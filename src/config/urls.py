@@ -27,8 +27,8 @@ from core.views import IndexTemplate
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("django.contrib.auth.urls")),
-    path("api/v1/", include("publishers.api.urls")),
-    path("api/v3/", include("series.api.urls")),
+    path("api/v2/", include("publishers.api.urls")),
+    path("api/v4/", include("series.api.urls")),
     path("api/v3/", include("core.api.urls")),
 ]
 
