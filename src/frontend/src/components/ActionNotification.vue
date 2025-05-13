@@ -55,7 +55,7 @@ export default {
 			apiService(this.endpoint, 'DELETE').then((reason) => {
 				if (reason.protectedErrorDetail) {
 					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-						'Cannot delete this Publisher because other users are using it'
+						reason.protectedErrorDetail
 					);
 				} else {
 					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(

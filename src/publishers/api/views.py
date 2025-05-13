@@ -20,7 +20,9 @@ class PublisherViewSet(viewsets.ModelViewSet):
             self.perform_destroy(instance)
         except ProtectedError:
             return Response(
-                {"protectedErrorDetail": "impossible to delete this object"},
+                {
+                    "protectedErrorDetail": "Cannot delete this Publisher because other users are using it"
+                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
         return Response(status=status.HTTP_204_NO_CONTENT)

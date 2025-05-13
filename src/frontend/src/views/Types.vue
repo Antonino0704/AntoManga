@@ -174,7 +174,7 @@ export default {
 						if (reason.protectedErrorDetail) {
 							checks = true;
 							(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-								"Cannot delete some instances of 'Type'"
+								reason.protectedErrorDetail
 							);
 						}
 						if (!checks) {
