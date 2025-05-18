@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from config import settings
 import json
+import os
 
 
 class IsAuthenticatedView(APIView):
@@ -16,16 +17,13 @@ class IsAuthenticatedView(APIView):
 class ReadVersionAPIView(APIView):
 
     def get(self, request):
-        settings.DEBUG
         with open(
-            ("" if settings.DEBUG else "/home/AntoManga/AntoManga/src/")
-            + "version.json",
+            f"{settings.BASE_DIR}/version.json",
             "r",
         ) as server_file:
             server_data = json.load(server_file)
         with open(
-            ("" if settings.DEBUG else "/home/AntoManga/AntoManga/src/")
-            + "frontend/package.json",
+            f"{settings.BASE_DIR}/frontend/package.json",
             "r",
         ) as frontend_file:
             frontend_data = json.load(frontend_file)
@@ -40,7 +38,5 @@ class ReadVersionAPIView(APIView):
 class getLicenseView(APIView):
 
     def get(self, request):
-        with open(
-            ("../" if settings.DEBUG else "/home/AntoManga/AntoManga/") + "LICENSE", "r"
-        ) as license:
+        with open(f"{os.path.dirname(settings.BASE_DIR)}/LICENSE", "r") as license:
             return Response(license.read())
