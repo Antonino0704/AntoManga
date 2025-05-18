@@ -8,6 +8,9 @@ fi
 
 if [[ $port =~ ^[0-9]+$ ]]; then
 
+	cd "$(cd "$(dirname "{BASH_SOURCE[0]}")" && pwd)"
+	cd ../
+
 	# active env
 	source venv/bin/activate
 
