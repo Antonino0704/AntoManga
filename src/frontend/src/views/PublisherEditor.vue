@@ -142,7 +142,7 @@ export default {
 				) {
 					let data = new FormData();
 					data.append('image', (event.target as InstanceType<typeof HTMLInputElement>).files![0]);
-					imageApiService(`v1/image/publishers/${this.slug}/`, 'PUT', data).then(() => {
+					imageApiService(`${endpoints.imgPublishers}${this.slug}/`, 'PUT', data).then(() => {
 						(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
 							"publisher's image updated with success"
 						);
