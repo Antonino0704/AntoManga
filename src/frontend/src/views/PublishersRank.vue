@@ -76,7 +76,9 @@ export default {
 				})
 			);
 			this.sort();
-			document.querySelectorAll('div')[6].className = '';
+			if (document.querySelectorAll('div')[6].className != 'col-auto')
+				document.querySelectorAll('div')[6].className = '';
+			else document.querySelectorAll('div')[4].className = '';
 			document.querySelector('table')!.className = 'table container-sm';
 		},
 		sort() {
