@@ -34,6 +34,10 @@ export interface PublisherDetail extends Publisher {
 	detail: string;
 }
 
+export interface PublisherRank extends Publisher {
+	count: number;
+}
+
 export interface RequestObject {
 	results: Array;
 	count: number;

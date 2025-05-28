@@ -49,6 +49,11 @@
 								Types
 							</router-link>
 						</li>
+						<li>
+							<router-link :to="{ name: 'PublishersRank' }" type="button" class="dropdown-item">
+								Publishers Rank
+							</router-link>
+						</li>
 						<li v-if="isAuthenticatedVar"><hr class="dropdown-divider" /></li>
 						<li v-if="isAuthenticatedVar">
 							<router-link
