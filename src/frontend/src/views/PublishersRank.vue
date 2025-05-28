@@ -54,6 +54,7 @@ export default {
 				this.publishers.push(...publishers);
 				this.getImageSeries();
 				this.getSeriesList();
+				this.sort();
 			});
 		},
 		getImageSeries() {
@@ -71,6 +72,8 @@ export default {
 					publisher.count = data.count;
 				});
 			});
+		},
+		sort() {
 			this.publishers.sort((publisher: PublisherRank) => {
 				return publisher.count;
 			});
