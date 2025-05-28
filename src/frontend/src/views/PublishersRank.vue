@@ -45,8 +45,7 @@ export default {
 	name: 'PublisherRank',
 	data() {
 		return {
-			publishers: [] as Array<PublisherRank>,
-			loading: true
+			publishers: [] as Array<PublisherRank>
 		};
 	},
 	methods: {
@@ -55,11 +54,6 @@ export default {
 				this.publishers.push(...publishers);
 				this.getImageSeries();
 				this.getSeriesList();
-				setTimeout(() => {
-					this.sort();
-					document.querySelectorAll('div')[4].className = '';
-					document.querySelector('table')!.className = 'table container-sm';
-				}, 1000);
 			});
 		},
 		getImageSeries() {
@@ -71,12 +65,19 @@ export default {
 				);
 			});
 		},
-		getSeriesList() {
-			this.publishers.forEach((publisher: PublisherRank) => {
-				apiService(`${endpoints.seriesList}${publisher.slug}/`).then((data: RequestObject) => {
-					publisher.count = data.count;
-				});
-			});
+		async getSeriesList() {
+			await Promise.all(
+				this.publishers.map((publisher) => {
+					return apiService(`${endpoints.seriesList}${publisher.slug}/`).then(
+						(data: RequestObject) => {
+							publisher.count = data.count;
+						}
+					);
+				})
+			);
+			this.sort();
+			document.querySelectorAll('div')[6].className = '';
+			document.querySelector('table')!.className = 'table container-sm';
 		},
 		sort() {
 			this.publishers.sort((publisher1, publisher2) => {
