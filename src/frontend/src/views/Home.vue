@@ -21,7 +21,7 @@
 					</router-link>
 				</div>
 				<div class="row">
-					<div colspan="2" class="mt-3" v-for="(serie, index) in series" :key="serie.id">
+					<div colspan="2" class="list col mt-3" v-for="(serie, index) in series" :key="serie.id">
 						<div
 							:id="'cardid-' + serie.id"
 							class="card mt-2"
