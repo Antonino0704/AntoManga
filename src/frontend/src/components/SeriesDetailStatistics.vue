@@ -158,6 +158,7 @@ export default {
 		getDataSeries() {
 			apiService(`${endpoints.series}${this.slug}/`).then((data: Series) => {
 				this.series = data;
+				this.isAuthenticated();
 			});
 		},
 		getVolumesReadx100(): string {
@@ -274,7 +275,6 @@ export default {
 	},
 	created() {
 		this.getDataSeries();
-		this.isAuthenticated();
 	}
 };
 </script>

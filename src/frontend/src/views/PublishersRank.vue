@@ -1,8 +1,8 @@
 <template>
 	<div class="PublisherRank mt-3">
 		<h1 class="fs-1 font-monospace">Publishers Rank</h1>
-		<div>
-			<table class="table container-sm">
+		<div class="placeholder">
+			<table class="table container-sm placeholder">
 				<thead>
 					<tr>
 						<th scope="col">Pos</th>
@@ -45,7 +45,8 @@ export default {
 	name: 'PublisherRank',
 	data() {
 		return {
-			publishers: [] as Array<PublisherRank>
+			publishers: [] as Array<PublisherRank>,
+			loading: true
 		};
 	},
 	methods: {
@@ -54,7 +55,11 @@ export default {
 				this.publishers.push(...publishers);
 				this.getImageSeries();
 				this.getSeriesList();
-				this.sort();
+				setTimeout(() => {
+					this.sort();
+					document.querySelectorAll('div')[4].className = '';
+					document.querySelector('table')!.className = 'table container-sm';
+				}, 1000);
 			});
 		},
 		getImageSeries() {
@@ -74,8 +79,8 @@ export default {
 			});
 		},
 		sort() {
-			this.publishers.sort((publisher: PublisherRank) => {
-				return publisher.count;
+			this.publishers.sort((publisher1, publisher2) => {
+				return publisher1.count - publisher2.count;
 			});
 			this.publishers.reverse();
 		}
