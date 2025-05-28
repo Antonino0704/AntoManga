@@ -21,7 +21,7 @@
 					</router-link>
 				</div>
 				<div class="row">
-					<div colspan="2" class="list col mt-3" v-for="(serie, index) in series" :key="serie.id">
+					<div colspan="2" class="mt-3" v-for="(serie, index) in series" :key="serie.id">
 						<div
 							:id="'cardid-' + serie.id"
 							class="card mt-2"
@@ -80,27 +80,28 @@ export default {
 			next: {
 				nextCard: null as string | null,
 				nextImageCard: null as string | null
-			}
+			},
+			savedScroll: 0
 		};
 	},
 	components: {
 		navbar
 	},
 	methods: {
-		moreData(dataset: number, current: number) {
+		async moreData(dataset: number, current: number) {
 			if ((current >= dataset && dataset != -1) || this.next.nextCard == null) {
 				this.setLayout();
 				this.loading = false;
 				return;
 			}
-			apiService(this.next.nextCard.replace(/\S*\/api\//g, ''))
+			return apiService(this.next.nextCard.replace(/\S*\/api\//g, ''))
 				.then((data: RequestObject) => {
 					this.series.push(...data.results);
 					this.next.nextCard = data.next;
 				})
 				.then(() => {
 					if (this.next.nextImageCard != null) {
-						apiService(this.next.nextImageCard.replace(/\S*\/api\//g, ''))
+						return apiService(this.next.nextImageCard.replace(/\S*\/api\//g, ''))
 							.then((data: RequestObject) => {
 								this.next.nextImageCard = data.next;
 								for (let i = 0; i < data.results.length; i++) {
@@ -108,27 +109,24 @@ export default {
 								}
 							})
 							.then(() => {
-								this.moreData(dataset, current + 1);
+								return this.moreData(dataset, current + 1);
 							});
 					}
 				});
 		},
-		getDataSeries() {
-			apiService(endpoints.series + this.filter())
+		async getDataSeries() {
+			return apiService(endpoints.series + this.filter())
 				.then((data: RequestObject) => {
 					this.series = data.results;
 					this.seriesLength = data.count;
 					this.next.nextCard = data.next;
 				})
 				.then(() => {
-					if (this.$route.query.dataset != undefined) {
-						this.loading = true;
-						this.moreData(Number(this.$route.query.dataset), 1);
-					}
+					return this.getDataImageSeries();
 				});
 		},
-		getDataImageSeries() {
-			apiService(endpoints.imgSeries + this.filter())
+		async getDataImageSeries() {
+			return apiService(endpoints.imgSeries + this.filter())
 				.then((data: RequestObject) => {
 					this.next.nextImageCard = data.next;
 					this.imagesSeries = [];
@@ -139,6 +137,10 @@ export default {
 				.then(() => {
 					this.loading = false;
 					this.setLayout();
+					if (this.$route.query.dataset != undefined) {
+						this.loading = true;
+						return this.moreData(Number(this.$route.query.dataset), 1);
+					}
 				});
 		},
 		gridClick(load: boolean = false) {
@@ -218,13 +220,10 @@ export default {
 		},
 		async search(type: number, searchBarText: string) {
 			if (type == 0 && searchBarText === '') {
-				this.$router.replace({
+				await this.$router.replace({
 					query: {}
 				});
-				setTimeout(() => {
-					this.getDataSeries();
-					this.getDataImageSeries();
-				}, 100);
+				await this.getDataSeries();
 				return;
 			}
 			let url =
@@ -269,9 +268,14 @@ export default {
 			return filter;
 		}
 	},
-	created() {
-		this.getDataSeries();
-		this.getDataImageSeries();
+	beforeRouterLeave(to, from, next) {
+		history.replaceState({ scroll: window.scrollY }, '');
+		next();
+	},
+	async mounted() {
+		await this.getDataSeries();
+		this.savedScroll = history.state?.scroll || 0;
+		window.scrollTo(0, this.savedScroll.top);
 	}
 };
 </script>
