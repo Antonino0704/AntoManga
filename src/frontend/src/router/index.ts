@@ -10,6 +10,7 @@ import TypeView from '../views/Types.vue';
 import StatsView from '../views/Stats.vue';
 import InfoView from '../views/Info.vue';
 import NotFound from '../views/NotFound.vue';
+import PublishersRank from '@/views/PublishersRank.vue';
 
 const router = createRouter({
 	history: createWebHistory('/'),
@@ -67,6 +68,11 @@ const router = createRouter({
 			path: '/info/',
 			name: 'InfoView',
 			component: InfoView
+		},
+		{
+			path: '/publishers-rank/',
+			name: 'PublishersRank',
+			component: PublishersRank
 		},
 		{
 			path: '/:pathMatch(.*)*',
