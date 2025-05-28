@@ -3,7 +3,9 @@ import actions from '@actions/core';
 import { compare } from 'semver';
 
 const require = createRequire(import.meta.url);
-const url = 'https://antomanga.pythonanywhere.com/api/v3/version/';
+const endpoints = require('../utils/endpoints');
+const baseEndpoint = 'https://antomanga.pythonanywhere.com/api/';
+const url = baseEndpoint + endpoints.version;
 
 if (process.env.architecture == 'frontend') {
 	const packagejsonFile = require('../../package.json');
