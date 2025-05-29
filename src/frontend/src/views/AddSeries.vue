@@ -139,20 +139,20 @@ export default {
 		});
 	},
 	methods: {
-		getTypes() {
-			apiService(endpoints.types).then((data: Array<Type>) => {
-				for (let i = 0; i < data.length; i++) {
-					this.types.push(data[i]);
-				}
-				//wait for options to load
-				setTimeout(() => {
+		async getTypes() {
+			return apiService(endpoints.types)
+				.then((data: Array<Type>) => {
+					for (let i = 0; i < data.length; i++) {
+						this.types.push(data[i]);
+					}
+				})
+				.then(() => {
 					this.series.typology = parseInt(
 						document.querySelector<HTMLOptionElement>('#typeSelect > option')!.value
 					);
 					document.querySelector<HTMLOptionElement>('#typeSelect > option')!.selected = true;
 					document.querySelector<HTMLSelectElement>('#typeSelect')!.className = 'form-select-sm';
-				}, 500);
-			});
+				});
 		},
 		getPublishers() {
 			apiService(endpoints.publishers).then((data: Array<any>) => {
