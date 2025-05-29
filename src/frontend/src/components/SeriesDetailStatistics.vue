@@ -1,5 +1,6 @@
 <template>
 	<div class="series-detail-stats container-sm mt-3">
+		<spinnerLoading ref="spinner" />
 		<div class="list-inline-item" v-if="isAuthenticatedVar">
 			<!--pen logo from bootstrap-->
 			<i
@@ -132,6 +133,7 @@
 <script lang="ts">
 import { apiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
+import spinnerLoading from '../components/SpinnerLoading.vue';
 import type { Series } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 
@@ -152,13 +154,14 @@ export default {
 		};
 	},
 	components: {
-		Notification
+		Notification,
+		spinnerLoading
 	},
 	methods: {
-		getDataSeries() {
-			apiService(`${endpoints.series}${this.slug}/`).then((data: Series) => {
+		async getDataSeries() {
+			return apiService(`${endpoints.series}${this.slug}/`).then((data: Series) => {
 				this.series = data;
-				this.isAuthenticated();
+				return this.isAuthenticated();
 			});
 		},
 		getVolumesReadx100(): string {
@@ -267,14 +270,15 @@ export default {
 			document.querySelector('#inputBought')!.className = 'form-control';
 			document.querySelector('#inputRead')!.className = 'form-control';
 		},
-		isAuthenticated() {
-			apiService(endpoints.isAuthenticated, 'GET').then((response: any) => {
+		async isAuthenticated() {
+			return apiService(endpoints.isAuthenticated, 'GET').then((response: any) => {
 				this.isAuthenticatedVar = response.result;
+				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 			});
 		}
 	},
-	created() {
-		this.getDataSeries();
+	async created() {
+		await this.getDataSeries();
 	}
 };
 </script>
