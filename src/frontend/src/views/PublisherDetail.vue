@@ -128,20 +128,25 @@ export default {
 		ActionNotification,
 		NotFound
 	},
+	beforeRouteEnter(to, from, next) {
+		if (history.state)
+			if (history.state.scroll) if (from.name !== 'SeriesDetail') history.state.scroll.top = 0;
+		next();
+	},
 	methods: {
-		moreData(dataset: number, current: number) {
+		async moreData(dataset: number, current: number): Promise<any> {
 			if ((current >= dataset && dataset != -1) || this.next.nextCard == null) {
 				this.loading = false;
 				return;
 			}
-			apiService(this.next.nextCard.replace(/\S*\/api\//g, ''))
+			return apiService(this.next.nextCard.replace(/\S*\/api\//g, ''))
 				.then((data: RequestObject) => {
 					this.series.push(...data.results);
 					this.next.nextCard = data.next;
 				})
 				.then(() => {
 					if (this.next.nextImageCard != null) {
-						apiService(this.next.nextImageCard.replace(/\S*\/api\//g, ''))
+						return apiService(this.next.nextImageCard.replace(/\S*\/api\//g, ''))
 							.then((data: RequestObject) => {
 								this.next.nextImageCard = data.next;
 								for (let i = 0; i < data.results.length; i++) {
@@ -149,7 +154,7 @@ export default {
 								}
 							})
 							.then(() => {
-								this.moreData(dataset, current + 1);
+								return this.moreData(dataset, current + 1);
 							});
 					}
 				});
@@ -164,27 +169,28 @@ export default {
 				this.imagePublisher = data.image;
 			});
 		},
-		getseriesData() {
-			apiService(`${endpoints.seriesList}${this.slug}/`)
+		async getseriesData() {
+			return apiService(`${endpoints.seriesList}${this.slug}/`)
 				.then((data: RequestObject) => {
 					this.series = data.results;
 					this.seriesLength = data.count;
 					this.next.nextCard = data.next;
 				})
 				.then(() => {
-					if (this.$route.query.dataset != undefined) {
-						this.loading = true;
-						this.moreData(Number(this.$route.query.dataset), 1);
-					}
+					return this.getImageseriesData();
 				});
 		},
-		getImageseriesData() {
-			apiService(`${endpoints.imgSeriesList}${this.slug}/`).then((data: RequestObject) => {
+		async getImageseriesData() {
+			return apiService(`${endpoints.imgSeriesList}${this.slug}/`).then((data: RequestObject) => {
 				this.next.nextImageCard = data.next;
 				for (let i = 0; i < data.results.length; i++) {
 					this.imageSeries.push(data.results[i].image);
 				}
 				this.loading = false;
+				if (this.$route.query.dataset != undefined) {
+					this.loading = true;
+					return this.moreData(Number(this.$route.query.dataset), 1);
+				}
 			});
 		},
 		deletePublisher() {
@@ -240,12 +246,12 @@ export default {
 			});
 		}
 	},
-	created() {
+	async created() {
 		this.getPublisherData();
 		this.getImagePublisherData();
-		this.getseriesData();
-		this.getImageseriesData();
+		await this.getseriesData();
 		this.isAuthenticated();
+		window.scrollTo(0, history.state?.scroll?.top || 0);
 	}
 };
 </script>

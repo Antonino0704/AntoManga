@@ -80,15 +80,14 @@ export default {
 			next: {
 				nextCard: null as string | null,
 				nextImageCard: null as string | null
-			},
-			savedScroll: 0
+			}
 		};
 	},
 	components: {
 		navbar
 	},
 	methods: {
-		async moreData(dataset: number, current: number) {
+		async moreData(dataset: number, current: number): Promise<any> {
 			if ((current >= dataset && dataset != -1) || this.next.nextCard == null) {
 				this.setLayout();
 				this.loading = false;
@@ -268,14 +267,9 @@ export default {
 			return filter;
 		}
 	},
-	beforeRouterLeave(to, from, next) {
-		history.replaceState({ scroll: window.scrollY }, '');
-		next();
-	},
-	async mounted() {
+	async created() {
 		await this.getDataSeries();
-		this.savedScroll = history.state?.scroll || 0;
-		window.scrollTo(0, this.savedScroll.top);
+		window.scrollTo(0, history.state?.scroll?.top || 0);
 	}
 };
 </script>
