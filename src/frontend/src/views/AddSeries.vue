@@ -154,21 +154,21 @@ export default {
 					document.querySelector<HTMLSelectElement>('#typeSelect')!.className = 'form-select-sm';
 				});
 		},
-		getPublishers() {
-			apiService(endpoints.publishers).then((data: Array<any>) => {
-				for (let i = 0; i < data.length; i++) {
-					this.publishers.push(data[i]);
-				}
-				//wait for options to load
-				setTimeout(() => {
+		async getPublishers() {
+			return apiService(endpoints.publishers)
+				.then((data: Array<any>) => {
+					for (let i = 0; i < data.length; i++) {
+						this.publishers.push(data[i]);
+					}
+				})
+				.then(() => {
 					this.series.publisher = document.querySelector<HTMLOptionElement>(
 						'#publisherSelect > option'
 					)!.value;
 					document.querySelector<HTMLOptionElement>('#publisherSelect > option')!.selected = true;
 					document.querySelector<HTMLSelectElement>('#publisherSelect')!.className =
 						'form-select-sm';
-				}, 500);
-			});
+				});
 		},
 		addImage(event: Event) {
 			//doesn't add the image to the server
@@ -286,9 +286,9 @@ export default {
 			document.querySelector('#floatingInputGrid')!.className = 'form-control';
 		}
 	},
-	created() {
-		this.getTypes();
-		this.getPublishers();
+	async created() {
+		await this.getTypes();
+		await this.getPublishers();
 	}
 };
 </script>

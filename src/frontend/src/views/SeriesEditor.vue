@@ -109,32 +109,34 @@ export default {
 				this.getPublishers();
 			});
 		},
-		getTypes() {
-			apiService(endpoints.types).then((data: Array<any>) => {
-				for (let i = 0; i < data.length; i++) {
-					this.types.push(data[i]);
-				}
-				//wait for options to load
-				setTimeout(() => {
-					document.querySelector<HTMLOptionElement>(`#IDType-${this.series.typology}`)!.selected =
-						true;
-					document.querySelector('#typeSelect')!.className = 'form-select-sm';
-				}, 500);
-			});
+		async getTypes() {
+			return apiService(endpoints.types)
+				.then((data: Array<any>) => {
+					for (let i = 0; i < data.length; i++) {
+						this.types.push(data[i]);
+					}
+				})
+				.then(() => {
+					this.series.typology = parseInt(
+						document.querySelector<HTMLOptionElement>('#typeSelect > option')!.value
+					);
+					document.querySelector<HTMLOptionElement>('#typeSelect > option')!.selected = true;
+					document.querySelector<HTMLSelectElement>('#typeSelect')!.className = 'form-select-sm';
+				});
 		},
-		getPublishers() {
-			apiService(endpoints.publishers).then((data: Array<any>) => {
-				for (let i = 0; i < data.length; i++) {
-					this.publishers.push(data[i]);
-				}
-				//wait for options to load
-				setTimeout(() => {
+		async getPublishers() {
+			return apiService(endpoints.publishers)
+				.then((data: Array<any>) => {
+					for (let i = 0; i < data.length; i++) {
+						this.publishers.push(data[i]);
+					}
+				})
+				.then(() => {
 					document.querySelector<HTMLOptionElement>(
 						`#IDPublisher-${this.series.publisher}`
 					)!.selected = true;
 					document.querySelector('#publisherSelect')!.className = 'form-select-sm';
-				}, 500);
-			});
+				});
 		},
 		getImageSeries() {
 			apiService(`${endpoints.imgSeries}${this.slug}/`).then((data: SeriesViewsetInstance) => {
@@ -202,9 +204,9 @@ export default {
 			}
 		}
 	},
-	created() {
-		this.getSeriesData();
-		this.getImageSeries();
+	async created() {
+		await this.getSeriesData();
+		await this.getImageSeries();
 	}
 };
 </script>
