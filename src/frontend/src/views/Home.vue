@@ -208,6 +208,7 @@ export default {
 			}
 		},
 		async search(type: number, searchBarText: string) {
+			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
 			if (type == 0 && searchBarText === '') {
 				await this.$router.replace({
 					query: {}
