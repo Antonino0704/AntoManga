@@ -15,24 +15,26 @@
 				</div>
 			</div>
 
-			<div class="picture-edit">
-				<label for="file-input">
-					<img
-						:src="imageSeries"
-						class="list-inline-item rounded-circle mt-2"
-						style="width: 200px"
+			<div class="mt-3 list-inline-item">
+				<div class="input-group mb-3">
+					<input
+						type="file"
+						accept="image/*"
+						class="form-control"
+						id="file-input"
+						@change="updateImage($event)"
 					/>
-				</label>
-				<input type="file" accept="image/*" id="file-input" @change="updateImage($event)" />
+					<label class="input-group-text" for="file-input">
+						<i fill="currentColor" class="bi bi-images"> </i>
+					</label>
+					<div class="invalid-feedback">Invalid image</div>
+				</div>
+
+				<PreviewComponent class="list-inline-item" ref="preview" />
 			</div>
 
 			<div class="placeholder-glow mt-3">
-				<select
-					id="typeSelect"
-					class="placeholder form-select-sm"
-					aria-hidden="true"
-					v-model="series.typology"
-				>
+				<select id="typeSelect" class="placeholder form-select-sm" v-model="series.typology">
 					<option v-for="type in types" :key="type.id" :value="type.id" :id="'IDType-' + type.id">
 						{{ type.name }}
 					</option>
@@ -40,12 +42,7 @@
 			</div>
 
 			<div class="placeholder-glow mt-3">
-				<select
-					id="publisherSelect"
-					class="placeholder form-select-sm"
-					aria-hidden="true"
-					v-model="series.publisher"
-				>
+				<select id="publisherSelect" class="placeholder form-select-sm" v-model="series.publisher">
 					<option
 						v-for="publisher in publishers"
 						:key="publisher.id"
@@ -68,6 +65,7 @@
 import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import NotFound from '../views/NotFound.vue';
+import PreviewComponent from '../components/PreviewComponent.vue';
 import type { SeriesViewsetInstance, Type, Publisher } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 
@@ -85,12 +83,15 @@ export default {
 			imageSeries: '',
 			types: [] as Array<Type>,
 			publishers: [] as Array<Publisher>,
-			error: ''
+			error: '',
+			formData: new FormData(),
+			imageUploaded: false
 		};
 	},
 	components: {
 		Notification,
-		NotFound
+		NotFound,
+		PreviewComponent
 	},
 	beforeRouteEnter(to, from, next) {
 		apiService(endpoints.isAuthenticated, 'GET').then((response: any) => {
@@ -117,10 +118,8 @@ export default {
 					}
 				})
 				.then(() => {
-					this.series.typology = parseInt(
-						document.querySelector<HTMLOptionElement>('#typeSelect > option')!.value
-					);
-					document.querySelector<HTMLOptionElement>('#typeSelect > option')!.selected = true;
+					document.querySelector<HTMLOptionElement>(`#IDType-${this.series.typology}`)!.selected =
+						true;
 					document.querySelector<HTMLSelectElement>('#typeSelect')!.className = 'form-select-sm';
 				});
 		},
@@ -141,25 +140,37 @@ export default {
 		getImageSeries() {
 			apiService(`${endpoints.imgSeries}${this.slug}/`).then((data: SeriesViewsetInstance) => {
 				this.imageSeries = data.image;
+				(this.$refs.preview as InstanceType<typeof PreviewComponent>).setPreview(data.image);
 			});
 		},
 		Update() {
 			if (this.checkData()) {
-				apiService(`${endpoints.series}${this.slug}/`, 'PUT', this.series).then(
-					(response: SeriesViewsetInstance) => {
-						(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-							'series updated with success'
-						);
+				apiService(`${endpoints.series}${this.slug}/`, 'PUT', this.series)
+					.then(() => {
+						if (this.imageUploaded) {
+							imageApiService(`${endpoints.imgSeries}${this.slug}/`, 'PUT', this.formData).then(
+								() => {
+									(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+										'series and image updated with success'
+									);
+								}
+							);
+						} else {
+							(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+								'series updated with success'
+							);
+						}
+					})
+					.then(() => {
 						setTimeout(
 							() =>
 								this.$router.push({
 									name: 'SeriesDetail',
-									params: { slug: response.slug }
+									params: { slug: this.series.slug }
 								}),
 							1000
 						);
-					}
-				);
+					});
 			} else {
 				document.querySelector('#floatingInputGrid')!.className = 'form-control is-invalid';
 				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(this.error);
@@ -179,25 +190,23 @@ export default {
 						'image/'
 					)
 				) {
-					let data = new FormData();
-					data.append('image', (event.target as InstanceType<typeof HTMLInputElement>).files![0]);
-					imageApiService(`${endpoints.imgSeries}${this.slug}/`, 'PUT', data).then(() => {
-						(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-							"series's image updated with success"
-						);
-						setTimeout(
-							() =>
-								this.$router.push({
-									name: 'SeriesDetail',
-									params: { slug: this.series.slug }
-								}),
-							1000
-						);
-					});
+					this.formData.append(
+						'image',
+						(event.target as InstanceType<typeof HTMLInputElement>).files![0]
+					);
+					(this.$refs.preview as InstanceType<typeof PreviewComponent>).setPreview(
+						URL.createObjectURL((event.target as InstanceType<typeof HTMLInputElement>).files![0])
+					);
+					this.imageUploaded = true;
 				} else {
 					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
 						'unsupported image '
 					);
+					document.querySelector<HTMLInputElement>('#file-input')!.value = '';
+					(this.$refs.preview as InstanceType<typeof PreviewComponent>).setPreview(
+						this.imageSeries
+					);
+					this.imageUploaded = false;
 				}
 			} catch (error) {
 				console.log(error);

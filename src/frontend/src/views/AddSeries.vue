@@ -12,7 +12,7 @@
 				</div>
 			</div>
 
-			<div class="mt-3">
+			<div class="mt-3 list-inline-item">
 				<div class="input-group mb-3">
 					<input
 						type="file"
@@ -26,15 +26,12 @@
 					</label>
 					<div class="invalid-feedback">Invalid image</div>
 				</div>
+
+				<PreviewComponent class="list-inline-item" ref="preview" />
 			</div>
 
 			<div class="placeholder-glow mt-3">
-				<select
-					id="typeSelect"
-					class="form-select-sm placeholder"
-					aria-hidden="true"
-					v-model="series.typology"
-				>
+				<select id="typeSelect" class="form-select-sm placeholder" v-model="series.typology">
 					<option v-for="type in types" :key="type.id" :value="type.id" :id="'IDType-' + type.id">
 						{{ type.name }}
 					</option>
@@ -105,6 +102,7 @@
 <script lang="ts">
 import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
+import PreviewComponent from '../components/PreviewComponent.vue';
 import type { Series, Type, Publisher } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 
@@ -127,7 +125,8 @@ export default {
 		};
 	},
 	components: {
-		Notification
+		Notification,
+		PreviewComponent
 	},
 	beforeRouteEnter(to, from, next) {
 		apiService(endpoints.isAuthenticated, 'GET').then((response: any) => {
@@ -179,12 +178,16 @@ export default {
 					'image',
 					(event.target as InstanceType<typeof HTMLInputElement>).files![0]
 				);
+				(this.$refs.preview as InstanceType<typeof PreviewComponent>).setPreview(
+					URL.createObjectURL((event.target as InstanceType<typeof HTMLInputElement>).files![0])
+				);
 				document.querySelector('#file-input')!.className = 'form-control';
 				this.imageUploaded = true;
 			} else {
 				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
 					'unsupported image '
 				);
+				(this.$refs.preview as InstanceType<typeof PreviewComponent>).resetPreview();
 				document.querySelector('#file-input')!.className = 'form-control is-invalid';
 				this.imageUploaded = false;
 			}
