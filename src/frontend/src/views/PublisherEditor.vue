@@ -38,17 +38,6 @@
 				<PreviewComponent class="list-inline-item" ref="preview" />
 			</div>
 
-			<!-- <div class="picture-edit">
-				<label for="file-input">
-					<img
-						:src="imagePublisher"
-						class="list-inline-item rounded-circle mt-2"
-						style="width: 200px"
-					/>
-				</label>
-				<input type="file" accept="image/*" id="file-input" @change="updateImage($event)" />
-			</div> -->
-
 			<div class="form-floating mt-3">
 				<textarea
 					style="height: 10rem"
