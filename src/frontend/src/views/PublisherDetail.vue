@@ -93,7 +93,7 @@
 import { apiService } from '../utils/APIService';
 import ActionNotification from '../components/ActionNotification.vue';
 import NotFound from '../views/NotFound.vue';
-import spinnerLoading from '../components/SpinnerLoading.vue'
+import spinnerLoading from '../components/SpinnerLoading.vue';
 import type { Series, PublisherDetail, RequestObject } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 

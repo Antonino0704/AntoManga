@@ -65,7 +65,7 @@
 import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import NotFound from '../views/NotFound.vue';
-import PreviewComponent from '../components/PreviewComponent.vue';
+import PreviewComponent from '../components/SeriesImagePreview.vue';
 import type { SeriesViewsetInstance, Type, Publisher } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 

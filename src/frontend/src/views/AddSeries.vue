@@ -27,7 +27,7 @@
 					<div class="invalid-feedback">Invalid image</div>
 				</div>
 
-				<PreviewComponent class="list-inline-item" ref="preview" />
+				<SeriesImagePreview class="list-inline-item" ref="preview" />
 			</div>
 
 			<div class="placeholder-glow mt-3">
@@ -102,7 +102,7 @@
 <script lang="ts">
 import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
-import PreviewComponent from '../components/PreviewComponent.vue';
+import SeriesImagePreview from '../components/SeriesImagePreview.vue';
 import type { Series, Type, Publisher } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 
@@ -126,7 +126,7 @@ export default {
 	},
 	components: {
 		Notification,
-		PreviewComponent
+		SeriesImagePreview
 	},
 	beforeRouteEnter(to, from, next) {
 		apiService(endpoints.isAuthenticated, 'GET').then((response: any) => {
@@ -178,7 +178,7 @@ export default {
 					'image',
 					(event.target as InstanceType<typeof HTMLInputElement>).files![0]
 				);
-				(this.$refs.preview as InstanceType<typeof PreviewComponent>).setPreview(
+				(this.$refs.preview as InstanceType<typeof SeriesImagePreview>).setPreview(
 					URL.createObjectURL((event.target as InstanceType<typeof HTMLInputElement>).files![0])
 				);
 				document.querySelector('#file-input')!.className = 'form-control';
@@ -187,7 +187,7 @@ export default {
 				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
 					'unsupported image '
 				);
-				(this.$refs.preview as InstanceType<typeof PreviewComponent>).resetPreview();
+				(this.$refs.preview as InstanceType<typeof SeriesImagePreview>).resetPreview();
 				document.querySelector('#file-input')!.className = 'form-control is-invalid';
 				this.imageUploaded = false;
 			}

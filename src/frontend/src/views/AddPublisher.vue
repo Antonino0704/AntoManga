@@ -32,7 +32,7 @@
 					<div class="invalid-feedback">Invalid image</div>
 				</div>
 
-				<PreviewComponent class="list-inline-item" ref="preview" />
+				<PublisherImagePreview class="list-inline-item" ref="preview" />
 			</div>
 
 			<div class="form-floating mt-3">
@@ -55,7 +55,7 @@
 <script lang="ts">
 import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
-import PreviewComponent from '../components/PreviewComponent.vue';
+import PublisherImagePreview from '../components/PublisherImagePreview.vue';
 import type { Publisher } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 
@@ -74,7 +74,7 @@ export default {
 	},
 	components: {
 		Notification,
-		PreviewComponent
+		PublisherImagePreview
 	},
 	beforeRouteEnter(to, from, next) {
 		apiService(endpoints.isAuthenticated, 'GET').then((response: any) => {
@@ -94,7 +94,7 @@ export default {
 					'image',
 					(event.target as InstanceType<typeof HTMLInputElement>).files![0]
 				);
-				(this.$refs.preview as InstanceType<typeof PreviewComponent>).setPreview(
+				(this.$refs.preview as InstanceType<typeof PublisherImagePreview>).setPreview(
 					URL.createObjectURL((event.target as InstanceType<typeof HTMLInputElement>).files![0])
 				);
 				document.querySelector('#file-input')!.className = 'form-control';
@@ -104,7 +104,7 @@ export default {
 					'unsupported image '
 				);
 				document.querySelector('#file-input')!.className = 'form-control is-invalid';
-				(this.$refs.preview as InstanceType<typeof PreviewComponent>).resetPreview();
+				(this.$refs.preview as InstanceType<typeof PublisherImagePreview>).resetPreview();
 				this.imageUploaded = false;
 			}
 		},

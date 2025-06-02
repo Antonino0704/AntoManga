@@ -35,7 +35,7 @@
 					<div class="invalid-feedback">Invalid image</div>
 				</div>
 
-				<PreviewComponent class="list-inline-item" ref="preview" />
+				<PublisherImagePreview class="list-inline-item" ref="preview" />
 			</div>
 
 			<div class="form-floating mt-3">
@@ -59,7 +59,7 @@
 import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import NotFound from '../views/NotFound.vue';
-import PreviewComponent from '../components/PreviewComponent.vue';
+import PublisherImagePreview from '../components/PublisherImagePreview.vue';
 import type { PublisherDetail } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 
@@ -77,7 +77,7 @@ export default {
 	components: {
 		Notification,
 		NotFound,
-		PreviewComponent
+		PublisherImagePreview
 	},
 	props: {
 		slug: {
@@ -103,7 +103,7 @@ export default {
 		getImagePublisherData() {
 			apiService(`${endpoints.imgPublishers}${this.slug}/`).then((data: PublisherDetail) => {
 				this.imagePublisher = data.image;
-				(this.$refs.preview as InstanceType<typeof PreviewComponent>).setPreview(data.image);
+				(this.$refs.preview as InstanceType<typeof PublisherImagePreview>).setPreview(data.image);
 			});
 		},
 		Update() {
@@ -167,7 +167,7 @@ export default {
 						'image',
 						(event.target as InstanceType<typeof HTMLInputElement>).files![0]
 					);
-					(this.$refs.preview as InstanceType<typeof PreviewComponent>).setPreview(
+					(this.$refs.preview as InstanceType<typeof PublisherImagePreview>).setPreview(
 						URL.createObjectURL((event.target as InstanceType<typeof HTMLInputElement>).files![0])
 					);
 					this.imageUploaded = true;
@@ -176,7 +176,7 @@ export default {
 						'unsupported image '
 					);
 					document.querySelector<HTMLInputElement>('#file-input')!.value = '';
-					(this.$refs.preview as InstanceType<typeof PreviewComponent>).setPreview(
+					(this.$refs.preview as InstanceType<typeof PublisherImagePreview>).setPreview(
 						this.imagePublisher
 					);
 					this.imageUploaded = false;

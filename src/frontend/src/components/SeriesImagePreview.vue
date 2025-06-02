@@ -1,5 +1,5 @@
 <template>
-	<div class="previewComponent">
+	<div class="SeriesImagePreview">
 		<div id="carousel" class="carousel slide" v-if="imagePreview">
 			<div class="carousel-indicators">
 				<button
@@ -28,7 +28,7 @@
 						<img
 							:src="imagePreview"
 							class="card-img-top rounded-pill image-series mt-2"
-							alt="preview1"
+							alt="preview2"
 							height="410"
 						/>
 					</div>
@@ -58,7 +58,7 @@
 
 <script lang="ts">
 export default {
-	name: 'PreviewComponent',
+	name: 'SeriesImagePreview',
 	data() {
 		return {
 			imagePreview: ''
