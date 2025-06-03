@@ -10,7 +10,7 @@
 						<a class="bi bi-link ms-1" href="https://beacons.ai/_hikki_"></a>
 					</li>
 				</ul>
-				<div class="container border border-primary mt-4 mb-4">
+				<div class="container border border-primary mt-4 mb-4 placeholder" id="version">
 					<p class="mt-2">Backend Version: {{ version.backendVersion }}</p>
 					<p class="mt-2">Frontend Version: {{ version.frontendVersion }}</p>
 				</div>
@@ -56,7 +56,7 @@
 				<div class="form-floating">
 					<textarea
 						readonly
-						class="form-control"
+						class="form-control placeholder"
 						style="height: 20rem; width: 20rem"
 						:value="license"
 					></textarea>
@@ -84,14 +84,22 @@ export default {
 	},
 	methods: {
 		getBackendVersion() {
-			apiService(endpoints.version).then((result: any) => {
-				this.version = result;
-			});
+			apiService(endpoints.version)
+				.then((result: any) => {
+					this.version = result;
+				})
+				.then(() => {
+					document.querySelector('#version')!.classList.remove('placeholder');
+				});
 		},
 		getLicense() {
-			apiService(endpoints.license).then((license: string) => {
-				this.license = license;
-			});
+			apiService(endpoints.license)
+				.then((license: string) => {
+					this.license = license;
+				})
+				.then(() => {
+					document.querySelector('textarea')!.classList.remove('placeholder');
+				});
 		}
 	},
 	created() {

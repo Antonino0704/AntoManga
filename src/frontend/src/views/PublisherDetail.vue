@@ -3,12 +3,7 @@
 		<NotFound message="PUBLISHER NOT FOUND" />
 	</div>
 	<div v-else class="publisher-detail container-sm">
-		<div
-			v-if="loading"
-			class="spinner-border position-absolute top-50 start-50"
-			style="width: 3rem; height: 3rem"
-			role="status"
-		></div>
+		<spinnerLoading ref="spinner" />
 		<div class="mt-3">
 			<router-link
 				:to="{ name: 'AddPublisher' }"
@@ -98,6 +93,7 @@
 import { apiService } from '../utils/APIService';
 import ActionNotification from '../components/ActionNotification.vue';
 import NotFound from '../views/NotFound.vue';
+import spinnerLoading from '../components/SpinnerLoading.vue';
 import type { Series, PublisherDetail, RequestObject } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 
@@ -126,22 +122,28 @@ export default {
 	},
 	components: {
 		ActionNotification,
-		NotFound
+		NotFound,
+		spinnerLoading
+	},
+	beforeRouteEnter(to, from, next) {
+		if (history.state)
+			if (history.state.scroll) if (from.name !== 'SeriesDetail') history.state.scroll.top = 0;
+		next();
 	},
 	methods: {
-		moreData(dataset: number, current: number) {
+		async moreData(dataset: number, current: number): Promise<any> {
 			if ((current >= dataset && dataset != -1) || this.next.nextCard == null) {
-				this.loading = false;
+				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 				return;
 			}
-			apiService(this.next.nextCard.replace(/\S*\/api\//g, ''))
+			return apiService(this.next.nextCard.replace(/\S*\/api\//g, ''))
 				.then((data: RequestObject) => {
 					this.series.push(...data.results);
 					this.next.nextCard = data.next;
 				})
 				.then(() => {
 					if (this.next.nextImageCard != null) {
-						apiService(this.next.nextImageCard.replace(/\S*\/api\//g, ''))
+						return apiService(this.next.nextImageCard.replace(/\S*\/api\//g, ''))
 							.then((data: RequestObject) => {
 								this.next.nextImageCard = data.next;
 								for (let i = 0; i < data.results.length; i++) {
@@ -149,7 +151,7 @@ export default {
 								}
 							})
 							.then(() => {
-								this.moreData(dataset, current + 1);
+								return this.moreData(dataset, current + 1);
 							});
 					}
 				});
@@ -164,27 +166,27 @@ export default {
 				this.imagePublisher = data.image;
 			});
 		},
-		getseriesData() {
-			apiService(`${endpoints.seriesList}${this.slug}/`)
+		async getseriesData() {
+			return apiService(`${endpoints.seriesList}${this.slug}/`)
 				.then((data: RequestObject) => {
 					this.series = data.results;
 					this.seriesLength = data.count;
 					this.next.nextCard = data.next;
 				})
 				.then(() => {
-					if (this.$route.query.dataset != undefined) {
-						this.loading = true;
-						this.moreData(Number(this.$route.query.dataset), 1);
-					}
+					return this.getImageseriesData();
 				});
 		},
-		getImageseriesData() {
-			apiService(`${endpoints.imgSeriesList}${this.slug}/`).then((data: RequestObject) => {
+		async getImageseriesData() {
+			return apiService(`${endpoints.imgSeriesList}${this.slug}/`).then((data: RequestObject) => {
 				this.next.nextImageCard = data.next;
 				for (let i = 0; i < data.results.length; i++) {
 					this.imageSeries.push(data.results[i].image);
 				}
-				this.loading = false;
+				if (this.$route.query.dataset != undefined) {
+					return this.moreData(Number(this.$route.query.dataset), 1);
+				}
+				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 			});
 		},
 		deletePublisher() {
@@ -196,7 +198,7 @@ export default {
 		},
 		moreSeries() {
 			if (this.next.nextCard != null) {
-				this.loading = true;
+				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
 				apiService(this.next.nextCard.replace(/\S*\/api\//g, ''))
 					.then((data: RequestObject) => {
 						this.series.push(...data.results);
@@ -213,7 +215,7 @@ export default {
 								})
 								.then(() => {
 									this.changeUrl();
-									this.loading = false;
+									(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 								});
 						}
 					});
@@ -240,12 +242,12 @@ export default {
 			});
 		}
 	},
-	created() {
+	async created() {
 		this.getPublisherData();
 		this.getImagePublisherData();
-		this.getseriesData();
-		this.getImageseriesData();
+		await this.getseriesData();
 		this.isAuthenticated();
+		window.scrollTo(0, history.state?.scroll?.top || 0);
 	}
 };
 </script>

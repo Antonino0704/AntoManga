@@ -12,7 +12,7 @@
 				</div>
 			</div>
 
-			<div class="mt-3">
+			<div class="mt-3 list-inline-item">
 				<div class="input-group mb-3">
 					<input
 						type="file"
@@ -26,15 +26,12 @@
 					</label>
 					<div class="invalid-feedback">Invalid image</div>
 				</div>
+
+				<SeriesImagePreview class="list-inline-item" ref="preview" />
 			</div>
 
 			<div class="placeholder-glow mt-3">
-				<select
-					id="typeSelect"
-					class="form-select-sm placeholder"
-					aria-hidden="true"
-					v-model="series.typology"
-				>
+				<select id="typeSelect" class="form-select-sm placeholder" v-model="series.typology">
 					<option v-for="type in types" :key="type.id" :value="type.id" :id="'IDType-' + type.id">
 						{{ type.name }}
 					</option>
@@ -105,6 +102,7 @@
 <script lang="ts">
 import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
+import SeriesImagePreview from '../components/SeriesImagePreview.vue';
 import type { Series, Type, Publisher } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 
@@ -127,7 +125,8 @@ export default {
 		};
 	},
 	components: {
-		Notification
+		Notification,
+		SeriesImagePreview
 	},
 	beforeRouteEnter(to, from, next) {
 		apiService(endpoints.isAuthenticated, 'GET').then((response: any) => {
@@ -139,36 +138,36 @@ export default {
 		});
 	},
 	methods: {
-		getTypes() {
-			apiService(endpoints.types).then((data: Array<Type>) => {
-				for (let i = 0; i < data.length; i++) {
-					this.types.push(data[i]);
-				}
-				//wait for options to load
-				setTimeout(() => {
+		async getTypes() {
+			return apiService(endpoints.types)
+				.then((data: Array<Type>) => {
+					for (let i = 0; i < data.length; i++) {
+						this.types.push(data[i]);
+					}
+				})
+				.then(() => {
 					this.series.typology = parseInt(
 						document.querySelector<HTMLOptionElement>('#typeSelect > option')!.value
 					);
 					document.querySelector<HTMLOptionElement>('#typeSelect > option')!.selected = true;
 					document.querySelector<HTMLSelectElement>('#typeSelect')!.className = 'form-select-sm';
-				}, 500);
-			});
+				});
 		},
-		getPublishers() {
-			apiService(endpoints.publishers).then((data: Array<any>) => {
-				for (let i = 0; i < data.length; i++) {
-					this.publishers.push(data[i]);
-				}
-				//wait for options to load
-				setTimeout(() => {
+		async getPublishers() {
+			return apiService(endpoints.publishers)
+				.then((data: Array<any>) => {
+					for (let i = 0; i < data.length; i++) {
+						this.publishers.push(data[i]);
+					}
+				})
+				.then(() => {
 					this.series.publisher = document.querySelector<HTMLOptionElement>(
 						'#publisherSelect > option'
 					)!.value;
 					document.querySelector<HTMLOptionElement>('#publisherSelect > option')!.selected = true;
 					document.querySelector<HTMLSelectElement>('#publisherSelect')!.className =
 						'form-select-sm';
-				}, 500);
-			});
+				});
 		},
 		addImage(event: Event) {
 			//doesn't add the image to the server
@@ -179,12 +178,16 @@ export default {
 					'image',
 					(event.target as InstanceType<typeof HTMLInputElement>).files![0]
 				);
+				(this.$refs.preview as InstanceType<typeof SeriesImagePreview>).setPreview(
+					URL.createObjectURL((event.target as InstanceType<typeof HTMLInputElement>).files![0])
+				);
 				document.querySelector('#file-input')!.className = 'form-control';
 				this.imageUploaded = true;
 			} else {
 				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
 					'unsupported image '
 				);
+				(this.$refs.preview as InstanceType<typeof SeriesImagePreview>).resetPreview();
 				document.querySelector('#file-input')!.className = 'form-control is-invalid';
 				this.imageUploaded = false;
 			}
@@ -286,9 +289,9 @@ export default {
 			document.querySelector('#floatingInputGrid')!.className = 'form-control';
 		}
 	},
-	created() {
-		this.getTypes();
-		this.getPublishers();
+	async created() {
+		await this.getTypes();
+		await this.getPublishers();
 	}
 };
 </script>

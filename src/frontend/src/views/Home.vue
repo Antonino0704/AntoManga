@@ -1,12 +1,7 @@
 <template>
 	<div class="HomeView row justify-content-center">
 		<navbar @filterEvent="search" />
-		<div
-			v-if="loading"
-			class="spinner-border position-absolute top-50 start-50"
-			style="width: 3rem; height: 3rem"
-			role="status"
-		></div>
+		<spinnerLoading ref="spinner" />
 		<div class="col-auto">
 			<div class="container text-center">
 				<div class="fs-1">
@@ -66,6 +61,7 @@
 import { apiService } from '../utils/APIService';
 import type { SeriesViewsetInstance, RequestObject } from '../@types/interfaces';
 import navbar from '../components/Navbar.vue';
+import spinnerLoading from '../components/SpinnerLoading.vue';
 import { endpoints } from '@/utils/endpoints';
 
 export default {
@@ -76,7 +72,6 @@ export default {
 			imagesSeries: [] as Array<string>,
 			seriesLength: 0,
 			grid: false,
-			loading: true,
 			next: {
 				nextCard: null as string | null,
 				nextImageCard: null as string | null
@@ -84,23 +79,22 @@ export default {
 		};
 	},
 	components: {
-		navbar
+		navbar,
+		spinnerLoading
 	},
 	methods: {
-		moreData(dataset: number, current: number) {
+		async moreData(dataset: number, current: number): Promise<any> {
 			if ((current >= dataset && dataset != -1) || this.next.nextCard == null) {
-				this.setLayout();
-				this.loading = false;
-				return;
+				return this.setLayout();
 			}
-			apiService(this.next.nextCard.replace(/\S*\/api\//g, ''))
+			return apiService(this.next.nextCard.replace(/\S*\/api\//g, ''))
 				.then((data: RequestObject) => {
 					this.series.push(...data.results);
 					this.next.nextCard = data.next;
 				})
 				.then(() => {
 					if (this.next.nextImageCard != null) {
-						apiService(this.next.nextImageCard.replace(/\S*\/api\//g, ''))
+						return apiService(this.next.nextImageCard.replace(/\S*\/api\//g, ''))
 							.then((data: RequestObject) => {
 								this.next.nextImageCard = data.next;
 								for (let i = 0; i < data.results.length; i++) {
@@ -108,27 +102,24 @@ export default {
 								}
 							})
 							.then(() => {
-								this.moreData(dataset, current + 1);
+								return this.moreData(dataset, current + 1);
 							});
 					}
 				});
 		},
-		getDataSeries() {
-			apiService(endpoints.series + this.filter())
+		async getDataSeries() {
+			return apiService(endpoints.series + this.filter())
 				.then((data: RequestObject) => {
 					this.series = data.results;
 					this.seriesLength = data.count;
 					this.next.nextCard = data.next;
 				})
 				.then(() => {
-					if (this.$route.query.dataset != undefined) {
-						this.loading = true;
-						this.moreData(Number(this.$route.query.dataset), 1);
-					}
+					return this.getDataImageSeries();
 				});
 		},
-		getDataImageSeries() {
-			apiService(endpoints.imgSeries + this.filter())
+		async getDataImageSeries() {
+			return apiService(endpoints.imgSeries + this.filter())
 				.then((data: RequestObject) => {
 					this.next.nextImageCard = data.next;
 					this.imagesSeries = [];
@@ -137,8 +128,10 @@ export default {
 					}
 				})
 				.then(() => {
-					this.loading = false;
-					this.setLayout();
+					if (this.$route.query.dataset != undefined) {
+						return this.moreData(Number(this.$route.query.dataset), 1);
+					}
+					return this.setLayout();
 				});
 		},
 		gridClick(load: boolean = false) {
@@ -154,13 +147,12 @@ export default {
 			this.grid = !this.grid;
 			if (!load) this.$cookies.set('grid-cookie', this.grid, 60 * 60 * 24 * 30);
 		},
-		setLayout() {
-			setTimeout(() => {
-				if (this.$cookies.isKey('grid-cookie')) {
-					this.grid = this.$cookies.get('grid-cookie') == 'true' ? false : true;
-					this.gridClick(true);
-				}
-			}, 500);
+		async setLayout() {
+			if (this.$cookies.isKey('grid-cookie')) {
+				this.grid = this.$cookies.get('grid-cookie') == 'true' ? false : true;
+				this.gridClick(true);
+			}
+			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 		},
 		mouseEnter(id: string) {
 			document.querySelector(`#${id}`)!.className =
@@ -169,17 +161,17 @@ export default {
 		mouseLeave(id: string) {
 			document.querySelector(`#${id}`)!.className = 'card mt-2';
 		},
-		moreSeries() {
+		async moreSeries() {
 			if (this.next.nextCard != null) {
-				this.loading = true;
-				apiService(this.next.nextCard.replace(/\S*\/api\//g, ''))
+				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
+				return apiService(this.next.nextCard.replace(/\S*\/api\//g, ''))
 					.then((data: RequestObject) => {
 						this.series.push(...data.results);
 						this.next.nextCard = data.next;
 					})
 					.then(() => {
 						if (this.next.nextImageCard != null) {
-							apiService(this.next.nextImageCard.replace(/\S*\/api\//g, ''))
+							return apiService(this.next.nextImageCard.replace(/\S*\/api\//g, ''))
 								.then((data: RequestObject) => {
 									this.next.nextImageCard = data.next;
 									for (let i = 0; i < data.results.length; i++) {
@@ -187,11 +179,10 @@ export default {
 									}
 								})
 								.then(() => {
-									this.setLayout();
 									if (!isNaN(Number(this.$route.query.type)))
 										this.changeUrl(Number(this.$route.query.type));
 									else this.changeUrl();
-									this.loading = false;
+									return this.setLayout();
 								});
 						}
 					});
@@ -217,14 +208,12 @@ export default {
 			}
 		},
 		async search(type: number, searchBarText: string) {
+			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
 			if (type == 0 && searchBarText === '') {
-				this.$router.replace({
+				await this.$router.replace({
 					query: {}
 				});
-				setTimeout(() => {
-					this.getDataSeries();
-					this.getDataImageSeries();
-				}, 100);
+				await this.getDataSeries();
 				return;
 			}
 			let url =
@@ -251,9 +240,8 @@ export default {
 							}
 						})
 						.then(() => {
-							this.setLayout();
 							this.changeUrl(type, searchBarText);
-							this.loading = false;
+							return this.setLayout();
 						});
 				});
 		},
@@ -269,9 +257,9 @@ export default {
 			return filter;
 		}
 	},
-	created() {
-		this.getDataSeries();
-		this.getDataImageSeries();
+	async created() {
+		await this.getDataSeries();
+		window.scrollTo(0, history.state?.scroll?.top || 0);
 	}
 };
 </script>

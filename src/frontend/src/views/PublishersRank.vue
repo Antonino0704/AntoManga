@@ -76,10 +76,9 @@ export default {
 				})
 			);
 			this.sort();
-			if (document.querySelectorAll('div')[6].className != 'col-auto')
-				document.querySelectorAll('div')[6].className = '';
-			else document.querySelectorAll('div')[4].className = '';
-			document.querySelector('table')!.className = 'table container-sm';
+			document.querySelectorAll('.placeholder').forEach((el) => {
+				el.classList.remove('placeholder');
+			});
 		},
 		sort() {
 			this.publishers.sort((publisher1, publisher2) => {

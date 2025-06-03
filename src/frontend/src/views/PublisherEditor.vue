@@ -20,15 +20,22 @@
 				</div>
 			</div>
 
-			<div class="picture-edit">
-				<label for="file-input">
-					<img
-						:src="imagePublisher"
-						class="list-inline-item rounded-circle mt-2"
-						style="width: 200px"
+			<div class="mt-3 list-inline-item">
+				<div class="input-group mb-3">
+					<input
+						type="file"
+						accept="image/*"
+						class="form-control"
+						id="file-input"
+						@change="updateImage($event)"
 					/>
-				</label>
-				<input type="file" accept="image/*" id="file-input" @change="updateImage($event)" />
+					<label class="input-group-text" for="file-input">
+						<i fill="currentColor" class="bi bi-images"> </i>
+					</label>
+					<div class="invalid-feedback">Invalid image</div>
+				</div>
+
+				<PublisherImagePreview class="list-inline-item" ref="preview" />
 			</div>
 
 			<div class="form-floating mt-3">
@@ -52,6 +59,7 @@
 import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import NotFound from '../views/NotFound.vue';
+import PublisherImagePreview from '../components/PublisherImagePreview.vue';
 import type { PublisherDetail } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 
@@ -61,12 +69,15 @@ export default {
 		return {
 			publisher: {} as PublisherDetail,
 			imagePublisher: '',
-			error: ''
+			error: '',
+			formData: new FormData(),
+			imageUploaded: false
 		};
 	},
 	components: {
 		Notification,
-		NotFound
+		NotFound,
+		PublisherImagePreview
 	},
 	props: {
 		slug: {
@@ -92,25 +103,37 @@ export default {
 		getImagePublisherData() {
 			apiService(`${endpoints.imgPublishers}${this.slug}/`).then((data: PublisherDetail) => {
 				this.imagePublisher = data.image;
+				(this.$refs.preview as InstanceType<typeof PublisherImagePreview>).setPreview(data.image);
 			});
 		},
 		Update() {
 			if (this.checkData()) {
-				apiService(`${endpoints.publishers}${this.slug}/`, 'PUT', this.publisher).then(
-					(response: PublisherDetail) => {
-						(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-							'publisher updated with success'
-						);
+				apiService(`${endpoints.publishers}${this.slug}/`, 'PUT', this.publisher)
+					.then(() => {
+						if (this.imageUploaded) {
+							imageApiService(`${endpoints.imgPublishers}${this.slug}/`, 'PUT', this.formData).then(
+								() => {
+									(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+										'publisher and image updated with success'
+									);
+								}
+							);
+						} else {
+							(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+								'publisher updated with success'
+							);
+						}
+					})
+					.then(() => {
 						setTimeout(
 							() =>
 								this.$router.push({
 									name: 'PublisherDetail',
-									params: { slug: response.slug }
+									params: { slug: this.publisher.slug }
 								}),
 							1000
 						);
-					}
-				);
+					});
 			} else {
 				document.querySelector('#floatingInputGrid')!.className = 'form-control';
 				document.querySelector('#floatingTextarea')!.className = 'form-control';
@@ -140,25 +163,23 @@ export default {
 						'image/'
 					)
 				) {
-					let data = new FormData();
-					data.append('image', (event.target as InstanceType<typeof HTMLInputElement>).files![0]);
-					imageApiService(`${endpoints.imgPublishers}${this.slug}/`, 'PUT', data).then(() => {
-						(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-							"publisher's image updated with success"
-						);
-						setTimeout(
-							() =>
-								this.$router.push({
-									name: 'PublisherDetail',
-									params: { slug: this.publisher.slug }
-								}),
-							1000
-						);
-					});
+					this.formData.append(
+						'image',
+						(event.target as InstanceType<typeof HTMLInputElement>).files![0]
+					);
+					(this.$refs.preview as InstanceType<typeof PublisherImagePreview>).setPreview(
+						URL.createObjectURL((event.target as InstanceType<typeof HTMLInputElement>).files![0])
+					);
+					this.imageUploaded = true;
 				} else {
 					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
 						'unsupported image '
 					);
+					document.querySelector<HTMLInputElement>('#file-input')!.value = '';
+					(this.$refs.preview as InstanceType<typeof PublisherImagePreview>).setPreview(
+						this.imagePublisher
+					);
+					this.imageUploaded = false;
 				}
 			} catch (error) {
 				console.log(error);

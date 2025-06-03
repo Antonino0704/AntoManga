@@ -79,17 +79,7 @@ const router = createRouter({
 			name: 'NotFound',
 			component: NotFound
 		}
-	],
-	scrollBehavior(to, from, savedPosition) {
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		return new Promise((resolve, reject) => {
-			setTimeout(() => {
-				if (savedPosition) {
-					return resolve(savedPosition);
-				}
-			}, 1200);
-		});
-	}
+	]
 });
 
 export default router;

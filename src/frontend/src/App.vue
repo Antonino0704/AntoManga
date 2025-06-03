@@ -9,6 +9,7 @@
 	</nav>
 
 	<div id="app"></div>
+	<scrollTop v-if="scrollY > 300" />
 	<router-view />
 	<toggleTheme />
 </template>
@@ -16,6 +17,7 @@
 <script lang="ts">
 import toggleTheme from './components/ToggleTheme.vue';
 import isNotAuthenticated from './components/IsNotAuthenticated.vue';
+import scrollTop from './components/ScrollTop.vue';
 import { apiService } from './utils/APIService';
 import { endpoints } from '@/utils/endpoints';
 
@@ -23,12 +25,14 @@ export default {
 	name: 'App',
 	data() {
 		return {
-			isNotAuthenticatedVar: true
+			isNotAuthenticatedVar: true,
+			scrollY: 0
 		};
 	},
 	components: {
 		toggleTheme,
-		isNotAuthenticated
+		isNotAuthenticated,
+		scrollTop
 	},
 	computed: {
 		isHome() {
@@ -44,10 +48,14 @@ export default {
 		},
 		getLogo() {
 			return `${document.location.origin}/media/icon.png`;
+		},
+		handleScroll() {
+			this.scrollY = window.scrollY;
 		}
 	},
 	created() {
 		this.isAuthenticated();
+		window.addEventListener('scroll', this.handleScroll);
 	}
 };
 </script>
