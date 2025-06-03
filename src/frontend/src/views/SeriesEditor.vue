@@ -145,32 +145,40 @@ export default {
 		},
 		Update() {
 			if (this.checkData()) {
-				apiService(`${endpoints.series}${this.slug}/`, 'PUT', this.series)
-					.then(() => {
+				apiService(`${endpoints.series}${this.slug}/`, 'PUT', this.series).then(
+					(response: SeriesViewsetInstance) => {
 						if (this.imageUploaded) {
-							imageApiService(`${endpoints.imgSeries}${this.slug}/`, 'PUT', this.formData).then(
-								() => {
+							imageApiService(`${endpoints.imgSeries}${this.slug}/`, 'PUT', this.formData)
+								.then(() => {
 									(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
 										'series and image updated with success'
 									);
-								}
-							);
+								})
+								.then(() => {
+									setTimeout(
+										() =>
+											this.$router.push({
+												name: 'SeriesDetail',
+												params: { slug: response.slug }
+											}),
+										1000
+									);
+								});
 						} else {
 							(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
 								'series updated with success'
 							);
+							setTimeout(
+								() =>
+									this.$router.push({
+										name: 'SeriesDetail',
+										params: { slug: response.slug }
+									}),
+								1000
+							);
 						}
-					})
-					.then(() => {
-						setTimeout(
-							() =>
-								this.$router.push({
-									name: 'SeriesDetail',
-									params: { slug: this.series.slug }
-								}),
-							1000
-						);
-					});
+					}
+				);
 			} else {
 				document.querySelector('#floatingInputGrid')!.className = 'form-control is-invalid';
 				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(this.error);

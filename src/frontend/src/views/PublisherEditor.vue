@@ -108,32 +108,40 @@ export default {
 		},
 		Update() {
 			if (this.checkData()) {
-				apiService(`${endpoints.publishers}${this.slug}/`, 'PUT', this.publisher)
-					.then(() => {
+				apiService(`${endpoints.publishers}${this.slug}/`, 'PUT', this.publisher).then(
+					(response: PublisherDetail) => {
 						if (this.imageUploaded) {
-							imageApiService(`${endpoints.imgPublishers}${this.slug}/`, 'PUT', this.formData).then(
-								() => {
+							imageApiService(`${endpoints.imgPublishers}${this.slug}/`, 'PUT', this.formData)
+								.then(() => {
 									(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
 										'publisher and image updated with success'
 									);
-								}
-							);
+								})
+								.then(() => {
+									setTimeout(
+										() =>
+											this.$router.push({
+												name: 'PublisherDetail',
+												params: { slug: response.slug }
+											}),
+										1000
+									);
+								});
 						} else {
 							(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
 								'publisher updated with success'
 							);
+							setTimeout(
+								() =>
+									this.$router.push({
+										name: 'PublisherDetail',
+										params: { slug: response.slug }
+									}),
+								1000
+							);
 						}
-					})
-					.then(() => {
-						setTimeout(
-							() =>
-								this.$router.push({
-									name: 'PublisherDetail',
-									params: { slug: this.publisher.slug }
-								}),
-							1000
-						);
-					});
+					}
+				);
 			} else {
 				document.querySelector('#floatingInputGrid')!.className = 'form-control';
 				document.querySelector('#floatingTextarea')!.className = 'form-control';
