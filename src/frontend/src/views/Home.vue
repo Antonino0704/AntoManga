@@ -15,6 +15,7 @@
 					<router-link :to="{ name: 'InfoView' }" type="button" class="bi bi-info-circle">
 					</router-link>
 				</div>
+				<SearchNoResults message="it is so empty here" v-if="!seriesLength" class="mt-2" />
 				<div class="row">
 					<div colspan="2" class="list col mt-3" v-for="(serie, index) in series" :key="serie.id">
 						<div
@@ -62,6 +63,7 @@ import { apiService } from '../utils/APIService';
 import type { SeriesViewsetInstance, RequestObject } from '../@types/interfaces';
 import navbar from '../components/Navbar.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
+import SearchNoResults from '../components/SearchNoResults.vue';
 import { endpoints } from '@/utils/endpoints';
 
 export default {
@@ -80,7 +82,8 @@ export default {
 	},
 	components: {
 		navbar,
-		spinnerLoading
+		spinnerLoading,
+		SearchNoResults
 	},
 	methods: {
 		async moreData(dataset: number, current: number): Promise<any> {
