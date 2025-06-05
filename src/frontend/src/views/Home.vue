@@ -72,7 +72,7 @@ export default {
 		return {
 			series: [] as Array<SeriesViewsetInstance>,
 			imagesSeries: [] as Array<string>,
-			seriesLength: 0,
+			seriesLength: 1,
 			grid: false,
 			next: {
 				nextCard: null as string | null,
