@@ -155,7 +155,7 @@ export default {
 				this.grid = this.$cookies.get('grid-cookie') == 'true' ? false : true;
 				this.gridClick(true);
 			}
-			document.querySelector('span').className = 'badge rounded-pill text-bg-info me-2';
+			document.querySelector('span')!.className = 'badge rounded-pill text-bg-info me-2';
 			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 		},
 		mouseEnter(id: string) {
