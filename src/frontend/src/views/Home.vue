@@ -9,7 +9,7 @@
 					<i id="gridButton" class="bi bi-grid ms-2 fs-5" @click="gridClick()"></i>
 				</div>
 				<div>
-					<span class="badge rounded-pill text-bg-info me-2">Length: {{ seriesLength }}</span>
+					<span class="badge rounded-pill me-2 placeholder">Length: {{ seriesLength }}</span>
 					<router-link :to="{ name: 'StatsView' }" type="button" class="bi bi-bar-chart-line me-2">
 					</router-link>
 					<router-link :to="{ name: 'InfoView' }" type="button" class="bi bi-info-circle">
@@ -155,6 +155,7 @@ export default {
 				this.grid = this.$cookies.get('grid-cookie') == 'true' ? false : true;
 				this.gridClick(true);
 			}
+			document.querySelector('span').className = 'badge rounded-pill text-bg-info me-2';
 			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 		},
 		mouseEnter(id: string) {
