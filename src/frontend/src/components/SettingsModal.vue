@@ -1,0 +1,42 @@
+<template>
+	<div class="settingsmodal">
+		<div
+			class="modal fade"
+			id="settingsModal"
+			tabindex="-1"
+			aria-labelledby="settingsModalLabel"
+			aria-hidden="true"
+		>
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5 text-secondary" id="settingsModalLabel">SETTINGS</h1>
+						<button
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="modal"
+							aria-label="Close"
+						></button>
+					</div>
+					<div class="modal-body">
+						<a type="button" class="btn btn-secondary" href="/change-password/">Change Password</a>
+						<hr />
+						<a type="button" class="btn btn-danger" href="/accounts/logout/">LOGOUT</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<script lang="ts">
+export default {
+	name: 'SettingsModal'
+};
+</script>
+
+<style>
+.settingsmodal {
+	text-align: center;
+}
+</style>
