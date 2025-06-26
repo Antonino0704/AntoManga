@@ -25,7 +25,7 @@ export default {
 	name: 'App',
 	data() {
 		return {
-			isNotAuthenticatedVar: true,
+			isNotAuthenticatedVar: false,
 			scrollY: 0
 		};
 	},
