@@ -1,7 +1,11 @@
 <template>
 	<div class="navabar row justify-content-center">
-		<div style="text-align: right">
-			<a v-if="isAuthenticatedVar" class="bi bi-box-arrow-right mb-2" href="/accounts/logout/"></a>
+		<div v-if="isAuthenticatedVar" class="position-relative pb-5">
+			<SettingsModal
+				class="bi bi-gear-fill position-absolute top-0 end-0 pe-3 pt-2 mb-2"
+				data-bs-toggle="modal"
+				data-bs-target="#settingsModal"
+			/>
 		</div>
 		<div class="col-auto">
 			<nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -84,6 +88,7 @@
 import { apiService } from '../utils/APIService';
 import type { Type, Publisher } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
+import SettingsModal from './SettingsModal.vue';
 
 export default {
 	name: 'NavBar',
@@ -97,6 +102,9 @@ export default {
 			statusFilter: 0,
 			isAuthenticatedVar: false
 		};
+	},
+	components: {
+		SettingsModal
 	},
 	computed: {
 		isTypesPubslihers() {
