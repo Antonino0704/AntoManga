@@ -36,6 +36,7 @@ urlpatterns = [
     path("api/v2/", include("publishers.api.urls")),
     path("api/v4/", include("series.api.urls")),
     path("api/v3/", include("core.api.urls")),
+    path("api/v1/", include("users.api.urls")),
 ]
 
 if settings.DEBUG:
