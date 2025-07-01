@@ -21,6 +21,8 @@
 					<div class="modal-body">
 						<a type="button" class="btn btn-secondary" href="/change-password/">Change Password</a>
 						<hr />
+						<a type="button" class="btn btn-secondary" v-if="user.is_staff" href="/admin/">Admin</a>
+						<hr v-if="user.is_staff" />
 						<a type="button" class="btn btn-danger" href="/accounts/logout/">LOGOUT</a>
 					</div>
 				</div>
@@ -30,8 +32,27 @@
 </template>
 
 <script lang="ts">
+import { apiService } from '../utils/APIService';
+import { endpoints } from '@/utils/endpoints';
+import type { User } from '../@types/interfaces';
+
 export default {
-	name: 'SettingsModal'
+	name: 'SettingsModal',
+	data() {
+		return {
+			user: {} as User
+		};
+	},
+	methods: {
+		isStaff() {
+			apiService(endpoints.userMe).then((user: User) => {
+				this.user = user;
+			});
+		}
+	},
+	created() {
+		this.isStaff();
+	}
 };
 </script>
 

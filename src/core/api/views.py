@@ -4,9 +4,12 @@ from rest_framework.response import Response
 from config import settings
 import json
 import os
+from core.minxins import DeprecatedAPIMixin
 
 
-class IsAuthenticatedView(APIView):
+class IsAuthenticatedView(DeprecatedAPIMixin, APIView):
+    deprecation_message = "Use /api/v1/user-me/ instead"
+    alternative_url = "/api/v1/user-me/"
 
     def get(self, request):
         if request.user.is_anonymous:
