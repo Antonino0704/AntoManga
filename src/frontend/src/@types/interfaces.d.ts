@@ -50,3 +50,9 @@ export interface Stats {
 	volumes_bought: number;
 	volumes_read: number;
 }
+
+export interface User {
+	username: string;
+	is_authenticated: boolean;
+	is_staff: boolean;
+}

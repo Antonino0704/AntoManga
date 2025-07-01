@@ -9,7 +9,8 @@ const endpoints = {
 	seriesList: 'v4/series-list/',
 	imgSeriesList: 'v4/image/series-list/',
 	version: 'v3/version/',
-	license: 'v3/license/'
+	license: 'v3/license/',
+	userMe: 'v1/user-me/'
 };
 
 export { endpoints };
