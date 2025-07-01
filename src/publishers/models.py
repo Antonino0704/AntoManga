@@ -6,3 +6,6 @@ class Publisher(models.Model):
     slug = models.SlugField(max_length=255, unique=True)
     description = models.TextField(blank=True)
     image = models.ImageField()
+
+    def __str__(self):
+        return self.name
