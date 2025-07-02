@@ -25,6 +25,8 @@ from django.views.static import serve
 
 from core.views import IndexTemplate
 
+apiVersion = "v4/"
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("django.contrib.auth.urls")),
@@ -33,10 +35,10 @@ urlpatterns = [
         PasswordChangeView.as_view(success_url="/"),
         name="django_change_paswd",
     ),
-    path("api/v2/", include("publishers.api.urls")),
-    path("api/v4/", include("series.api.urls")),
-    path("api/v3/", include("core.api.urls")),
-    path("api/v1/", include("users.api.urls")),
+    path(f"api/{apiVersion}", include("publishers.api.urls")),
+    path(f"api/{apiVersion}", include("series.api.urls")),
+    path(f"api/{apiVersion}", include("core.api.urls")),
+    path(f"api/{apiVersion}", include("users.api.urls")),
 ]
 
 if settings.DEBUG:

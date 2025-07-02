@@ -3,32 +3,41 @@ import actions from '@actions/core';
 import { compare } from 'semver';
 
 const require = createRequire(import.meta.url);
-const url = 'https://antomanga.pythonanywhere.com/api/v3/version/';
+const base = 'https://antomanga.pythonanywhere.com/api/';
+const apiVersions = ['v4/', 'v3/'];
+const urls = [`${base}${apiVersions[0]}version/`, `${base}${apiVersions[1]}version/`];
+
+function requests(file: any, msgSuccess: string, msgNotSuccess: string) {
+	urls.forEach((url) => {
+		fetch(url)
+			.then((res) => {
+				if (res.headers.get('content-type') == 'text/html; charset=utf-8')
+					throw new Error('api version is old');
+				return res.json();
+			})
+			.then((res) => {
+				if (compare(file.version, res.frontendVersion) > 0) {
+					actions.info(msgSuccess);
+				} else {
+					actions.setFailed(msgNotSuccess);
+				}
+			})
+			.catch((err) => {
+				if (err.message != 'api version is old') actions.setFailed(`server off:  ${err}`);
+			});
+	});
+}
 
 if (process.env.architecture == 'frontend') {
 	const packagejsonFile = require('../../package.json');
-	fetch(url)
-		.then((res) => res.json())
-		.then((res) => {
-			if (compare(packagejsonFile.version, res.frontendVersion) > 0) {
-				actions.info('frontend version is ok');
-			} else {
-				actions.setFailed('version is not bumped');
-			}
-		})
-		.catch((err) => actions.setFailed(`server off:  ${err}`));
+	const msgSuccess = 'frontend version is ok';
+	const msgNotSuccess = 'frontend version is not bumped';
+	requests(packagejsonFile, msgSuccess, msgNotSuccess);
 } else if (process.env.architecture == 'backend') {
 	const versionjsonServerFile = require('../../../version.json');
-	fetch(url)
-		.then((res) => res.json())
-		.then((res) => {
-			if (compare(versionjsonServerFile.version, res.backendVersion) > 0) {
-				actions.info('backend version is ok');
-			} else {
-				actions.setFailed('backend is not bumped');
-			}
-		})
-		.catch((err) => actions.setFailed(`server off:  ${err}`));
+	const msgSuccess = 'backend version is ok';
+	const msgNotSuccess = 'backend is not bumped';
+	requests(versionjsonServerFile, msgSuccess, msgNotSuccess);
 } else {
 	actions.setFailed('something went wrong');
 }
