@@ -103,7 +103,7 @@
 import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import SeriesImagePreview from '../components/SeriesImagePreview.vue';
-import type { Series, Type, Publisher } from '../@types/interfaces';
+import type { Series, Type, Publisher, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 
 export default {
@@ -129,8 +129,8 @@ export default {
 		SeriesImagePreview
 	},
 	beforeRouteEnter(to, from, next) {
-		apiService(endpoints.isAuthenticated, 'GET').then((response: any) => {
-			if (response.result) {
+		apiService(endpoints.userMe, 'GET').then((response: User) => {
+			if (response.is_authenticated) {
 				next();
 			} else {
 				next('/not-found');

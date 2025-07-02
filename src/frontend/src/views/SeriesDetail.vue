@@ -6,7 +6,7 @@
 		<router-link
 			:to="{ name: 'AddSeries' }"
 			class="btn btn-outline-info mb-3"
-			v-if="isAuthenticatedVar"
+			v-if="user.is_authenticated"
 			>Add A New Manga
 		</router-link>
 		<div class="card mb-3">
@@ -21,7 +21,7 @@
 					<router-link
 						:to="{ name: 'SeriesEditor', params: { slug: series.slug } }"
 						class="list-inline-item ms-2"
-						v-if="isAuthenticatedVar"
+						v-if="user.is_authenticated"
 					>
 						<!--pen logo from bootstrap-->
 						<i class="bi bi-pen fs-6" fill="currentColor"></i>
@@ -32,7 +32,7 @@
 						fill="currentColor"
 						class="bi bi-trash list-inline-item text-warning fs-5"
 						@click="deleteSeries()"
-						v-if="isAuthenticatedVar"
+						v-if="user.is_authenticated"
 					>
 					</i>
 				</div>
@@ -63,7 +63,7 @@ import { apiService } from '../utils/APIService';
 import seriesDetailStats from '../components/SeriesDetailStatistics.vue';
 import ActionNotification from '../components/ActionNotification.vue';
 import NotFound from '../views/NotFound.vue';
-import type { SeriesViewsetInstance } from '../@types/interfaces';
+import type { SeriesViewsetInstance, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 
 export default {
@@ -78,7 +78,7 @@ export default {
 		return {
 			series: {} as SeriesViewsetInstance,
 			imageSeries: '',
-			isAuthenticatedVar: false
+			user: {} as User
 		};
 	},
 	components: {
@@ -105,8 +105,8 @@ export default {
 			);
 		},
 		isAuthenticated() {
-			apiService(endpoints.isAuthenticated, 'GET').then((response: any) => {
-				this.isAuthenticatedVar = response.result;
+			apiService(endpoints.userMe, 'GET').then((response: User) => {
+				this.user = response;
 			});
 		}
 	},

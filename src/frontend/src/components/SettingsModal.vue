@@ -32,26 +32,13 @@
 </template>
 
 <script lang="ts">
-import { apiService } from '../utils/APIService';
-import { endpoints } from '@/utils/endpoints';
-import type { User } from '../@types/interfaces';
-
 export default {
 	name: 'SettingsModal',
-	data() {
-		return {
-			user: {} as User
-		};
-	},
-	methods: {
-		isStaff() {
-			apiService(endpoints.userMe).then((user: User) => {
-				this.user = user;
-			});
+	props: {
+		user: {
+			type: Object,
+			required: true
 		}
-	},
-	created() {
-		this.isStaff();
 	}
 };
 </script>

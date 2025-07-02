@@ -10,4 +10,4 @@ class UserView(APIView):
 
     def get(self, request):
         serializer = UserSerializer(self.request.user)
-        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.data, status=status.HTTP_200_OK)

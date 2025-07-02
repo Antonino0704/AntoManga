@@ -1,5 +1,5 @@
 <template>
-	<isNotAuthenticated v-if="isNotAuthenticatedVar" />
+	<isNotAuthenticated v-if="!user.is_authenticated" />
 	<nav class="navabar row justify-content-center mt-2" v-if="isHome">
 		<div class="col-auto">
 			<a class="navbar-brand mb-2" href="/">
@@ -20,12 +20,13 @@ import isNotAuthenticated from './components/IsNotAuthenticated.vue';
 import scrollTop from './components/ScrollTop.vue';
 import { apiService } from './utils/APIService';
 import { endpoints } from '@/utils/endpoints';
+import type { User } from './@types/interfaces';
 
 export default {
 	name: 'App',
 	data() {
 		return {
-			isNotAuthenticatedVar: false,
+			user: { is_authenticated: true } as User,
 			scrollY: 0
 		};
 	},
@@ -42,8 +43,8 @@ export default {
 	methods: {
 		isAuthenticated() {
 			console.log('%cNothing to see here', 'color: yellow; font-size: xx-large');
-			apiService(endpoints.isAuthenticated, 'GET').then((response: any) => {
-				this.isNotAuthenticatedVar = !response.result;
+			apiService(endpoints.userMe, 'GET').then((response: User) => {
+				this.user = response;
 			});
 		},
 		getLogo() {

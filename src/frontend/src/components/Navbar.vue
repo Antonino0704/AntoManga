@@ -1,7 +1,8 @@
 <template>
 	<div class="navabar row justify-content-center">
-		<div v-if="isAuthenticatedVar" class="position-relative pb-5">
+		<div v-if="user.is_authenticated" class="position-relative pb-5">
 			<SettingsModal
+				:user="user"
 				class="bi bi-gear-fill position-absolute top-0 end-0 pe-3 pt-2 mb-2"
 				data-bs-toggle="modal"
 				data-bs-target="#settingsModal"
@@ -58,8 +59,8 @@
 								Publishers Rank
 							</router-link>
 						</li>
-						<li v-if="isAuthenticatedVar"><hr class="dropdown-divider" /></li>
-						<li v-if="isAuthenticatedVar">
+						<li v-if="user.is_authenticated"><hr class="dropdown-divider" /></li>
+						<li v-if="user.is_authenticated">
 							<router-link
 								:to="{ name: 'AddPublisher' }"
 								type="button"
@@ -86,7 +87,7 @@
 
 <script lang="ts">
 import { apiService } from '../utils/APIService';
-import type { Type, Publisher } from '../@types/interfaces';
+import type { Type, Publisher, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 import SettingsModal from './SettingsModal.vue';
 
@@ -100,7 +101,7 @@ export default {
 			] as Array<Type>,
 			publishers: 0,
 			statusFilter: 0,
-			isAuthenticatedVar: false
+			user: {} as User
 		};
 	},
 	components: {
@@ -108,7 +109,7 @@ export default {
 	},
 	computed: {
 		isTypesPubslihers() {
-			return this.types.length > 2 && this.publishers > 0 && this.isAuthenticatedVar;
+			return this.types.length > 2 && this.publishers > 0 && this.user.is_authenticated;
 		}
 	},
 	methods: {
@@ -144,8 +145,8 @@ export default {
 			return `${document.location.origin}/media/icon.png`;
 		},
 		isAuthenticated() {
-			apiService(endpoints.isAuthenticated, 'GET').then((response: any) => {
-				this.isAuthenticatedVar = response.result;
+			apiService(endpoints.userMe, 'GET').then((response: User) => {
+				this.user = response;
 			});
 		}
 	},
