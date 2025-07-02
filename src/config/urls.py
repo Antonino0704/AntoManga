@@ -25,7 +25,7 @@ from django.views.static import serve
 
 from core.views import IndexTemplate
 
-apiVersion = 'v4/'
+apiVersion = "v4/"
 
 urlpatterns = [
     path("admin/", admin.site.urls),
