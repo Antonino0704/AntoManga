@@ -1,7 +1,7 @@
 <template>
 	<div class="series-detail-stats container-sm mt-3">
 		<spinnerLoading ref="spinner" />
-		<div class="list-inline-item" v-if="isAuthenticatedVar">
+		<div class="list-inline-item" v-if="user.is_authenticated">
 			<!--pen logo from bootstrap-->
 			<i
 				class="bi bi-pen list-inline-item fs-6"
@@ -134,7 +134,7 @@
 import { apiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
-import type { Series } from '../@types/interfaces';
+import type { Series, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 
 export default {
@@ -150,7 +150,7 @@ export default {
 			series: {} as Series,
 			editIcon: false,
 			errors: '',
-			isAuthenticatedVar: false
+			user: {} as User
 		};
 	},
 	components: {
@@ -271,8 +271,8 @@ export default {
 			document.querySelector('#inputRead')!.className = 'form-control';
 		},
 		async isAuthenticated() {
-			return apiService(endpoints.isAuthenticated, 'GET').then((response: any) => {
-				this.isAuthenticatedVar = response.result;
+			return apiService(endpoints.userMe, 'GET').then((response: User) => {
+				this.user = response;
 				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 			});
 		}

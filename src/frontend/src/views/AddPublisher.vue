@@ -56,7 +56,7 @@
 import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import PublisherImagePreview from '../components/PublisherImagePreview.vue';
-import type { Publisher } from '../@types/interfaces';
+import type { Publisher, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 
 export default {
@@ -77,8 +77,8 @@ export default {
 		PublisherImagePreview
 	},
 	beforeRouteEnter(to, from, next) {
-		apiService(endpoints.isAuthenticated, 'GET').then((response: any) => {
-			if (response.result) {
+		apiService(endpoints.userMe, 'GET').then((response: User) => {
+			if (response.is_authenticated) {
 				next();
 			} else {
 				next('/not-found');

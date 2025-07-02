@@ -60,7 +60,7 @@ import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import NotFound from '../views/NotFound.vue';
 import PublisherImagePreview from '../components/PublisherImagePreview.vue';
-import type { PublisherDetail } from '../@types/interfaces';
+import type { PublisherDetail, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 
 export default {
@@ -86,8 +86,8 @@ export default {
 		}
 	},
 	beforeRouteEnter(to, from, next) {
-		apiService(endpoints.isAuthenticated, 'GET').then((response: any) => {
-			if (response.result) {
+		apiService(endpoints.userMe, 'GET').then((response: User) => {
+			if (response.is_authenticated) {
 				next();
 			} else {
 				next('/not-found');

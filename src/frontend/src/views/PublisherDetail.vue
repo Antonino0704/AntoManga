@@ -8,14 +8,14 @@
 			<router-link
 				:to="{ name: 'AddPublisher' }"
 				class="btn btn-outline-info"
-				v-if="isAuthenticatedVar"
+				v-if="user.is_authenticated"
 				>Add New Publisher
 			</router-link>
 			<button
 				@click="deletePublisher()"
 				type="button"
 				class="btn btn-outline-warning ms-2"
-				v-if="isAuthenticatedVar"
+				v-if="user.is_authenticated"
 			>
 				Delete
 			</button>
@@ -35,7 +35,7 @@
 						<div class="ms-1">
 							<router-link
 								:to="{ name: 'PublisherEditor', params: { slug: publisher.slug } }"
-								v-if="isAuthenticatedVar"
+								v-if="user.is_authenticated"
 							>
 								<!--pen logo from bootstrap-->
 								<i class="bi bi-pen" fill="currentColor"></i>
@@ -94,7 +94,7 @@ import { apiService } from '../utils/APIService';
 import ActionNotification from '../components/ActionNotification.vue';
 import NotFound from '../views/NotFound.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
-import type { Series, PublisherDetail, RequestObject } from '../@types/interfaces';
+import type { Series, PublisherDetail, RequestObject, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 
 export default {
@@ -117,7 +117,7 @@ export default {
 				nextCard: null as string | null,
 				nextImageCard: null as string | null
 			},
-			isAuthenticatedVar: false
+			user: {} as User
 		};
 	},
 	components: {
@@ -237,8 +237,8 @@ export default {
 			}
 		},
 		isAuthenticated() {
-			apiService(endpoints.isAuthenticated, 'GET').then((response: any) => {
-				this.isAuthenticatedVar = response.result;
+			apiService(endpoints.userMe, 'GET').then((response: User) => {
+				this.user = response;
 			});
 		}
 	},

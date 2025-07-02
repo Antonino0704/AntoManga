@@ -10,13 +10,13 @@
 	<div v-else class="typeView container-sm">
 		<h1>Types</h1>
 
-		<TypesComponent v-if="isAuthenticatedVar" />
+		<TypesComponent v-if="user.is_authenticated" />
 		<!--pen logo from bootstrap-->
 		<i
 			class="bi bi-pen list-inline-item fs-6"
 			fill="currentColor"
 			v-show="!editIcon"
-			v-if="isAuthenticatedVar"
+			v-if="user.is_authenticated"
 			@click="edit()"
 		></i>
 
@@ -25,7 +25,7 @@
 			fill="currentColor"
 			class="bi bi-check-circle-fill ms-2 text-success fs-5"
 			v-show="editIcon"
-			v-if="isAuthenticatedVar"
+			v-if="user.is_authenticated"
 			@click="editType()"
 		>
 		</i>
@@ -35,7 +35,7 @@
 			fill="currentColor"
 			class="bi bi-x-circle-fill text-danger ms-2 fs-5"
 			v-show="editIcon"
-			v-if="isAuthenticatedVar"
+			v-if="user.is_authenticated"
 			@click="cancelOperation()"
 		>
 		</i>
@@ -45,7 +45,7 @@
 			fill="currentColor"
 			class="bi bi-trash list-inline-item text-warning ms-1 fs-5"
 			v-show="editIcon"
-			v-if="isAuthenticatedVar"
+			v-if="user.is_authenticated"
 			@click="deleteType()"
 		>
 		</i>
@@ -84,7 +84,7 @@
 import { apiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import TypesComponent from '../components/TypesComponent.vue';
-import type { Type } from '../@types/interfaces';
+import type { Type, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 
 export default {
@@ -94,7 +94,7 @@ export default {
 			types: [] as Array<Type>,
 			editIcon: false,
 			loading: false,
-			isAuthenticatedVar: false
+			user: {} as User
 		};
 	},
 	components: {
@@ -203,8 +203,8 @@ export default {
 			setTimeout(() => (this.loading = false), 1000);
 		},
 		isAuthenticated() {
-			apiService(endpoints.isAuthenticated, 'GET').then((response: any) => {
-				this.isAuthenticatedVar = response.result;
+			apiService(endpoints.userMe, 'GET').then((response: User) => {
+				this.user = response;
 			});
 		}
 	},
