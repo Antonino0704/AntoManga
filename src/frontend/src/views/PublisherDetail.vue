@@ -181,29 +181,19 @@ export default {
 				`${endpoints.publishers}${this.slug}/`
 			);
 		},
-		moreSeries() {
-			if (this.next.nextCard != null) {
+		async moreSeries() {
+			if (this.next.nextCard != null && this.next.nextImageCard != null) {
 				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
-				apiService(this.next.nextCard.replace(/\S*\/api\//g, ''))
-					.then((data: RequestObject) => {
-						this.series.push(...data.results);
-						this.next.nextCard = data.next;
-					})
-					.then(() => {
-						if (this.next.nextImageCard != null) {
-							apiService(this.next.nextImageCard.replace(/\S*\/api\//g, ''))
-								.then((data: RequestObject) => {
-									this.next.nextImageCard = data.next;
-									for (let i = 0; i < data.results.length; i++) {
-										this.imageSeries.push(data.results[i].image);
-									}
-								})
-								.then(() => {
-									this.changeUrl();
-									(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
-								});
-						}
-					});
+
+				const seriesData = await moreData(1, 0, this.next.nextCard);
+				const seriesDataImg = await moreDataImage(1, 0, this.next.nextImageCard);
+				this.series.push(...seriesData.series);
+				this.next.nextCard = seriesData.nextCard;
+				this.imageSeries.push(...seriesDataImg.imageSeries);
+				this.next.nextImageCard = seriesDataImg.nextImageCard;
+
+				this.changeUrl();
+				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 			}
 		},
 		changeUrl() {

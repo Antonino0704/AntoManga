@@ -148,30 +148,22 @@ export default {
 			document.querySelector(`#${id}`)!.className = 'card mt-2';
 		},
 		async moreSeries() {
-			if (this.next.nextCard != null) {
+			if (this.next.nextCard != null && this.next.nextImageCard != null) {
 				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
-				return apiService(this.next.nextCard.replace(/\S*\/api\//g, ''))
-					.then((data: RequestObject) => {
-						this.series.push(...data.results);
-						this.next.nextCard = data.next;
-					})
-					.then(() => {
-						if (this.next.nextImageCard != null) {
-							return apiService(this.next.nextImageCard.replace(/\S*\/api\//g, ''))
-								.then((data: RequestObject) => {
-									this.next.nextImageCard = data.next;
-									for (let i = 0; i < data.results.length; i++) {
-										this.imagesSeries.push(data.results[i].image);
-									}
-								})
-								.then(() => {
-									if (!isNaN(Number(this.$route.query.type)))
-										this.changeUrl(Number(this.$route.query.type));
-									else this.changeUrl();
-									return this.setLayout();
-								});
-						}
-					});
+				const seriesData = await moreData(1, 0, this.next.nextCard);
+				const seriesDataImg = await moreDataImage(1, 0, this.next.nextImageCard);
+
+				this.series.push(...seriesData.series);
+				this.next.nextCard = seriesData.nextCard;
+				this.imagesSeries.push(...seriesDataImg.imageSeries);
+				this.next.nextImageCard = seriesDataImg.nextImageCard;
+				let type = undefined;
+				let search =
+					this.$route.query.filterbyname != null ? String(this.$route.query.filterbyname) : '';
+				if (!isNaN(Number(this.$route.query.type))) type = Number(this.$route.query.type);
+
+				this.changeUrl(type, search);
+				return this.setLayout();
 			}
 		},
 		changeUrl(type: number = 0, search: string = '') {
