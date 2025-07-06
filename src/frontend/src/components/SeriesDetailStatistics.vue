@@ -136,6 +136,7 @@ import Notification from '../components/Notification.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
 import type { Series, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
+import { checkDataStats, showErrors, resetErrors } from '@/utils/StatsErrorsChecks';
 
 export default {
 	name: 'seriesDetailStats',
@@ -150,7 +151,8 @@ export default {
 			series: {} as Series,
 			editIcon: false,
 			errors: '',
-			user: {} as User
+			user: {} as User,
+			error: ''
 		};
 	},
 	components: {
@@ -188,87 +190,21 @@ export default {
 			this.editIcon = !this.editIcon;
 		},
 		cancelOperation() {
-			this.resetErrors();
+			resetErrors();
 			this.edit(true);
 			this.getDataSeries();
 		},
 		sendData() {
-			if (this.checkData()) {
+			if (checkDataStats(this.series)) {
 				apiService(`${endpoints.series}${this.slug}/`, 'PUT', this.series).then(() => {
-					this.resetErrors();
+					resetErrors();
 					this.edit(true);
 				});
 			} else {
-				this.resetErrors();
-				this.showErrors();
+				resetErrors();
+				this.error = showErrors(this.series);
+				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(this.error);
 			}
-		},
-		checkData(): boolean {
-			if (
-				this.series.n_volumes <= 0 ||
-				this.series.volumes_bought < 0 ||
-				typeof this.series.volumes_bought != 'number' ||
-				this.series.volumes_read < 0 ||
-				typeof this.series.volumes_read != 'number'
-			) {
-				return false;
-			}
-			if (
-				this.series.n_volumes < this.series.volumes_bought ||
-				this.series.volumes_bought < this.series.volumes_read
-			) {
-				return false;
-			}
-			return true;
-		},
-		showErrors() {
-			if (this.series.n_volumes <= 0) {
-				document.querySelector('#inputNVol')!.className = 'form-control is-invalid';
-				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-					"n volumes can't be negative"
-				);
-			}
-			if (this.series.volumes_bought < 0) {
-				document.querySelector('#inputBought')!.className = 'form-control is-invalid';
-				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-					"volumes bought can't be negative"
-				);
-			}
-			if (this.series.volumes_read < 0) {
-				document.querySelector('#inputRead')!.className = 'form-control is-invalid';
-				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-					"volumes read can't be negative"
-				);
-			}
-			if (this.series.n_volumes < this.series.volumes_bought) {
-				document.querySelector('#inputBought')!.className = 'form-control is-invalid';
-				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-					"the volumes bought can't be more than total volumes"
-				);
-			}
-			if (this.series.volumes_bought < this.series.volumes_read) {
-				document.querySelector('#inputRead')!.className = 'form-control is-invalid';
-				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-					"the volumes read can't be more than total bought"
-				);
-			}
-			if (typeof this.series.volumes_bought != 'number') {
-				document.querySelector('#inputBought')!.className = 'form-control is-invalid';
-				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-					"volumes bought can't be blank"
-				);
-			}
-			if (typeof this.series.volumes_read != 'number') {
-				document.querySelector('#inputRead')!.className = 'form-control is-invalid';
-				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-					"volumes read can't be blank"
-				);
-			}
-		},
-		resetErrors() {
-			document.querySelector('#inputNVol')!.className = 'form-control';
-			document.querySelector('#inputBought')!.className = 'form-control';
-			document.querySelector('#inputRead')!.className = 'form-control';
 		},
 		async isAuthenticated() {
 			return apiService(endpoints.userMe, 'GET').then((response: User) => {
