@@ -105,6 +105,7 @@ import Notification from '../components/Notification.vue';
 import SeriesImagePreview from '../components/SeriesImagePreview.vue';
 import type { Series, Type, Publisher, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
+import { checkDataStats, showErrors, resetErrors } from '@/utils/StatsErrorsChecks';
 
 export default {
 	name: 'AddSeries',
@@ -218,74 +219,38 @@ export default {
 			}
 		},
 		checkData() {
-			if (!this.imageUploaded) {
-				this.error = 'image not loaded correctly';
-				return false;
-			}
-			if (
-				!this.series.name ||
-				this.series.n_volumes <= 0 ||
-				this.series.volumes_bought < 0 ||
-				typeof this.series.volumes_bought != 'number' ||
-				this.series.volumes_read < 0 ||
-				typeof this.series.volumes_read != 'number'
-			) {
-				this.error = "The fields can't be blank";
-				return false;
-			}
-			if (
-				this.series.n_volumes < this.series.volumes_bought ||
-				this.series.volumes_bought < this.series.volumes_read
-			) {
-				this.error = 'Errors with numbering';
-				return false;
-			}
-			if (!this.types.length) {
-				this.error = 'there is no type';
-				return false;
-			}
-			if (!this.publishers.length) {
-				this.error = 'there is no publisher';
-				return false;
-			}
-			return true;
+			if (!this.imageUploaded) return false;
+
+			if (!this.series.name) return false;
+
+			if (!this.types.length) return false;
+
+			if (!this.publishers.length) return false;
+
+			return checkDataStats(this.series);
 		},
 		showErrors() {
 			if (!this.imageUploaded) {
+				this.error = 'image not loaded correctly';
 				document.querySelector('#file-input')!.className = 'form-control is-invalid';
 			}
-			if (this.series.n_volumes <= 0) {
-				document.querySelector('#inputNVol')!.className = 'form-control is-invalid';
-			}
-			if (
-				typeof this.series.volumes_bought != 'number' ||
-				this.series.volumes_bought < 0 ||
-				this.series.n_volumes < this.series.volumes_bought
-			) {
-				document.querySelector('#inputBought')!.className = 'form-control is-invalid';
-			}
-			if (
-				typeof this.series.volumes_read != 'number' ||
-				this.series.volumes_read < 0 ||
-				this.series.volumes_bought < this.series.volumes_read
-			) {
-				document.querySelector('#inputRead')!.className = 'form-control is-invalid';
-			}
+			this.error = showErrors(this.series);
 			if (!this.series.name) {
+				this.error = "The fields can't be blank";
 				document.querySelector('#floatingInputGrid')!.className = 'form-control is-invalid';
 			}
 			if (!this.types.length) {
+				this.error = 'there is no type';
 				document.querySelector('#typeSelect')!.className = 'form-select-sm placeholder bg-danger';
 			}
 			if (!this.publishers.length) {
+				this.error = 'there is no publisher';
 				document.querySelector('#publisherSelect')!.className =
 					'form-select-sm placeholder bg-danger';
 			}
 		},
 		resetErrors() {
-			document.querySelector('#inputNVol')!.className = 'form-control';
-			document.querySelector('#inputBought')!.className = 'form-control';
-			document.querySelector('#inputRead')!.className = 'form-control';
+			resetErrors();
 			document.querySelector('#floatingInputGrid')!.className = 'form-control';
 		}
 	},

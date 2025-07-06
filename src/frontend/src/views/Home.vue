@@ -65,6 +65,7 @@ import navbar from '../components/Navbar.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
 import SearchNoResults from '../components/SearchNoResults.vue';
 import { endpoints } from '@/utils/endpoints';
+import { moreData, moreDataImage } from '../utils/getSeries';
 
 export default {
 	name: 'HomeView',
@@ -86,56 +87,37 @@ export default {
 		SearchNoResults
 	},
 	methods: {
-		async moreData(dataset: number, current: number): Promise<any> {
-			if ((current >= dataset && dataset != -1) || this.next.nextCard == null) {
-				return this.setLayout();
-			}
-			return apiService(this.next.nextCard.replace(/\S*\/api\//g, ''))
-				.then((data: RequestObject) => {
-					this.series.push(...data.results);
-					this.next.nextCard = data.next;
-				})
-				.then(() => {
-					if (this.next.nextImageCard != null) {
-						return apiService(this.next.nextImageCard.replace(/\S*\/api\//g, ''))
-							.then((data: RequestObject) => {
-								this.next.nextImageCard = data.next;
-								for (let i = 0; i < data.results.length; i++) {
-									this.imagesSeries.push(data.results[i].image);
-								}
-							})
-							.then(() => {
-								return this.moreData(dataset, current + 1);
-							});
-					}
-				});
-		},
 		async getDataSeries() {
-			return apiService(endpoints.series + this.filter())
-				.then((data: RequestObject) => {
-					this.series = data.results;
-					this.seriesLength = data.count;
-					this.next.nextCard = data.next;
-				})
-				.then(() => {
-					return this.getDataImageSeries();
-				});
+			await apiService(endpoints.series + this.filter()).then((data: RequestObject) => {
+				this.series = data.results;
+				this.seriesLength = data.count;
+				this.next.nextCard = data.next;
+			});
+			if (this.$route.query.dataset != undefined) {
+				let seriesData = await moreData(Number(this.$route.query.dataset), 1, this.next.nextCard);
+				this.series.push(...seriesData.series);
+				this.next.nextCard = seriesData.nextCard;
+			}
+			return this.getDataImageSeries();
 		},
 		async getDataImageSeries() {
-			return apiService(endpoints.imgSeries + this.filter())
-				.then((data: RequestObject) => {
-					this.next.nextImageCard = data.next;
-					this.imagesSeries = [];
-					for (let i = 0; i < data.results.length; i++) {
-						this.imagesSeries.push(data.results[i].image);
-					}
-				})
-				.then(() => {
-					if (this.$route.query.dataset != undefined) {
-						return this.moreData(Number(this.$route.query.dataset), 1);
-					}
-					return this.setLayout();
-				});
+			await apiService(endpoints.imgSeries + this.filter()).then((data: RequestObject) => {
+				this.next.nextImageCard = data.next;
+				this.imagesSeries = [];
+				for (let i = 0; i < data.results.length; i++) {
+					this.imagesSeries.push(data.results[i].image);
+				}
+			});
+			if (this.$route.query.dataset != undefined) {
+				const seriesDataImg = await moreDataImage(
+					Number(this.$route.query.dataset),
+					1,
+					this.next.nextImageCard
+				);
+				this.imagesSeries.push(...seriesDataImg.imageSeries);
+				this.next.nextImageCard = seriesDataImg.nextImageCard;
+			}
+			return this.setLayout();
 		},
 		gridClick(load: boolean = false) {
 			const listElement = document.querySelectorAll('.list');
@@ -166,30 +148,22 @@ export default {
 			document.querySelector(`#${id}`)!.className = 'card mt-2';
 		},
 		async moreSeries() {
-			if (this.next.nextCard != null) {
+			if (this.next.nextCard != null && this.next.nextImageCard != null) {
 				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
-				return apiService(this.next.nextCard.replace(/\S*\/api\//g, ''))
-					.then((data: RequestObject) => {
-						this.series.push(...data.results);
-						this.next.nextCard = data.next;
-					})
-					.then(() => {
-						if (this.next.nextImageCard != null) {
-							return apiService(this.next.nextImageCard.replace(/\S*\/api\//g, ''))
-								.then((data: RequestObject) => {
-									this.next.nextImageCard = data.next;
-									for (let i = 0; i < data.results.length; i++) {
-										this.imagesSeries.push(data.results[i].image);
-									}
-								})
-								.then(() => {
-									if (!isNaN(Number(this.$route.query.type)))
-										this.changeUrl(Number(this.$route.query.type));
-									else this.changeUrl();
-									return this.setLayout();
-								});
-						}
-					});
+				const seriesData = await moreData(1, 0, this.next.nextCard);
+				const seriesDataImg = await moreDataImage(1, 0, this.next.nextImageCard);
+
+				this.series.push(...seriesData.series);
+				this.next.nextCard = seriesData.nextCard;
+				this.imagesSeries.push(...seriesDataImg.imageSeries);
+				this.next.nextImageCard = seriesDataImg.nextImageCard;
+				let type = undefined;
+				let search =
+					this.$route.query.filterbyname != null ? String(this.$route.query.filterbyname) : '';
+				if (!isNaN(Number(this.$route.query.type))) type = Number(this.$route.query.type);
+
+				this.changeUrl(type, search);
+				return this.setLayout();
 			}
 		},
 		changeUrl(type: number = 0, search: string = '') {

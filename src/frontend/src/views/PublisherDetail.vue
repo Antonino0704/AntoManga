@@ -96,6 +96,7 @@ import NotFound from '../views/NotFound.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
 import type { Series, PublisherDetail, RequestObject, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
+import { moreData, moreDataImage } from '../utils/getSeries';
 
 export default {
 	name: 'PublisherDetail',
@@ -131,31 +132,6 @@ export default {
 		next();
 	},
 	methods: {
-		async moreData(dataset: number, current: number): Promise<any> {
-			if ((current >= dataset && dataset != -1) || this.next.nextCard == null) {
-				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
-				return;
-			}
-			return apiService(this.next.nextCard.replace(/\S*\/api\//g, ''))
-				.then((data: RequestObject) => {
-					this.series.push(...data.results);
-					this.next.nextCard = data.next;
-				})
-				.then(() => {
-					if (this.next.nextImageCard != null) {
-						return apiService(this.next.nextImageCard.replace(/\S*\/api\//g, ''))
-							.then((data: RequestObject) => {
-								this.next.nextImageCard = data.next;
-								for (let i = 0; i < data.results.length; i++) {
-									this.imageSeries.push(data.results[i].image);
-								}
-							})
-							.then(() => {
-								return this.moreData(dataset, current + 1);
-							});
-					}
-				});
-		},
 		getPublisherData() {
 			apiService(`${endpoints.publishers}${this.slug}/`).then((data: PublisherDetail) => {
 				this.publisher = data;
@@ -167,27 +143,36 @@ export default {
 			});
 		},
 		async getseriesData() {
-			return apiService(`${endpoints.seriesList}${this.slug}/`)
-				.then((data: RequestObject) => {
-					this.series = data.results;
-					this.seriesLength = data.count;
-					this.next.nextCard = data.next;
-				})
-				.then(() => {
-					return this.getImageseriesData();
-				});
+			await apiService(`${endpoints.seriesList}${this.slug}/`).then((data: RequestObject) => {
+				this.series = data.results;
+				this.seriesLength = data.count;
+				this.next.nextCard = data.next;
+			});
+
+			if (this.$route.query.dataset != undefined) {
+				let seriesData = await moreData(Number(this.$route.query.dataset), 1, this.next.nextCard);
+				this.series.push(...seriesData.series);
+				this.next.nextCard = seriesData.nextCard;
+			}
+			return this.getImageseriesData();
 		},
 		async getImageseriesData() {
-			return apiService(`${endpoints.imgSeriesList}${this.slug}/`).then((data: RequestObject) => {
+			await apiService(`${endpoints.imgSeriesList}${this.slug}/`).then((data: RequestObject) => {
 				this.next.nextImageCard = data.next;
 				for (let i = 0; i < data.results.length; i++) {
 					this.imageSeries.push(data.results[i].image);
 				}
-				if (this.$route.query.dataset != undefined) {
-					return this.moreData(Number(this.$route.query.dataset), 1);
-				}
-				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 			});
+			if (this.$route.query.dataset != undefined) {
+				const seriesDataImg = await moreDataImage(
+					Number(this.$route.query.dataset),
+					1,
+					this.next.nextImageCard
+				);
+				this.imageSeries.push(...seriesDataImg.imageSeries);
+				this.next.nextImageCard = seriesDataImg.nextImageCard;
+			}
+			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 		},
 		deletePublisher() {
 			(this.$refs.actionNotification as InstanceType<typeof ActionNotification>).sendNotification(
@@ -196,29 +181,19 @@ export default {
 				`${endpoints.publishers}${this.slug}/`
 			);
 		},
-		moreSeries() {
-			if (this.next.nextCard != null) {
+		async moreSeries() {
+			if (this.next.nextCard != null && this.next.nextImageCard != null) {
 				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
-				apiService(this.next.nextCard.replace(/\S*\/api\//g, ''))
-					.then((data: RequestObject) => {
-						this.series.push(...data.results);
-						this.next.nextCard = data.next;
-					})
-					.then(() => {
-						if (this.next.nextImageCard != null) {
-							apiService(this.next.nextImageCard.replace(/\S*\/api\//g, ''))
-								.then((data: RequestObject) => {
-									this.next.nextImageCard = data.next;
-									for (let i = 0; i < data.results.length; i++) {
-										this.imageSeries.push(data.results[i].image);
-									}
-								})
-								.then(() => {
-									this.changeUrl();
-									(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
-								});
-						}
-					});
+
+				const seriesData = await moreData(1, 0, this.next.nextCard);
+				const seriesDataImg = await moreDataImage(1, 0, this.next.nextImageCard);
+				this.series.push(...seriesData.series);
+				this.next.nextCard = seriesData.nextCard;
+				this.imageSeries.push(...seriesDataImg.imageSeries);
+				this.next.nextImageCard = seriesDataImg.nextImageCard;
+
+				this.changeUrl();
+				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 			}
 		},
 		changeUrl() {
