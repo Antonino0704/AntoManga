@@ -39,7 +39,6 @@ export default {
 			}
 		},
 		toggleClick() {
-			console.log('a');
 			if (document.documentElement.getAttribute('data-bs-theme') == 'dark') {
 				this.toggle('light');
 				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
