@@ -1,10 +1,6 @@
 <template>
 	<div v-if="loading">
-		<div
-			class="spinner-border position-absolute top-50 start-50"
-			style="width: 3rem; height: 3rem"
-			role="status"
-		></div>
+		<spinnerLoading />
 		<span>Loading.....</span>
 	</div>
 	<div v-else class="typeView container-sm">
@@ -84,6 +80,7 @@
 import { apiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import TypesComponent from '../components/TypesComponent.vue';
+import spinnerLoading from '../components/SpinnerLoading.vue';
 import type { Type, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 
@@ -99,7 +96,8 @@ export default {
 	},
 	components: {
 		Notification,
-		TypesComponent
+		TypesComponent,
+		spinnerLoading
 	},
 	methods: {
 		getTypesData() {
