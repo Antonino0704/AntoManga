@@ -17,7 +17,7 @@
 				<select
 					id="selectType"
 					name="selectType"
-					class="form-select-sm mb-2 ms-2 select-style badge text-bg-dark"
+					class="form-select-sm mb-2 ms-2 select-style badge"
 					aria-label="NULL"
 					@change="search()"
 					v-model="statusFilter"
@@ -148,7 +148,15 @@ export default {
 			apiService(endpoints.userMe, 'GET').then((response: User) => {
 				this.user = response;
 			});
+		},
+		setSelectTheme() {
+			if (this.$cookies.isKey('theme-cookie') && this.$cookies.get('theme-cookie') == 'light') {
+				document.querySelector('#selectType')!.classList.add('text-bg-light');
+			} else document.querySelector('#selectType')!.classList.add('text-bg-dark');
 		}
+	},
+	mounted() {
+		this.setSelectTheme();
 	},
 	created() {
 		this.getTypes();
