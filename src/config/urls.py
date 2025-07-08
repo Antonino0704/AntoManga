@@ -17,7 +17,7 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, re_path, include
-from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.views import PasswordChangeView, LoginView, LogoutView
 
 from django.conf.urls.static import static
 from django.conf import settings
@@ -29,7 +29,16 @@ apiVersion = "v4/"
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("accounts/", include("django.contrib.auth.urls")),
+    path(
+        "accounts/login/",
+        LoginView.as_view(),
+        name="django_login",
+    ),
+    path(
+        "accounts/logout/",
+        LogoutView.as_view(),
+        name="django_logout",
+    ),
     path(
         "change-password/",
         PasswordChangeView.as_view(success_url="/"),
