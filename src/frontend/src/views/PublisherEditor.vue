@@ -62,6 +62,7 @@ import NotFound from '../views/NotFound.vue';
 import PublisherImagePreview from '../components/PublisherImagePreview.vue';
 import type { PublisherDetail, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
+import { validate } from '@/utils/supportedImageExtensions';
 
 export default {
 	name: 'PublisherEditor',
@@ -169,6 +170,9 @@ export default {
 				if (
 					(event.target as InstanceType<typeof HTMLInputElement>).files![0].type.startsWith(
 						'image/'
+					) &&
+					validate(
+						(event.target as InstanceType<typeof HTMLInputElement>).files![0].name.split('.').pop()
 					)
 				) {
 					this.formData.append(
