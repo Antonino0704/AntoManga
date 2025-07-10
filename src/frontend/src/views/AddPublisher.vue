@@ -58,6 +58,7 @@ import Notification from '../components/Notification.vue';
 import PublisherImagePreview from '../components/PublisherImagePreview.vue';
 import type { Publisher, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
+import { validate } from '@/utils/supportedImageExtensions';
 
 export default {
 	name: 'AddPublisher',
@@ -88,7 +89,12 @@ export default {
 	methods: {
 		addImage(event: Event) {
 			if (
-				(event.target as InstanceType<typeof HTMLInputElement>).files![0].type.startsWith('image/')
+				(event.target as InstanceType<typeof HTMLInputElement>).files![0].type.startsWith(
+					'image/'
+				) &&
+				validate(
+					(event.target as InstanceType<typeof HTMLInputElement>).files![0].name.split('.').pop()
+				)
 			) {
 				this.formData.append(
 					'image',

@@ -68,6 +68,7 @@ import NotFound from '../views/NotFound.vue';
 import PreviewComponent from '../components/SeriesImagePreview.vue';
 import type { SeriesViewsetInstance, Type, Publisher, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
+import { validate } from '@/utils/supportedImageExtensions';
 
 export default {
 	name: 'SeriesEditor',
@@ -196,6 +197,9 @@ export default {
 				if (
 					(event.target as InstanceType<typeof HTMLInputElement>).files![0].type.startsWith(
 						'image/'
+					) &&
+					validate(
+						(event.target as InstanceType<typeof HTMLInputElement>).files![0].name.split('.').pop()
 					)
 				) {
 					this.formData.append(

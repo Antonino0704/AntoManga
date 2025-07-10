@@ -105,6 +105,7 @@ import Notification from '../components/Notification.vue';
 import SeriesImagePreview from '../components/SeriesImagePreview.vue';
 import type { Series, Type, Publisher, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
+import { validate } from '@/utils/supportedImageExtensions';
 import { checkDataStats, showErrors, resetErrors } from '@/utils/StatsErrorsChecks';
 
 export default {
@@ -173,7 +174,12 @@ export default {
 		addImage(event: Event) {
 			//doesn't add the image to the server
 			if (
-				(event.target as InstanceType<typeof HTMLInputElement>).files![0].type.startsWith('image/')
+				(event.target as InstanceType<typeof HTMLInputElement>).files![0].type.startsWith(
+					'image/'
+				) &&
+				validate(
+					(event.target as InstanceType<typeof HTMLInputElement>).files![0].name.split('.').pop()
+				)
 			) {
 				this.formData.append(
 					'image',
@@ -230,11 +236,11 @@ export default {
 			return checkDataStats(this.series);
 		},
 		showErrors() {
+			this.error = showErrors(this.series);
 			if (!this.imageUploaded) {
 				this.error = 'image not loaded correctly';
 				document.querySelector('#file-input')!.className = 'form-control is-invalid';
 			}
-			this.error = showErrors(this.series);
 			if (!this.series.name) {
 				this.error = "The fields can't be blank";
 				document.querySelector('#floatingInputGrid')!.className = 'form-control is-invalid';
