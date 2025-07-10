@@ -150,13 +150,14 @@ export default {
 		async moreSeries() {
 			if (this.next.nextCard != null && this.next.nextImageCard != null) {
 				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
-				const seriesData = await moreData(1, 0, this.next.nextCard);
-				const seriesDataImg = await moreDataImage(1, 0, this.next.nextImageCard);
-
-				this.series.push(...seriesData.series);
-				this.next.nextCard = seriesData.nextCard;
-				this.imagesSeries.push(...seriesDataImg.imageSeries);
-				this.next.nextImageCard = seriesDataImg.nextImageCard;
+				await moreData(1, 0, this.next.nextCard).then((seriesData) => {
+					this.series.push(...seriesData.series);
+					this.next.nextCard = seriesData.nextCard;
+				});
+				await moreDataImage(1, 0, this.next.nextImageCard).then((seriesDataImg) => {
+					this.imagesSeries.push(...seriesDataImg.imageSeries);
+					this.next.nextImageCard = seriesDataImg.nextImageCard;
+				});
 				let type = undefined;
 				let search =
 					this.$route.query.filterbyname != null ? String(this.$route.query.filterbyname) : '';
