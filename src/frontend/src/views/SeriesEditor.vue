@@ -107,15 +107,15 @@ export default {
 		});
 	},
 	methods: {
-		getSeriesData() {
-			apiService(`${endpoints.series}${this.slug}/`).then((data: SeriesViewsetInstance) => {
+		async getSeriesData() {
+			await apiService(`${endpoints.series}${this.slug}/`).then((data: SeriesViewsetInstance) => {
 				this.series = data;
 				this.getTypes();
 				this.getPublishers();
 			});
 		},
 		async getTypes() {
-			return apiService(endpoints.types)
+			await apiService(endpoints.types)
 				.then((data: Array<any>) => {
 					for (let i = 0; i < data.length; i++) {
 						this.types.push(data[i]);
@@ -128,7 +128,7 @@ export default {
 				});
 		},
 		async getPublishers() {
-			return apiService(endpoints.publishers)
+			await apiService(endpoints.publishers)
 				.then((data: Array<any>) => {
 					for (let i = 0; i < data.length; i++) {
 						this.publishers.push(data[i]);
@@ -141,11 +141,13 @@ export default {
 					document.querySelector('#publisherSelect')!.className = 'form-select-sm';
 				});
 		},
-		getImageSeries() {
-			apiService(`${endpoints.imgSeries}${this.slug}/`).then((data: SeriesViewsetInstance) => {
-				this.imageSeries = data.image;
-				(this.$refs.preview as InstanceType<typeof PreviewComponent>).setPreview(data.image);
-			});
+		async getImageSeries() {
+			await apiService(`${endpoints.imgSeries}${this.slug}/`).then(
+				(data: SeriesViewsetInstance) => {
+					this.imageSeries = data.image;
+					(this.$refs.preview as InstanceType<typeof PreviewComponent>).setPreview(data.image);
+				}
+			);
 		},
 		Update() {
 			if (this.checkData()) {
