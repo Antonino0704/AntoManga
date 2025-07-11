@@ -14,9 +14,15 @@
 <script lang="ts">
 export default {
 	name: 'SpinnerLoading',
+	props: {
+		startWithLoadingFalse: {
+			type: Boolean,
+			default: false
+		}
+	},
 	data() {
 		return {
-			loading: true
+			loading: !this.startWithLoadingFalse
 		};
 	},
 	methods: {

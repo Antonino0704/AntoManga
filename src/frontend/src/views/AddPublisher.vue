@@ -1,5 +1,6 @@
 <template>
 	<div class="add-publisher container-sm">
+		<spinnerLoading ref="spinner" :startWithLoadingFalse="true" />
 		<form class="list-inline" @submit.prevent="addPublisher">
 			<h1 class="list-inline-item">ADD A New Publisher</h1>
 			<div class="list-inline-item row g-2">
@@ -56,6 +57,7 @@
 import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import PublisherImagePreview from '../components/PublisherImagePreview.vue';
+import spinnerLoading from '../components/SpinnerLoading.vue';
 import type { Publisher, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 import { validateImage } from '@/utils/supportedImageExtensions';
@@ -75,7 +77,8 @@ export default {
 	},
 	components: {
 		Notification,
-		PublisherImagePreview
+		PublisherImagePreview,
+		spinnerLoading
 	},
 	beforeRouteEnter(to, from, next) {
 		apiService(endpoints.userMe, 'GET').then((response: User) => {
@@ -88,6 +91,7 @@ export default {
 	},
 	methods: {
 		async addImage(event: Event) {
+			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
 			if (await validateImage(event.target as InstanceType<typeof HTMLInputElement>)) {
 				this.formData.append(
 					'image',
@@ -106,6 +110,7 @@ export default {
 				(this.$refs.preview as InstanceType<typeof PublisherImagePreview>).resetPreview();
 				this.imageUploaded = false;
 			}
+			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 		},
 		addPublisher() {
 			if (this.checkData()) {

@@ -3,6 +3,7 @@
 		<NotFound message="PUBLISHER NOT FOUND" />
 	</div>
 	<div v-else class="publisher-editor container-sm mt-3">
+		<spinnerLoading ref="spinner" />
 		<form class="list-inline" @submit.prevent="Update">
 			<h1 class="list-inline-item">EDIT PAGE</h1>
 			<div class="list-inline-item row g-2">
@@ -60,6 +61,7 @@ import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import NotFound from '../views/NotFound.vue';
 import PublisherImagePreview from '../components/PublisherImagePreview.vue';
+import spinnerLoading from '../components/SpinnerLoading.vue';
 import type { PublisherDetail, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 import { validateImage } from '@/utils/supportedImageExtensions';
@@ -78,7 +80,8 @@ export default {
 	components: {
 		Notification,
 		NotFound,
-		PublisherImagePreview
+		PublisherImagePreview,
+		spinnerLoading
 	},
 	props: {
 		slug: {
@@ -96,13 +99,13 @@ export default {
 		});
 	},
 	methods: {
-		getPublisherData() {
-			apiService(`${endpoints.publishers}${this.slug}/`).then((data: PublisherDetail) => {
+		async getPublisherData() {
+			await apiService(`${endpoints.publishers}${this.slug}/`).then((data: PublisherDetail) => {
 				this.publisher = data;
 			});
 		},
-		getImagePublisherData() {
-			apiService(`${endpoints.imgPublishers}${this.slug}/`).then((data: PublisherDetail) => {
+		async getImagePublisherData() {
+			await apiService(`${endpoints.imgPublishers}${this.slug}/`).then((data: PublisherDetail) => {
 				this.imagePublisher = data.image;
 				(this.$refs.preview as InstanceType<typeof PublisherImagePreview>).setPreview(data.image);
 			});
@@ -166,6 +169,7 @@ export default {
 			}
 		},
 		async updateImage(event: Event) {
+			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
 			try {
 				if (await validateImage(event.target as InstanceType<typeof HTMLInputElement>)) {
 					this.formData.append(
@@ -189,11 +193,13 @@ export default {
 			} catch (error) {
 				console.log(error);
 			}
+			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 		}
 	},
-	created() {
-		this.getPublisherData();
-		this.getImagePublisherData();
+	async created() {
+		await this.getPublisherData();
+		await this.getImagePublisherData();
+		(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 	}
 };
 </script>
