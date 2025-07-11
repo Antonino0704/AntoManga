@@ -3,6 +3,7 @@
 		<NotFound message="SERIES NOT FOUND" />
 	</div>
 	<div v-else class="series-editor">
+		<spinnerLoading ref="spinner" />
 		<form class="list-inline" @submit.prevent="Update">
 			<h1 class="list-inline-item mt-2">EDIT PAGE</h1>
 			<div class="list-inline-item row g-2">
@@ -66,6 +67,7 @@ import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import NotFound from '../views/NotFound.vue';
 import PreviewComponent from '../components/SeriesImagePreview.vue';
+import spinnerLoading from '../components/SpinnerLoading.vue';
 import type { SeriesViewsetInstance, Type, Publisher, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 import { validateImage } from '@/utils/supportedImageExtensions';
@@ -92,7 +94,8 @@ export default {
 	components: {
 		Notification,
 		NotFound,
-		PreviewComponent
+		PreviewComponent,
+		spinnerLoading
 	},
 	beforeRouteEnter(to, from, next) {
 		apiService(endpoints.userMe, 'GET').then((response: User) => {
@@ -193,6 +196,7 @@ export default {
 			return true;
 		},
 		async updateImage(event: Event) {
+			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
 			try {
 				if (await validateImage(event.target as InstanceType<typeof HTMLInputElement>)) {
 					this.formData.append(
@@ -216,11 +220,13 @@ export default {
 			} catch (error) {
 				console.log(error);
 			}
+			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 		}
 	},
 	async created() {
 		await this.getSeriesData();
 		await this.getImageSeries();
+		(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 	}
 };
 </script>

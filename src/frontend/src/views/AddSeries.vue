@@ -1,5 +1,6 @@
 <template>
 	<div class="add-series container-sm mt-2">
+		<spinnerLoading ref="spinner" />
 		<form class="list-inline" @submit.prevent="addSeries">
 			<h1 class="list-inline-item">ADD A New Manga</h1>
 			<div class="list-inline-item row g-2">
@@ -103,6 +104,7 @@
 import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import SeriesImagePreview from '../components/SeriesImagePreview.vue';
+import spinnerLoading from '../components/SpinnerLoading.vue';
 import type { Series, Type, Publisher, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 import { validateImage } from '@/utils/supportedImageExtensions';
@@ -128,7 +130,8 @@ export default {
 	},
 	components: {
 		Notification,
-		SeriesImagePreview
+		SeriesImagePreview,
+		spinnerLoading
 	},
 	beforeRouteEnter(to, from, next) {
 		apiService(endpoints.userMe, 'GET').then((response: User) => {
@@ -173,6 +176,7 @@ export default {
 		},
 		async addImage(event: Event) {
 			//doesn't add the image to the server
+			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
 			if (await validateImage(event.target as InstanceType<typeof HTMLInputElement>)) {
 				this.formData.append(
 					'image',
@@ -191,6 +195,7 @@ export default {
 				document.querySelector('#file-input')!.className = 'form-control is-invalid';
 				this.imageUploaded = false;
 			}
+			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 		},
 		addSeries() {
 			if (this.checkData()) {
@@ -256,6 +261,7 @@ export default {
 	async created() {
 		await this.getTypes();
 		await this.getPublishers();
+		(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 	}
 };
 </script>
