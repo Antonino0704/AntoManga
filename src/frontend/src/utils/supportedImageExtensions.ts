@@ -1,79 +1,16 @@
-const supportedExtensions = [
-	'blp',
-	'bmp',
-	'dib',
-	'bufr',
-	'cur',
-	'pcx',
-	'dcx',
-	'dds',
-	'ps',
-	'eps',
-	'fit',
-	'fits',
-	'fli',
-	'flc',
-	'ftc',
-	'ftu',
-	'gbr',
-	'gif',
-	'grib',
-	'h5',
-	'hdf',
-	'png',
-	'apng',
-	'jp2',
-	'j2k',
-	'jpc',
-	'jpf',
-	'jpx',
-	'j2c',
-	'icns',
-	'ico',
-	'im',
-	'iim',
-	'tif',
-	'tiff',
-	'jfif',
-	'jpe',
-	'jpg',
-	'jpeg',
-	'mpg',
-	'mpeg',
-	'mpo',
-	'msp',
-	'palm',
-	'pcd',
-	'pdf',
-	'pxr',
-	'pbm',
-	'pgm',
-	'ppm',
-	'pnm',
-	'psd',
-	'bw',
-	'rgb',
-	'rgba',
-	'sgi',
-	'ras',
-	'tga',
-	'icb',
-	'vda',
-	'vst',
-	'webp',
-	'wmf',
-	'emf',
-	'xbm',
-	'xpm'
-];
+import { imageApiService } from './APIService';
+import { endpoints } from './endpoints';
 
-function validate(extension: string | undefined): boolean {
-	if (extension === undefined) return false;
-	let isValidate = false;
-	supportedExtensions.forEach((supportedExtension) => {
-		if (supportedExtension == extension) isValidate = true;
+async function validateImage(imageElement: HTMLInputElement) {
+	if (!imageElement.files![0].type.startsWith('image/')) return false;
+
+	const formData = new FormData();
+	formData.append('image', imageElement.files![0]);
+	let isValid = false;
+	await imageApiService(endpoints.validateImage, 'POST', formData).then((response) => {
+		isValid = response.isValid;
 	});
-	return isValidate;
+	return isValid;
 }
 
-export { validate };
+export { validateImage };

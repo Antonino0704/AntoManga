@@ -11,7 +11,8 @@ const endpoints = {
 	imgSeriesList: `${apiVersion}image/series-list/`,
 	version: `${apiVersion}version/`,
 	license: `${apiVersion}license/`,
-	userMe: `${apiVersion}user-me/`
+	userMe: `${apiVersion}user-me/`,
+	validateImage: `${apiVersion}image/validate/`
 };
 
 export { endpoints };

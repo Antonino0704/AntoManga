@@ -105,7 +105,7 @@ import Notification from '../components/Notification.vue';
 import SeriesImagePreview from '../components/SeriesImagePreview.vue';
 import type { Series, Type, Publisher, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
-import { validate } from '@/utils/supportedImageExtensions';
+import { validateImage } from '@/utils/supportedImageExtensions';
 import { checkDataStats, showErrors, resetErrors } from '@/utils/StatsErrorsChecks';
 
 export default {
@@ -171,16 +171,9 @@ export default {
 						'form-select-sm';
 				});
 		},
-		addImage(event: Event) {
+		async addImage(event: Event) {
 			//doesn't add the image to the server
-			if (
-				(event.target as InstanceType<typeof HTMLInputElement>).files![0].type.startsWith(
-					'image/'
-				) &&
-				validate(
-					(event.target as InstanceType<typeof HTMLInputElement>).files![0].name.split('.').pop()
-				)
-			) {
+			if (await validateImage(event.target as InstanceType<typeof HTMLInputElement>)) {
 				this.formData.append(
 					'image',
 					(event.target as InstanceType<typeof HTMLInputElement>).files![0]
