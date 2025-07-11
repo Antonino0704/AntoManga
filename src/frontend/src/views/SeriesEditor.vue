@@ -68,7 +68,7 @@ import NotFound from '../views/NotFound.vue';
 import PreviewComponent from '../components/SeriesImagePreview.vue';
 import type { SeriesViewsetInstance, Type, Publisher, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
-import { validate } from '@/utils/supportedImageExtensions';
+import { validateImage } from '@/utils/supportedImageExtensions';
 
 export default {
 	name: 'SeriesEditor',
@@ -192,16 +192,9 @@ export default {
 			}
 			return true;
 		},
-		updateImage(event: Event) {
+		async updateImage(event: Event) {
 			try {
-				if (
-					(event.target as InstanceType<typeof HTMLInputElement>).files![0].type.startsWith(
-						'image/'
-					) &&
-					validate(
-						(event.target as InstanceType<typeof HTMLInputElement>).files![0].name.split('.').pop()
-					)
-				) {
+				if (await validateImage(event.target as InstanceType<typeof HTMLInputElement>)) {
 					this.formData.append(
 						'image',
 						(event.target as InstanceType<typeof HTMLInputElement>).files![0]

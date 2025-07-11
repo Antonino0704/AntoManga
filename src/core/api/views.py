@@ -5,6 +5,7 @@ from config import settings
 import json
 import os
 from core.minxins import DeprecatedAPIMixin
+from series.api.serializers import ImageSeriesSerializer
 
 
 class IsAuthenticatedView(DeprecatedAPIMixin, APIView):
@@ -43,3 +44,10 @@ class getLicenseView(APIView):
     def get(self, request):
         with open(f"{os.path.dirname(settings.BASE_DIR)}/LICENSE", "r") as license:
             return Response(license.read())
+
+
+class validateImage(APIView):
+
+    def post(self, request):
+        serializer = ImageSeriesSerializer(data=request.data)
+        return Response({"isValid": serializer.is_valid()})

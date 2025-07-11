@@ -62,7 +62,7 @@ import NotFound from '../views/NotFound.vue';
 import PublisherImagePreview from '../components/PublisherImagePreview.vue';
 import type { PublisherDetail, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
-import { validate } from '@/utils/supportedImageExtensions';
+import { validateImage } from '@/utils/supportedImageExtensions';
 
 export default {
 	name: 'PublisherEditor',
@@ -165,16 +165,9 @@ export default {
 				document.querySelector('#floatingTextarea')!.className = 'form-control is-invalid';
 			}
 		},
-		updateImage(event: Event) {
+		async updateImage(event: Event) {
 			try {
-				if (
-					(event.target as InstanceType<typeof HTMLInputElement>).files![0].type.startsWith(
-						'image/'
-					) &&
-					validate(
-						(event.target as InstanceType<typeof HTMLInputElement>).files![0].name.split('.').pop()
-					)
-				) {
+				if (await validateImage(event.target as InstanceType<typeof HTMLInputElement>)) {
 					this.formData.append(
 						'image',
 						(event.target as InstanceType<typeof HTMLInputElement>).files![0]
