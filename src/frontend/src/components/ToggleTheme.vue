@@ -1,5 +1,5 @@
 <template>
-	<div class="toggleTheme row justify-content-center ms-2 mt-5">
+	<div class="toggleTheme row justify-content-center">
 		<div class="col-auto">
 			<i id="toggleButton" @click="toggleClick()" class="bi bi-toggle-on"></i>
 		</div>

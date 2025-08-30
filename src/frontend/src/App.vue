@@ -1,5 +1,8 @@
 <template>
 	<isNotAuthenticated v-if="!user.is_authenticated" />
+	<div class="position-relative pb-5">
+		<SettingsModal :user="user" />
+	</div>
 	<nav class="navabar row justify-content-center mt-2" v-if="isHome">
 		<div class="col-auto">
 			<a class="navbar-brand mb-2" href="/">
@@ -11,16 +14,15 @@
 	<div id="app"></div>
 	<scrollTop v-if="scrollY > 300" />
 	<router-view />
-	<toggleTheme />
 </template>
 
 <script lang="ts">
-import toggleTheme from './components/ToggleTheme.vue';
 import isNotAuthenticated from './components/IsNotAuthenticated.vue';
 import scrollTop from './components/ScrollTop.vue';
 import { apiService } from './utils/APIService';
 import { endpoints } from '@/utils/endpoints';
 import type { User } from './@types/interfaces';
+import SettingsModal from './components/SettingsModal.vue';
 
 export default {
 	name: 'App',
@@ -31,9 +33,9 @@ export default {
 		};
 	},
 	components: {
-		toggleTheme,
 		isNotAuthenticated,
-		scrollTop
+		scrollTop,
+		SettingsModal
 	},
 	computed: {
 		isHome() {

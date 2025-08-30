@@ -1,13 +1,5 @@
 <template>
 	<div class="navabar row justify-content-center">
-		<div v-if="user.is_authenticated" class="position-relative pb-5">
-			<SettingsModal
-				:user="user"
-				class="bi bi-gear-fill position-absolute top-0 end-0 pe-3 pt-2 mb-2"
-				data-bs-toggle="modal"
-				data-bs-target="#settingsModal"
-			/>
-		</div>
 		<div class="col-auto">
 			<nav class="navbar navbar-expand-lg bg-body-tertiary">
 				<a class="navbar-brand ms-3 mb-2" href="/">
@@ -89,7 +81,6 @@
 import { apiService } from '../utils/APIService';
 import type { Type, Publisher, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
-import SettingsModal from './SettingsModal.vue';
 
 export default {
 	name: 'NavBar',
@@ -97,19 +88,17 @@ export default {
 		return {
 			types: [
 				{ id: 0, name: 'null' },
-				{ id: -1, name: 'incomplete' }
+				{ id: -1, name: 'incomplete' },
+				{ id: -2, name: 'Ready To Read' }
 			] as Array<Type>,
 			publishers: 0,
 			statusFilter: 0,
 			user: {} as User
 		};
 	},
-	components: {
-		SettingsModal
-	},
 	computed: {
 		isTypesPubslihers() {
-			return this.types.length > 2 && this.publishers > 0 && this.user.is_authenticated;
+			return this.types.length > 3 && this.publishers > 0 && this.user.is_authenticated;
 		}
 	},
 	methods: {
