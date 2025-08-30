@@ -14,6 +14,7 @@
 	<div id="app"></div>
 	<scrollTop v-if="scrollY > 300" />
 	<router-view />
+	<footer class="pt-4" style="text-align: center">{{ getFooter() }}</footer>
 </template>
 
 <script lang="ts">
@@ -54,6 +55,9 @@ export default {
 		},
 		handleScroll() {
 			this.scrollY = window.scrollY;
+		},
+		getFooter() {
+			return `© 2023 - ${new Date().getFullYear()} Antonino Buscarino`;
 		}
 	},
 	created() {
