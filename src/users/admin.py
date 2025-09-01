@@ -61,7 +61,7 @@ class InviteTokenAdmin(admin.ModelAdmin):
     is_valid.boolean = True
 
     def get_queryset(self, request):
-        self.publicDomain = f"{request.scheme}{request.get_host()}"
+        self.publicDomain = f"{request.scheme}://{request.get_host()}"
         return super().get_queryset(request)
 
     def save_model(self, request, obj, form, change):
