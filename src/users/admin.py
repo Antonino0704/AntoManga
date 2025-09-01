@@ -49,7 +49,7 @@ class InviteTokenAdmin(admin.ModelAdmin):
         return format_html('<a href="{}">{}</a>', link, obj.author)
 
     def link(self, obj):
-        link = f"/invite/{obj.token}"
+        link = f"{self.publicDomain}/invite/{obj.token}"
         return format_html(
             '<a href="#" onclick="navigator.clipboard.writeText(\'{}\'); return false;">link</a>',
             link,
@@ -59,6 +59,10 @@ class InviteTokenAdmin(admin.ModelAdmin):
         return not obj.expire
 
     is_valid.boolean = True
+
+    def get_queryset(self, request):
+        self.publicDomain = f"{request.scheme}{request.get_host()}"
+        return super().get_queryset(request)
 
     def save_model(self, request, obj, form, change):
         if not obj.pk:
