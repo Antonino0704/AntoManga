@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "series",
     "core",
     "users",
+    "django_registration",
 ]
 
 MIDDLEWARE = [

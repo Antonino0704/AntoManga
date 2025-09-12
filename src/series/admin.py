@@ -64,6 +64,11 @@ class SeriesAdmin(admin.ModelAdmin):
         link = reverse("admin:auth_user_change", args=[obj.owner.id])
         return format_html('<a href="{}">{}</a>', link, obj.owner)
 
+    def save_model(self, request, obj, form, change):
+        if not obj.pk:
+            obj.owner = request.user
+        return super().save_model(request, obj, form, change)
+
 
 admin.site.register(Typology)
 admin.site.register(Series, SeriesAdmin)

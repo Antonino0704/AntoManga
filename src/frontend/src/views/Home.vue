@@ -6,7 +6,7 @@
 			<div class="container text-center">
 				<div class="fs-1">
 					Series
-					<i id="gridButton" class="bi bi-grid ms-2 fs-5" @click="gridClick()"></i>
+					<div class="fs-6" v-if="user.is_authenticated">Welcome {{ user.username }}</div>
 				</div>
 				<div>
 					<span class="badge rounded-pill me-2 placeholder">Length: {{ seriesLength }}</span>
@@ -30,7 +30,13 @@
 							</router-link>
 
 							<div class="card-body">
-								<h5 class="card-title">{{ serie.name }}</h5>
+								<h5 class="card-title">
+									{{ serie.name }}
+									<i
+										v-if="getReadyToReadClick(serie)"
+										class="bi bi-exclamation-circle-fill text-warning"
+									></i>
+								</h5>
 								<p class="card-text fst-italic">Type: {{ serie.typology_name }}</p>
 
 								<router-link
@@ -60,7 +66,7 @@
 
 <script lang="ts">
 import { apiService } from '../utils/APIService';
-import type { SeriesViewsetInstance, RequestObject } from '../@types/interfaces';
+import type { SeriesViewsetInstance, RequestObject, User } from '../@types/interfaces';
 import navbar from '../components/Navbar.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
 import SearchNoResults from '../components/SearchNoResults.vue';
@@ -75,6 +81,8 @@ export default {
 			imagesSeries: [] as Array<string>,
 			seriesLength: 1,
 			grid: false,
+			readyToRead: false,
+			user: {} as User,
 			next: {
 				nextCard: null as string | null,
 				nextImageCard: null as string | null
@@ -126,17 +134,26 @@ export default {
 					? 'card-img-top rounded-pill image-series mt-2'
 					: 'card-img-top';
 			}
-			document.querySelector('#gridButton')!.className = !this.grid
-				? 'bi bi-card-image ms-2 fs-5'
-				: 'bi bi-grid ms-2 fs-5';
+
 			this.grid = !this.grid;
 			if (!load) this.$cookies.set('grid-cookie', this.grid, 60 * 60 * 24 * 30);
+		},
+		getReadyToReadClick(serie: SeriesViewsetInstance) {
+			return (
+				this.readyToRead && serie.volumes_read != serie.volumes_bought && this.user.is_authenticated
+			);
+		},
+		readReadyToReadCockie() {
+			if (this.$cookies.isKey('readytoread-cookie')) {
+				this.readyToRead = this.$cookies.get('readytoread-cookie') == 'true' ? true : false;
+			}
 		},
 		async setLayout() {
 			if (this.$cookies.isKey('grid-cookie')) {
 				this.grid = this.$cookies.get('grid-cookie') == 'true' ? false : true;
 				this.gridClick(true);
 			}
+			this.readReadyToReadCockie();
 			document.querySelector('span')!.className = 'badge rounded-pill text-bg-info me-2';
 			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 		},
@@ -234,10 +251,16 @@ export default {
 				filter += 'filterbyname=' + this.$route.query.filterbyname;
 			}
 			return filter;
+		},
+		isAuthenticated() {
+			apiService(endpoints.userMe, 'GET').then((response: User) => {
+				this.user = response;
+			});
 		}
 	},
 	async created() {
 		await this.getDataSeries();
+		this.isAuthenticated();
 		window.scrollTo(0, history.state?.scroll?.top || 0);
 	}
 };

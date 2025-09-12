@@ -43,7 +43,11 @@ class SeriesViewset(viewsets.ModelViewSet):
             seriesObjects = (
                 seriesObjects.filter(typology=int(self.request.query_params["type"]))
                 if int(self.request.query_params["type"]) > 0
-                else seriesObjects.exclude(n_volumes=F("volumes_bought"))
+                else (
+                    seriesObjects.exclude(n_volumes=F("volumes_bought"))
+                    if int(self.request.query_params["type"]) == -1
+                    else seriesObjects.exclude(volumes_read=F("volumes_bought"))
+                )
             )
         if "filterbyname" in self.request.query_params:
             seriesObjects = seriesObjects.filter(
@@ -78,7 +82,11 @@ class ImageSeriesViewset(viewsets.ModelViewSet):
             seriesObjects = (
                 seriesObjects.filter(typology=int(self.request.query_params["type"]))
                 if int(self.request.query_params["type"]) > 0
-                else seriesObjects.exclude(n_volumes=F("volumes_bought"))
+                else (
+                    seriesObjects.exclude(n_volumes=F("volumes_bought"))
+                    if int(self.request.query_params["type"]) == -1
+                    else seriesObjects.exclude(volumes_read=F("volumes_bought"))
+                )
             )
         if "filterbyname" in self.request.query_params:
             seriesObjects = seriesObjects.filter(

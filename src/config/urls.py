@@ -24,6 +24,7 @@ from django.conf import settings
 from django.views.static import serve
 
 from core.views import IndexTemplate
+from users.views import InviteView
 
 apiVersion = "v4/"
 
@@ -43,6 +44,11 @@ urlpatterns = [
         "change-password/",
         PasswordChangeView.as_view(success_url="/"),
         name="django_change_paswd",
+    ),
+    path(
+        "invite/<str:token>",
+        InviteView.as_view(success_url="/"),
+        name="django_registration_register",
     ),
     path(f"api/{apiVersion}", include("publishers.api.urls")),
     path(f"api/{apiVersion}", include("series.api.urls")),
