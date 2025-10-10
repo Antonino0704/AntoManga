@@ -10,3 +10,6 @@ class InviteToken(models.Model):
     new_user = models.OneToOneField(
         User, on_delete=models.PROTECT, related_name="invite_join", null=True
     )
+
+    def __str__(self):
+        return self.token
