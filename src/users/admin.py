@@ -28,7 +28,7 @@ class InviteTokenAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "USE",
+            "Usage Details",
             {
                 "fields": (
                     "new_user",
@@ -37,7 +37,7 @@ class InviteTokenAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "Author",
+            "Author Information",
             {
                 "fields": ("author",),
             },

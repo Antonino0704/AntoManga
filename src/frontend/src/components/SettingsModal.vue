@@ -41,7 +41,6 @@
 							{{ ReadyToReadButtonText }}
 						</button>
 						<hr v-if="user.is_authenticated" />
-						<hr v-if="!user.is_authenticated" />
 						<a
 							type="button"
 							class="btn btn-secondary"
