@@ -48,8 +48,13 @@
 									@click="deleteSeries()"
 									v-if="user.is_authenticated"
 								>
-								</i
-							></small>
+								</i>
+								<a
+									href="#"
+									class="bi bi-share-fill"
+									onclick="navigator.clipboard.writeText(window.location.href); return false;"
+								></a>
+							</small>
 						</p>
 					</div>
 				</div>

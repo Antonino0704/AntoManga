@@ -53,7 +53,14 @@
 				<img :src="imagePublisher" class="card-img-top" alt="logoPublisher" />
 			</div>
 
-			<h5 class="mt-3">{{ publisher.name?.toUpperCase() }}'s manga list</h5>
+			<h5 class="mt-3">
+				{{ publisher.name?.toUpperCase() }}'s manga list
+				<a
+					href="#"
+					class="bi bi-share-fill ms-1 fs-6"
+					onclick="navigator.clipboard.writeText(window.location.href); return false;"
+				></a>
+			</h5>
 			<div class="vr">
 				<p text-body-secondary class="ms-2">Length: {{ seriesLength }}</p>
 			</div>
