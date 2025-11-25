@@ -187,6 +187,7 @@ export default {
 				'Publisher deleted',
 				`${endpoints.publishers}${this.slug}/`
 			);
+			window.scrollTo(0, 0);
 		},
 		async moreSeries() {
 			if (this.next.nextCard != null && this.next.nextImageCard != null) {
