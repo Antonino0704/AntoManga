@@ -59,6 +59,7 @@
 					href="#"
 					class="bi bi-share-fill ms-1 fs-6"
 					onclick="navigator.clipboard.writeText(window.location.href); return false;"
+					@click="copyAction()"
 				></a>
 			</h5>
 			<div class="vr">
@@ -93,12 +94,14 @@
 			class="position-absolute top-0 start-50 translate-middle-x"
 			ref="actionNotification"
 		/>
+		<Notification ref="notification" />
 	</div>
 </template>
 
 <script lang="ts">
 import { apiService } from '../utils/APIService';
 import ActionNotification from '../components/ActionNotification.vue';
+import Notification from '../components/Notification.vue';
 import NotFound from '../views/NotFound.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
 import type { Series, PublisherDetail, RequestObject, User } from '../@types/interfaces';
@@ -130,6 +133,7 @@ export default {
 	},
 	components: {
 		ActionNotification,
+		Notification,
 		NotFound,
 		spinnerLoading
 	},
@@ -187,6 +191,7 @@ export default {
 				'Publisher deleted',
 				`${endpoints.publishers}${this.slug}/`
 			);
+			window.scrollTo(0, 0);
 		},
 		async moreSeries() {
 			if (this.next.nextCard != null && this.next.nextImageCard != null) {
@@ -222,6 +227,11 @@ export default {
 			apiService(endpoints.userMe, 'GET').then((response: User) => {
 				this.user = response;
 			});
+		},
+		copyAction() {
+			(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+				'copied text'
+			);
 		}
 	},
 	async created() {

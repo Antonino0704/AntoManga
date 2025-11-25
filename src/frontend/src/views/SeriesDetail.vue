@@ -44,15 +44,16 @@
 								<!--bin icon from bootstrap-->
 								<i
 									fill="currentColor"
-									class="bi bi-trash list-inline-item text-warning fs-5"
+									class="bi bi-trash list-inline-item text-warning fs-6"
 									@click="deleteSeries()"
 									v-if="user.is_authenticated"
 								>
 								</i>
 								<a
 									href="#"
-									class="bi bi-share-fill"
+									class="bi bi-share-fill fs-6"
 									onclick="navigator.clipboard.writeText(window.location.href); return false;"
+									@click="copyAction()"
 								></a>
 							</small>
 						</p>
@@ -67,6 +68,7 @@
 			class="position-absolute top-0 start-50 translate-middle-x"
 			ref="actionNotification"
 		/>
+		<Notification ref="notification" />
 	</div>
 </template>
 
@@ -74,6 +76,7 @@
 import { apiService } from '../utils/APIService';
 import seriesDetailStats from '../components/SeriesDetailStatistics.vue';
 import ActionNotification from '../components/ActionNotification.vue';
+import Notification from '../components/Notification.vue';
 import NotFound from '../views/NotFound.vue';
 import type { SeriesViewsetInstance, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
@@ -96,6 +99,7 @@ export default {
 	components: {
 		seriesDetailStats,
 		ActionNotification,
+		Notification,
 		NotFound
 	},
 	methods: {
@@ -115,11 +119,17 @@ export default {
 				`${this.series.name} deleted`,
 				`${endpoints.series}${this.slug}/`
 			);
+			window.scrollTo(0, 0);
 		},
 		isAuthenticated() {
 			apiService(endpoints.userMe, 'GET').then((response: User) => {
 				this.user = response;
 			});
+		},
+		copyAction() {
+			(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+				'copied text'
+			);
 		}
 	},
 	created() {
