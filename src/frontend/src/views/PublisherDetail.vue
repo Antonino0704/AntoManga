@@ -59,6 +59,7 @@
 					href="#"
 					class="bi bi-share-fill ms-1 fs-6"
 					onclick="navigator.clipboard.writeText(window.location.href); return false;"
+					@click="copyAction()"
 				></a>
 			</h5>
 			<div class="vr">
