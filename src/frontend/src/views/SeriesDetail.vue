@@ -50,7 +50,6 @@
 								>
 								</i>
 								<a
-									href="#"
 									class="bi bi-share-fill fs-6"
 									onclick="navigator.clipboard.writeText(window.location.href); return false;"
 									@click="copyAction()"
@@ -68,7 +67,6 @@
 			class="position-absolute top-0 start-50 translate-middle-x"
 			ref="actionNotification"
 		/>
-		<Notification ref="notification" />
 	</div>
 </template>
 
@@ -76,7 +74,6 @@
 import { apiService } from '../utils/APIService';
 import seriesDetailStats from '../components/SeriesDetailStatistics.vue';
 import ActionNotification from '../components/ActionNotification.vue';
-import Notification from '../components/Notification.vue';
 import NotFound from '../views/NotFound.vue';
 import type { SeriesViewsetInstance, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
@@ -99,7 +96,6 @@ export default {
 	components: {
 		seriesDetailStats,
 		ActionNotification,
-		Notification,
 		NotFound
 	},
 	methods: {
@@ -127,9 +123,11 @@ export default {
 			});
 		},
 		copyAction() {
-			(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-				'copied text'
-			);
+			let shareButton = document.querySelector('.bi-share-fill') as HTMLElement;
+			shareButton.className = 'bi bi-check-square-fill text-success fs-6';
+			setTimeout(() => {
+				shareButton.className = 'bi bi-share-fill fs-6';
+			}, 2000);
 		}
 	},
 	created() {
