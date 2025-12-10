@@ -198,6 +198,7 @@ export default {
 			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 		},
 		addSeries() {
+			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
 			if (this.checkData()) {
 				apiService(endpoints.series, 'POST', this.series).then((response: Series) => {
 					imageApiService(`${endpoints.imgSeries}${response.slug}/`, 'PUT', this.formData).then(
@@ -205,6 +206,7 @@ export default {
 							(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
 								'Manga added with success'
 							);
+							(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 							setTimeout(
 								() =>
 									this.$router.push({
@@ -219,6 +221,7 @@ export default {
 			} else {
 				this.resetErrors();
 				this.showErrors();
+				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(this.error);
 			}
 		},
