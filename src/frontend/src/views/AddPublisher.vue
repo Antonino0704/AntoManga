@@ -114,12 +114,14 @@ export default {
 		},
 		addPublisher() {
 			if (this.checkData()) {
+				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
 				apiService(endpoints.publishers, 'POST', this.publisher).then((response: Publisher) => {
 					imageApiService(`${endpoints.imgPublishers}${response.slug}/`, 'PUT', this.formData).then(
 						() => {
 							(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
 								'publisher added with success'
 							);
+							(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 							setTimeout(
 								() =>
 									this.$router.push({

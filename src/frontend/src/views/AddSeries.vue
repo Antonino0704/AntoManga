@@ -199,12 +199,14 @@ export default {
 		},
 		addSeries() {
 			if (this.checkData()) {
+				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
 				apiService(endpoints.series, 'POST', this.series).then((response: Series) => {
 					imageApiService(`${endpoints.imgSeries}${response.slug}/`, 'PUT', this.formData).then(
 						() => {
 							(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
 								'Manga added with success'
 							);
+							(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 							setTimeout(
 								() =>
 									this.$router.push({
