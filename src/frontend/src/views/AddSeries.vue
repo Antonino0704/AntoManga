@@ -198,8 +198,8 @@ export default {
 			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 		},
 		addSeries() {
-			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
 			if (this.checkData()) {
+				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
 				apiService(endpoints.series, 'POST', this.series).then((response: Series) => {
 					imageApiService(`${endpoints.imgSeries}${response.slug}/`, 'PUT', this.formData).then(
 						() => {
@@ -221,7 +221,6 @@ export default {
 			} else {
 				this.resetErrors();
 				this.showErrors();
-				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(this.error);
 			}
 		},

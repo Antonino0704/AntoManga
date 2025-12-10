@@ -113,8 +113,8 @@ export default {
 			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 		},
 		addPublisher() {
-			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
 			if (this.checkData()) {
+				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
 				apiService(endpoints.publishers, 'POST', this.publisher).then((response: Publisher) => {
 					imageApiService(`${endpoints.imgPublishers}${response.slug}/`, 'PUT', this.formData).then(
 						() => {
@@ -137,7 +137,6 @@ export default {
 				document.querySelector('#floatingInputGrid')!.className = 'form-control';
 				document.querySelector('#floatingTextarea')!.className = 'form-control';
 				this.showErrors();
-				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(this.error);
 			}
 		},
