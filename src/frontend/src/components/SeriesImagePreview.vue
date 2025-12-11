@@ -24,13 +24,15 @@
 					</div>
 				</div>
 				<div class="carousel-item">
-					<div class="card" style="width: 18rem">
-						<img
-							:src="imagePreview"
-							class="card-img-top rounded-pill image-series mt-2"
-							alt="preview2"
-							height="410"
-						/>
+					<div class="card" style="border: none">
+						<img :src="imagePreview" class="card-img-top card-fit" alt="preview2" />
+
+						<div>
+							<span class="horizontal-line-bottom"></span>
+							<span class="horizontal-line-top"></span>
+							<span class="line vertical-line-left"></span>
+							<span class="line vertical-line-right"></span>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -74,3 +76,37 @@ export default {
 	}
 };
 </script>
+
+<style>
+.horizontal-line-bottom {
+	border-top: 2px dashed #000;
+	width: 8.5rem;
+	position: absolute;
+	bottom: 0%;
+	left: 15%;
+}
+
+.horizontal-line-top {
+	border-bottom: 2px dashed #000;
+	width: 8.5rem;
+	position: absolute;
+	bottom: 99.5%;
+	left: 15%;
+}
+
+.vertical-line-left {
+	border-left: 2px dashed #000;
+	height: 12rem;
+	left: 14%;
+	top: 0%;
+	position: absolute;
+}
+
+.vertical-line-right {
+	border-right: 2px dashed #000;
+	height: 12rem;
+	right: 14%;
+	top: 0%;
+	position: absolute;
+}
+</style>

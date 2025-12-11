@@ -132,12 +132,14 @@ export default {
 			for (let i = 0; i < listElement.length; i++) {
 				if (!this.grid) {
 					listElement[i].querySelector('div')!.style.removeProperty('width');
+					listElement[i].querySelector('div')!.style.setProperty('min-width', '12rem');
 					listElement[i].querySelector('div')!.style.border = 'none';
-					listElement[i]!.className = 'list col-6 col-md-4 col-lg-3 mt-3';
+					listElement[i]!.className = 'list col-6 col-md-4 col-lg-3 mt-3 me-auto';
 					listElement[i].querySelector('a > img')!.removeAttribute('height');
 					listElement[i].querySelector('a > img')!.classList.add('card-fit');
 				} else {
 					listElement[i].querySelector('div')!.style.setProperty('width', '18rem');
+					listElement[i].querySelector('div')!.style.removeProperty('min-width');
 					listElement[i].querySelector('div')!.style.border = '1';
 					listElement[i]!.className = 'list col mt-3';
 					listElement[i].querySelector('a > img')!.setAttribute('height', '410');
