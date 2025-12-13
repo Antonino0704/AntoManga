@@ -28,7 +28,7 @@
 						<tr v-if="stats[current]">
 							<th scope="row">{{ stats[current].type?.name }}</th>
 							<td>{{ stats[current].nSeries }}</td>
-							<td>{{ ((stats[current].nSeries / seriesLength) * 100).toFixed(2) }}%</td>
+							<td>{{ formatX100 }}%</td>
 						</tr>
 					</tbody>
 				</table>
@@ -88,6 +88,13 @@ export default {
 			document.querySelector('#load')!.className = 'placeholder';
 			this.current--;
 			document.querySelector('#load')!.className = '';
+		}
+	},
+	computed: {
+		formatX100() {
+			return this.seriesLength
+				? ((this.stats[this.current].nSeries / this.seriesLength) * 100).toFixed(2)
+				: 0;
 		}
 	},
 	async created() {
