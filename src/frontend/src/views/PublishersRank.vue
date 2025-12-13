@@ -19,7 +19,8 @@
 							<i v-if="index == 0" class="bi bi-trophy-fill text-warning"></i>
 						</th>
 						<td>{{ publisher.count }}</td>
-						<td>{{ ((publisher.count / allVol) * 100).toFixed(2) }}%</td>
+						<!-- <td>{{ ((publisher.count / allVol) * 100).toFixed(2) }}%</td> -->
+						<td>{{ formatX100(publisher.count) }}%</td>
 						<td>
 							<router-link
 								:to="{
@@ -89,6 +90,9 @@ export default {
 				return publisher1.count - publisher2.count;
 			});
 			this.publishers.reverse();
+		},
+		formatX100(publisherCount: any) {
+			return this.allVol ? ((publisherCount / this.allVol) * 100).toFixed(2) : 0;
 		}
 	},
 	created() {
