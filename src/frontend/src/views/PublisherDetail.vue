@@ -52,7 +52,7 @@
 			<div class="card mt-3" style="width: 18rem">
 				<img :src="imagePublisher" class="card-img-top" alt="logoPublisher" />
 			</div>
-
+			<publisherStats :slug="slug" :seriesLength="seriesLength" v-if="publisher" />
 			<h5 class="mt-3">
 				{{ publisher.name?.toUpperCase() }}'s manga list
 				<a
@@ -101,6 +101,7 @@ import { apiService } from '../utils/APIService';
 import ActionNotification from '../components/ActionNotification.vue';
 import NotFound from '../views/NotFound.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
+import publisherStats from '../components/PublisherStats.vue';
 import type { Series, PublisherDetail, RequestObject, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 import { moreData, moreDataImage } from '../utils/getSeries';
@@ -131,7 +132,8 @@ export default {
 	components: {
 		ActionNotification,
 		NotFound,
-		spinnerLoading
+		spinnerLoading,
+		publisherStats
 	},
 	beforeRouteEnter(to, from, next) {
 		if (history.state)

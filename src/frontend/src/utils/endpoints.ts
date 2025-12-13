@@ -12,7 +12,8 @@ const endpoints = {
 	version: `${apiVersion}version/`,
 	license: `${apiVersion}license/`,
 	userMe: `${apiVersion}user-me/`,
-	validateImage: `${apiVersion}image/validate/`
+	validateImage: `${apiVersion}image/validate/`,
+	publisherStats: `${apiVersion}publisher-stats/`
 };
 
 export { endpoints };

@@ -56,3 +56,8 @@ export interface User {
 	is_authenticated: boolean;
 	is_staff: boolean;
 }
+
+export interface PublisherStats {
+	type: Type;
+	nSeries: number;
+}

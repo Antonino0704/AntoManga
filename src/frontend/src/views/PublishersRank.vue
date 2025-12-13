@@ -7,6 +7,7 @@
 					<tr>
 						<th scope="col">Pos</th>
 						<th scope="col">N. Series</th>
+						<th scope="col"><i class="bi bi-globe-americas"></i> (%)</th>
 						<th scope="col">Publisher</th>
 						<th scope="col">IMG</th>
 					</tr>
@@ -18,6 +19,7 @@
 							<i v-if="index == 0" class="bi bi-trophy-fill text-warning"></i>
 						</th>
 						<td>{{ publisher.count }}</td>
+						<td>{{ ((publisher.count / allVol) * 100).toFixed(2) }}%</td>
 						<td>
 							<router-link
 								:to="{
@@ -45,7 +47,8 @@ export default {
 	name: 'PublisherRank',
 	data() {
 		return {
-			publishers: [] as Array<PublisherRank>
+			publishers: [] as Array<PublisherRank>,
+			allVol: 0
 		};
 	},
 	methods: {
@@ -70,6 +73,7 @@ export default {
 				this.publishers.map((publisher) => {
 					return apiService(`${endpoints.seriesList}${publisher.slug}/`).then(
 						(data: RequestObject) => {
+							this.allVol += data.count;
 							publisher.count = data.count;
 						}
 					);
