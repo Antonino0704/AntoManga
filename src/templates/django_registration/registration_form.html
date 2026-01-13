@@ -11,6 +11,7 @@
   <link rel="icon"  href="/media/icon.png">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet" />
@@ -64,6 +65,7 @@
                 <div class="form-floating mb-3">
                 {% render_field form.username class="form-control" id="floatingUsername" placeholder="Username" %}
                 <label for="floatingUsername">Username</label>
+                </div>
                 {% if form.username.errors %}
                   <div class="text-danger my-2">
                     {% for error in form.username.errors %}
@@ -71,11 +73,12 @@
                     {% endfor %}
                   </div>
                 {% endif %}
-                </div>
 
                 <div class="form-floating mb-3">
                 {% render_field form.password1 class="form-control" id="floatingPassword1" placeholder="Password" %}
+                <i id="eyePassword1" class="bi bi-eye-fill me-2 position-absolute top-50 end-0" onclick="showPassword1()"></i>
                 <label for="floatingPassword1">Password</label>
+                </div>
                 {% if form.password1.errors %}
                   <div class="text-danger my-2">
                     {% for error in form.password1.errors %}
@@ -83,11 +86,12 @@
                     {% endfor %}
                   </div>
                 {% endif %}
-                </div>
 
                  <div class="form-floating mb-3">
                 {% render_field form.password2 class="form-control" id="floatingPassword2" placeholder="Confirm Password" %}
+                <i id="eyePassword2" class="bi bi-eye-fill me-2 position-absolute top-50 end-0" onclick="showPassword2()"></i>
                 <label for="floatingPassword2">Confirm Password</label>
+                </div>
                 {% if form.password2.errors %}
                   <div class="text-danger my-2">
                     {% for error in form.password2.errors %}
@@ -95,7 +99,6 @@
                     {% endfor %}
                   </div>
                 {% endif %}
-                </div>
                 
                 {% if form.errors %}
                   <div class="text-danger my-3">
@@ -114,5 +117,31 @@
                 </div>
             </div>
 </body>
+
+<script>
+  function showPassword1() {
+    let passwd = document.getElementById("floatingPassword1");
+    if(passwd.type == 'password') {
+      passwd.type = 'text';
+      document.querySelector("#eyePassword1").classList.replace("bi-eye-fill", "bi-eye-slash-fill");
+    }
+    else {
+      passwd.type = 'password';
+      document.querySelector("#eyePassword1").classList.replace("bi-eye-slash-fill", "bi-eye-fill");
+    }
+  }
+
+  function showPassword2() {
+    let passwd = document.getElementById("floatingPassword2");
+    if(passwd.type == 'password') {
+      passwd.type = 'text';
+      document.querySelector("#eyePassword2").classList.replace("bi-eye-fill", "bi-eye-slash-fill");
+    }
+    else {
+      passwd.type = 'password';
+      document.querySelector("#eyePassword2").classList.replace("bi-eye-slash-fill", "bi-eye-fill");
+    }
+  }
+</script>
 
 </html>

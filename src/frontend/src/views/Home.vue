@@ -5,7 +5,8 @@
 		<div class="col-auto">
 			<div class="container text-center">
 				<div class="fs-1">
-					Series
+					Home
+					<i class="bi bi-house"></i>
 					<div class="fs-6" v-if="user.is_authenticated">Welcome {{ user.username }}</div>
 				</div>
 				<div>
