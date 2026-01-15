@@ -49,11 +49,13 @@ python manage.py createsuperuser
 # Run Project
 
 ## For Production
-Change ALLOWED_HOSTS
+Change ALLOWED_HOSTS in .env file
 ```diff
-- ALLOWED_HOSTS = ["antomanga.pythonanywhere.com"] if not DEBUG else ["*"]
+- ALLOWED_HOSTS=*,
 
-+ ALLOWED_HOSTS = ["YourDomain"] if not DEBUG else ["*"]
++ ALLOWED_HOSTS=YourDomain 
+or 
++ ALLOWED_HOSTS=YourDomain1,YourDomain2
 ```
 [Set prod server](https://github.com/Antonino0704/AntoManga/blob/main/docs/setProdServer.md)
 ## For Devs

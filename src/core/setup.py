@@ -6,6 +6,7 @@ def generate_env_file():
     keyWords = {
         "secret_key": get_random_secret_key(),
         "DEBUG": False,
+        "ALLOWED_HOSTS": "*,",
         "VITE_LIVE_SERVER": False,
         "VITE_NETWORK": False,
         "BETA": False,

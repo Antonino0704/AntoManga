@@ -16,7 +16,12 @@ function requests(file: any, msgSuccess: string, msgNotSuccess: string) {
 				return res.json();
 			})
 			.then((res) => {
-				if (compare(file.version, res.frontendVersion) > 0) {
+				if (
+					compare(
+						file.version,
+						file.name == 'Backend-dev' ? res.backendVersion : res.frontendVersion
+					) > 0
+				) {
 					actions.info(msgSuccess);
 				} else {
 					actions.setFailed(msgNotSuccess);

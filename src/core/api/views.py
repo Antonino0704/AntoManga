@@ -9,7 +9,7 @@ from series.api.serializers import ImageSeriesSerializer
 
 
 class IsAuthenticatedView(DeprecatedAPIMixin, APIView):
-    deprecation_message = "Use /api/v1/user-me/ instead"
+    deprecation_message = "Use /user-me/ instead"
     alternative_url = "/user-me/"
 
     def get(self, request):
