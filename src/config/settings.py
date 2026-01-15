@@ -29,7 +29,7 @@ SECRET_KEY = os.getenv("secret_key")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = get_bool(os.getenv("DEBUG"))
 
-ALLOWED_HOSTS = ["antomanga.pythonanywhere.com"] if not DEBUG else ["*"]
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(",")
 
 
 # Application definition
