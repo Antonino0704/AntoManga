@@ -31,7 +31,7 @@ apiVersion = "v4/"
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-     path('', include(tf_urls)),
+    path("", include(tf_urls)),
     # path(
     #     "accounts/login/",
     #     LoginView.as_view(),
