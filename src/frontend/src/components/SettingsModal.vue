@@ -29,7 +29,7 @@
 							type="button"
 							class="btn btn-success"
 							v-if="!user.is_authenticated"
-							href="/accounts/login/"
+							href="/account/login/"
 							>LOGIN</a
 						>
 						<button
@@ -40,6 +40,14 @@
 						>
 							{{ ReadyToReadButtonText }}
 						</button>
+						<hr v-if="user.is_authenticated" />
+						<a
+							type="button"
+							class="btn btn-secondary"
+							v-if="user.is_authenticated"
+							href="/account/two_factor/"
+							>Two-factor authentication</a
+						>
 						<hr v-if="user.is_authenticated" />
 						<a
 							type="button"
