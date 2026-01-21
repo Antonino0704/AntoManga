@@ -1,44 +1,19 @@
 {% extends "base.html" %}
 
 {% block css %}
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet" />
-  <style>
-    html,
-    body {
-      height: 100%;
-    }
 
-    .form-container {
-      width: 300px;
-      margin: auto;
-    }
-
-    .outer-area {
-      border-radius: 10px;
-      padding-top: 25px;
-      padding-bottom: 25px;
-      width: 600px;
-      margin: auto;
-      background: #1D3557;
-    }
-
-    .auth-link {
-      color: #C850C0;
-    }
-
-    .auth-link:hover {
-      color: #FFCC70;
-    }
-  </style>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet" />
+{% include "css_comp.html" %}
 {% block css2 %}{% endblock %}
+
 {% endblock %}
 
 {% block content %}
 <div class="position-absolute top-50 start-50 translate-middle">
     <div {% block divOuterAreaParams %}class="outer-area"{% endblock %}>
-        <div class="auth-box text-center">
+        <div {% block divOuterBoxParams %}class="auth-box text-center"{% endblock %}>
             {% block supertitle %}<h1 class="text-light">AntoManga</h1>{% endblock %}
             {% block title_form %}{% endblock %}
             <div class="form-container">
