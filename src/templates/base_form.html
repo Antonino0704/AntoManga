@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block css %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet" />
+{% include "css_comp.html" %}
+{% block css2 %}{% endblock %}
+
+{% endblock %}
+
+{% block content %}
+<div class="position-absolute top-50 start-50 translate-middle">
+    <div {% block divOuterAreaParams %}class="outer-area"{% endblock %}>
+        <div {% block divOuterBoxParams %}class="auth-box text-center"{% endblock %}>
+            {% block supertitle %}<h1 class="text-light">AntoManga</h1>{% endblock %}
+            {% block title_form %}{% endblock %}
+            <div class="form-container">
+              {% block details %}{% endblock %}
+                <form method="POST">
+                    {% csrf_token %}
+                    {% block form %}{% endblock %}
+
+                    {% block buttonForm %}
+                    <div class="d-grid gap-2">
+                      <button type="submit" class="{% block buttonClass %}btn btn-lg btn-primary{% endblock %}">
+                        {% block buttonText %}{% endblock %}
+                      </button>
+                    </div>
+                    {% endblock %}
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% block content2 %}{% endblock %}
+{% endblock %}
+
+{% block javascript %}
+<script>
+    function showPassword1() {
+      let passwd = document.getElementById("floatingPassword1");
+      if(passwd.type == 'password') {
+        passwd.type = 'text';
+        document.querySelector("#eyePassword1").classList.replace("bi-eye-fill", "bi-eye-slash-fill");
+      }
+      else {
+        passwd.type = 'password';
+        document.querySelector("#eyePassword1").classList.replace("bi-eye-slash-fill", "bi-eye-fill");
+      }
+    }
+
+    function showPassword2() {
+      let passwd = document.getElementById("floatingPassword2");
+      if(passwd.type == 'password') {
+        passwd.type = 'text';
+        document.querySelector("#eyePassword2").classList.replace("bi-eye-fill", "bi-eye-slash-fill");
+      }
+      else {
+        passwd.type = 'password';
+        document.querySelector("#eyePassword2").classList.replace("bi-eye-slash-fill", "bi-eye-fill");
+      }
+    }
+  </script>
+
+{% block javascript2 %}{% endblock %}
+{% endblock %}
