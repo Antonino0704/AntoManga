@@ -8,16 +8,6 @@ from core.minxins import DeprecatedAPIMixin
 from series.api.serializers import ImageSeriesSerializer
 
 
-class IsAuthenticatedView(DeprecatedAPIMixin, APIView):
-    deprecation_message = "Use /user-me/ instead"
-    alternative_url = "/user-me/"
-
-    def get(self, request):
-        if request.user.is_anonymous:
-            return Response({"result": False}, status=status.HTTP_404_NOT_FOUND)
-        return Response({"result": True}, status=status.HTTP_202_ACCEPTED)
-
-
 class ReadVersionAPIView(APIView):
 
     def get(self, request):

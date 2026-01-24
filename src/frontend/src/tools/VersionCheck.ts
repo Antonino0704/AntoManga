@@ -4,7 +4,7 @@ import { compare } from 'semver';
 
 const require = createRequire(import.meta.url);
 const base = 'https://antomanga.pythonanywhere.com/api/';
-const apiVersions = ['v4/', 'v3/'];
+const apiVersions = ['v5/', 'v4/'];
 const urls = [`${base}${apiVersions[0]}version/`, `${base}${apiVersions[1]}version/`];
 
 function requests(file: any, msgSuccess: string, msgNotSuccess: string) {
