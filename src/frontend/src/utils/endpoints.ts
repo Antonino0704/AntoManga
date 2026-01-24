@@ -1,4 +1,4 @@
-const apiVersion = 'v4/';
+const apiVersion = 'v5/';
 const endpoints = {
 	publishers: `${apiVersion}publishers/`,
 	imgPublishers: `${apiVersion}image/publishers/`,
