@@ -57,7 +57,7 @@ export default {
 				theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
 			}
 			setTimeout(() => {
-				this.toggle(theme);
+				if (theme != null) this.toggle(theme);
 			}, 500);
 		}
 	},
