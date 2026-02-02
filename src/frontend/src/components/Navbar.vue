@@ -139,7 +139,11 @@ export default {
 			});
 		},
 		setSelectTheme() {
-			if (this.$cookies.isKey('theme-cookie') && this.$cookies.get('theme-cookie') == 'light') {
+			let theme = localStorage.getItem('theme-cookie');
+			if (theme == null) {
+				theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+			}
+			if (theme == 'light') {
 				document.querySelector('#selectType')!.classList.add('text-bg-light');
 			} else document.querySelector('#selectType')!.classList.add('text-bg-dark');
 		}
