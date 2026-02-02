@@ -100,16 +100,16 @@ export default {
 	},
 	methods: {
 		gridClick() {
-			if (this.$cookies.isKey('grid-cookie')) {
-				this.grid = this.$cookies.get('grid-cookie') == 'true' ? false : true;
+			if (localStorage.getItem('grid-cookie')) {
+				this.grid = localStorage.getItem('grid-cookie') == 'true' ? false : true;
 				document.querySelector('#gridButton')!.className = !this.grid
 					? 'bi bi-card-image fs-5'
 					: 'bi bi-grid fs-5';
 			}
 		},
 		getReadyToRead() {
-			if (this.$cookies.isKey('readytoread-cookie')) {
-				this.readyToRead = this.$cookies.get('readytoread-cookie') == 'true' ? true : false;
+			if (localStorage.getItem('readytoread-cookie')) {
+				this.readyToRead = localStorage.getItem('readytoread-cookie') == 'true' ? true : false;
 				this.ReadyToReadButtonText = this.readyToRead ? 'Hide Ready to Read' : 'Show Ready to Read';
 				document.querySelector('#ReadyToReadButton')!.className = this.readyToRead
 					? 'btn btn-success'
@@ -118,12 +118,12 @@ export default {
 		},
 		setGrid() {
 			console.log(this.grid);
-			this.$cookies.set('grid-cookie', this.grid, 60 * 60 * 24 * 30);
+			localStorage.setItem('grid-cookie', String(this.grid));
 			if (this.$route.name === 'Home') this.$router.go(0);
 			else this.gridClick();
 		},
 		setReadyToRead() {
-			this.$cookies.set('readytoread-cookie', !this.readyToRead, 60 * 60 * 24 * 30);
+			localStorage.setItem('readytoread-cookie', String(!this.readyToRead));
 			if (this.$route.name === 'Home') this.$router.go(0);
 			else this.getReadyToRead();
 		}

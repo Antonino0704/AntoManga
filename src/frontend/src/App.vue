@@ -44,6 +44,17 @@ export default {
 		}
 	},
 	methods: {
+		theme() {
+			let theme = localStorage.getItem('theme-cookie');
+			if (theme == null) {
+				theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+			}
+			if (theme == 'light') {
+				document.documentElement.setAttribute('data-bs-theme', 'light');
+			} else {
+				document.documentElement.setAttribute('data-bs-theme', 'dark');
+			}
+		},
 		isAuthenticated() {
 			console.log('%cNothing to see here', 'color: yellow; font-size: xx-large');
 			apiService(endpoints.userMe, 'GET').then((response: User) => {
@@ -61,6 +72,7 @@ export default {
 		}
 	},
 	created() {
+		this.theme();
 		this.isAuthenticated();
 		window.addEventListener('scroll', this.handleScroll);
 	}

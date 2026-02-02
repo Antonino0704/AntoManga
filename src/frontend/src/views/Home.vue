@@ -149,7 +149,7 @@ export default {
 			}
 
 			this.grid = !this.grid;
-			if (!load) this.$cookies.set('grid-cookie', this.grid, 60 * 60 * 24 * 30);
+			if (!load) localStorage.setItem('grid-cookie', String(this.grid));
 		},
 		getReadyToReadClick(serie: SeriesViewsetInstance) {
 			return (
@@ -157,13 +157,11 @@ export default {
 			);
 		},
 		readReadyToReadCockie() {
-			if (this.$cookies.isKey('readytoread-cookie')) {
-				this.readyToRead = this.$cookies.get('readytoread-cookie') == 'true' ? true : false;
-			}
+			this.readyToRead = localStorage.getItem('readytoread-cookie') == 'true' ? true : false;
 		},
 		async setLayout() {
-			if (this.$cookies.isKey('grid-cookie')) {
-				this.grid = this.$cookies.get('grid-cookie') == 'true' ? false : true;
+			if (localStorage.getItem('grid-cookie')) {
+				this.grid = localStorage.getItem('grid-cookie') == 'true' ? false : true;
 				this.gridClick(true);
 			}
 			this.readReadyToReadCockie();
