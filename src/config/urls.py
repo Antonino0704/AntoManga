@@ -27,7 +27,7 @@ from django.views.static import serve
 from core.views import IndexTemplate
 from users.views import InviteView
 
-apiVersion = "v5/"
+apiVersion = "v6/"
 
 urlpatterns = [
     path("admin/", admin.site.urls),

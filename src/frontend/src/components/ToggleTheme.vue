@@ -24,14 +24,8 @@ export default {
 		toggle(theme: string = 'dark') {
 			if (theme != 'dark') {
 				document.querySelector('#toggleButton')!.className = 'bi bi-toggle-off';
-				if (document.querySelector('#selectType'))
-					document.querySelector('#selectType')!.className =
-						'form-select-sm mb-2 ms-2 select-style badge text-bg-light';
 			} else {
 				document.querySelector('#toggleButton')!.className = 'bi bi-toggle-on';
-				if (document.querySelector('#selectType'))
-					document.querySelector('#selectType')!.className =
-						'form-select-sm mb-2 ms-2 select-style badge text-bg-dark';
 			}
 		},
 		toggleClick() {

@@ -5,19 +5,25 @@
 				<a class="navbar-brand ms-3 mb-2" href="/">
 					<img :src="getLogo()" width="30" height="30" alt="logo" />
 				</a>
+				<div class="btn-group me-3 dropstart">
+					<button
+						class="btn btn-outline-secondary dropdown-toggle"
+						type="button"
+						data-bs-toggle="dropdown"
+						data-bs-auto-close="outside"
+						aria-expanded="false"
+					>
+						Filters
+					</button>
+					<ul class="dropdown-menu">
+						<li v-for="(type, index) in types" :key="type.id" @click="toggle(index)">
+							<a class="dropdown-item"
+								>{{ type.name }} <i class="bi bi-check-lg text-success" v-show="type.applied"></i
+							></a>
+						</li>
+					</ul>
+				</div>
 
-				<select
-					id="selectType"
-					name="selectType"
-					class="form-select-sm mb-2 ms-2 select-style badge"
-					aria-label="NULL"
-					@change="search()"
-					v-model="statusFilter"
-				>
-					<option v-for="type in types" :key="type.id" :value="type.id">
-						{{ type.name }}
-					</option>
-				</select>
 				<div class="d-flex ps-2" role="search">
 					<input
 						id="searchBar"
@@ -79,7 +85,7 @@
 
 <script lang="ts">
 import { apiService } from '../utils/APIService';
-import type { Type, Publisher, User } from '../@types/interfaces';
+import type { Type, Typev2, Publisher, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 
 export default {
@@ -87,12 +93,13 @@ export default {
 	data() {
 		return {
 			types: [
-				{ id: 0, name: 'null' },
-				{ id: -1, name: 'incomplete' },
-				{ id: -2, name: 'Ready To Read' }
-			] as Array<Type>,
+				{ id: 0, name: 'clear', applied: false },
+				{ id: -1, name: 'incomplete', applied: false },
+				{ id: -2, name: 'Ready To Read', applied: false },
+				{ id: -3, name: 'exclude discontinued series', applied: false },
+				{ id: -4, name: 'discontinued series only', applied: false }
+			] as Array<Typev2>,
 			publishers: 0,
-			statusFilter: 0,
 			user: {} as User
 		};
 	},
@@ -105,13 +112,19 @@ export default {
 		getTypes() {
 			apiService(endpoints.types)
 				.then((data: Array<Type>) => {
-					for (let i = 0; i < data.length; i++) {
-						this.types.push(data[i]);
-					}
+					this.types.push(
+						...data.map((t) => ({
+							...t,
+							applied: false
+						}))
+					);
 				})
 				.then(() => {
-					if (this.$route.query.type != undefined)
-						this.statusFilter = Number(this.$route.query.type);
+					if (this.$route.query.type != undefined) {
+						this.types.forEach((type) => {
+							type.applied = this.$route.query.type!.includes(String(type.id));
+						});
+					}
 					if (this.$route.query.filterbyname != undefined)
 						document.querySelector<HTMLInputElement>('#searchBar')!.value = String(
 							this.$route.query.filterbyname
@@ -126,9 +139,16 @@ export default {
 		search() {
 			this.$emit(
 				'filterEvent',
-				this.statusFilter,
+				this.types.filter((type) => type.applied).map((t) => t.id),
 				document.querySelector<HTMLInputElement>('#searchBar')!.value.toLowerCase()
 			);
+		},
+		toggle(index: number) {
+			if (index == 3) this.types[4].applied = false;
+			if (index == 4) this.types[3].applied = false;
+
+			if (index == 0) this.types.map((t) => (t.applied = false));
+			else this.types[index].applied = !this.types[index].applied;
 		},
 		getLogo() {
 			return `${document.location.origin}/media/icon.png`;
@@ -137,19 +157,7 @@ export default {
 			apiService(endpoints.userMe, 'GET').then((response: User) => {
 				this.user = response;
 			});
-		},
-		setSelectTheme() {
-			let theme = localStorage.getItem('theme-cookie');
-			if (theme == null) {
-				theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-			}
-			if (theme == 'light') {
-				document.querySelector('#selectType')!.classList.add('text-bg-light');
-			} else document.querySelector('#selectType')!.classList.add('text-bg-dark');
 		}
-	},
-	mounted() {
-		this.setSelectTheme();
 	},
 	created() {
 		this.getTypes();

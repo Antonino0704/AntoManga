@@ -13,6 +13,7 @@ export interface Series {
 	image: string;
 	typology: number;
 	publisher: string;
+	is_discontinued: Boolean;
 }
 
 export interface SeriesViewsetInstance extends Series {
@@ -60,4 +61,8 @@ export interface User {
 export interface PublisherStats {
 	type: Type;
 	nSeries: number;
+}
+
+export interface Typev2 extends Type {
+	applied: Boolean;
 }

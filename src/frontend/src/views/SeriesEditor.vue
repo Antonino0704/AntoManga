@@ -54,6 +54,16 @@
 					</option>
 				</select>
 			</div>
+			<div class="checkbox-inline mt-2">
+				<input
+					class="form-check-input me-2"
+					type="checkbox"
+					value=""
+					id="isDiscontinued"
+					v-model="series.is_discontinued"
+				/>
+				<label class="form-check-label" for="isDiscontinued"> Discontinued </label>
+			</div>
 
 			<button class="btn btn-outline-success mt-3">Update</button>
 		</form>

@@ -37,6 +37,10 @@
 										v-if="getReadyToReadClick(serie)"
 										class="bi bi-exclamation-circle-fill text-warning"
 									></i>
+									<i
+										v-if="serie.is_discontinued"
+										class="bi bi-exclamation-triangle-fill text-danger ms-2"
+									></i>
 								</h5>
 								<p class="card-text fst-italic">Type: {{ serie.typology_name }}</p>
 
@@ -186,21 +190,29 @@ export default {
 					this.imagesSeries.push(...seriesDataImg.imageSeries);
 					this.next.nextImageCard = seriesDataImg.nextImageCard;
 				});
-				let type = undefined;
+
 				let search =
 					this.$route.query.filterbyname != null ? String(this.$route.query.filterbyname) : '';
-				if (!isNaN(Number(this.$route.query.type))) type = Number(this.$route.query.type);
 
-				this.changeUrl(type, search);
+				let types: number[] = [];
+				if (this.$route.query.type != undefined) {
+					if (Array.isArray(this.$route.query.type)) {
+						types = this.$route.query.type.map((t) => Number(t)).filter((n) => !isNaN(n));
+					} else {
+						types = Array.of(Number(this.$route.query.type));
+					}
+				}
+
+				this.changeUrl(types, search);
 				return this.setLayout();
 			}
 		},
-		changeUrl(type: number = 0, search: string = '') {
+		changeUrl(types: number[], search: string = '') {
 			if (this.next.nextCard != null) {
 				this.$router.replace({
 					query: {
 						dataset: Number(this.next.nextCard.replace(/\S*page=/g, '').replace(/&\S*/g, '')) - 1,
-						type: type != 0 ? type : undefined,
+						type: types.length != 0 ? types : undefined,
 						filterbyname: search != '' ? search : undefined
 					}
 				});
@@ -208,15 +220,15 @@ export default {
 				this.$router.replace({
 					query: {
 						dataset: -1,
-						type: type != 0 ? type : undefined,
+						type: types.length != 0 ? types : undefined,
 						filterbyname: search != '' ? search : undefined
 					}
 				});
 			}
 		},
-		async search(type: number, searchBarText: string) {
+		async search(types: number[], searchBarText: string) {
 			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
-			if (type == 0 && searchBarText === '') {
+			if (types.length == 0 && searchBarText === '') {
 				await this.$router.replace({
 					query: {}
 				});
@@ -224,13 +236,13 @@ export default {
 				return;
 			}
 			let url =
-				type == 0
+				types.length == 0
 					? `${endpoints.series}?filterbyname=${searchBarText}`
-					: `${endpoints.series}?type=${type}&filterbyname=${searchBarText}`;
+					: `${endpoints.series}?${this.createTypeUrl(types)}&filterbyname=${searchBarText}`;
 			let imageUrl =
-				type == 0
+				types.length == 0
 					? `${endpoints.imgSeries}?filterbyname=${searchBarText}`
-					: `${endpoints.imgSeries}?type=${type}&filterbyname=${searchBarText}`;
+					: `${endpoints.imgSeries}?${this.createTypeUrl(types)}&filterbyname=${searchBarText}`;
 			apiService(url)
 				.then((data: RequestObject) => {
 					this.series = data.results;
@@ -247,15 +259,20 @@ export default {
 							}
 						})
 						.then(() => {
-							this.changeUrl(type, searchBarText);
+							this.changeUrl(types, searchBarText);
 							return this.setLayout();
 						});
 				});
 		},
 		filter() {
 			let filter = '?';
+
 			if (this.$route.query.type != undefined) {
-				filter += 'type=' + this.$route.query.type;
+				if (Array.isArray(this.$route.query.type)) {
+					filter += 'type=' + this.$route.query.type.map((t) => Number(t)).filter((n) => !isNaN(n));
+				} else {
+					filter += 'type=' + this.$route.query.type;
+				}
 				filter += '&';
 			}
 			if (this.$route.query.filterbyname != undefined) {
@@ -267,6 +284,14 @@ export default {
 			apiService(endpoints.userMe, 'GET').then((response: User) => {
 				this.user = response;
 			});
+		},
+		createTypeUrl(types: number[]) {
+			let url = `type=${types[0]}`;
+			let newType = types.slice(1); // create a new type array because we don't want to change the 'types' instance
+			newType.forEach((type) => {
+				url += `%2C${type}`;
+			});
+			return url;
 		}
 	},
 	async created() {
