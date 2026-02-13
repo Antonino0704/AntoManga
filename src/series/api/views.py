@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.db.models import F
 from django.db.models.deletion import ProtectedError
+from core.randomString import is_number
 
 from series.models import Typology, Series
 from series.api.serializers import (
@@ -40,15 +41,31 @@ class SeriesViewset(viewsets.ModelViewSet):
     def get_queryset(self):
         seriesObjects = Series.objects.all()
         if "type" in self.request.query_params:
-            seriesObjects = (
-                seriesObjects.filter(typology=int(self.request.query_params["type"]))
-                if int(self.request.query_params["type"]) > 0
-                else (
-                    seriesObjects.exclude(n_volumes=F("volumes_bought"))
-                    if int(self.request.query_params["type"]) == -1
-                    else seriesObjects.exclude(volumes_read=F("volumes_bought"))
+            filters = self.request.query_params["type"].split(",")
+            filters = list(filter(lambda filter: filter.strip(), filters))
+
+            if "-3" in filters:
+                if "-4" not in filters:
+                    seriesObjects = Series.objects.filter(is_discontinued=False)
+                filters = list(filter(lambda t: t != "-3", filters))
+
+            if "-4" in filters:
+                seriesObjects = Series.objects.filter(is_discontinued=True)
+                filters = list(filter(lambda t: t != "-4", filters))
+
+            if "-1" in filters:
+                seriesObjects = seriesObjects.exclude(n_volumes=F("volumes_bought"))
+                filters = list(filter(lambda t: t != "-1", filters))
+
+            if "-2" in filters:
+                seriesObjects = seriesObjects.exclude(volumes_read=F("volumes_bought"))
+                filters = list(filter(lambda t: t != "-2", filters))
+
+            if len(filters) > 0:
+                seriesObjects = seriesObjects.filter(
+                    typology__in=list(map(int, filter(is_number, filters)))
                 )
-            )
+
         if "filterbyname" in self.request.query_params:
             seriesObjects = seriesObjects.filter(
                 name__contains=self.request.query_params["filterbyname"]
@@ -79,15 +96,31 @@ class ImageSeriesViewset(viewsets.ModelViewSet):
     def get_queryset(self):
         seriesObjects = Series.objects.all()
         if "type" in self.request.query_params:
-            seriesObjects = (
-                seriesObjects.filter(typology=int(self.request.query_params["type"]))
-                if int(self.request.query_params["type"]) > 0
-                else (
-                    seriesObjects.exclude(n_volumes=F("volumes_bought"))
-                    if int(self.request.query_params["type"]) == -1
-                    else seriesObjects.exclude(volumes_read=F("volumes_bought"))
+            filters = self.request.query_params["type"].split(",")
+            filters = list(filter(lambda filter: filter.strip(), filters))
+
+            if "-3" in filters:
+                if "-4" not in filters:
+                    seriesObjects = Series.objects.filter(is_discontinued=False)
+                filters = list(filter(lambda t: t != "-3", filters))
+
+            if "-4" in filters:
+                seriesObjects = Series.objects.filter(is_discontinued=True)
+                filters = list(filter(lambda t: t != "-4", filters))
+
+            if "-1" in filters:
+                seriesObjects = seriesObjects.exclude(n_volumes=F("volumes_bought"))
+                filters = list(filter(lambda t: t != "-1", filters))
+
+            if "-2" in filters:
+                seriesObjects = seriesObjects.exclude(volumes_read=F("volumes_bought"))
+                filters = list(filter(lambda t: t != "-2", filters))
+
+            if len(filters) > 0:
+                seriesObjects = seriesObjects.filter(
+                    typology__in=list(map(int, filter(is_number, filters)))
                 )
-            )
+
         if "filterbyname" in self.request.query_params:
             seriesObjects = seriesObjects.filter(
                 name__contains=self.request.query_params["filterbyname"]
@@ -117,7 +150,9 @@ class LengthView(APIView):
             else (
                 Series.objects.filter(typology=int(self.request.query_params["type"]))
                 if int(self.request.query_params["type"]) != -1
-                else Series.objects.exclude(n_volumes=F("volumes_bought"))
+                else Series.objects.exclude(
+                    n_volumes=F("volumes_bought")
+                )  # it should be removed
             )
         )
         serializer = LegthSeriesSerializer(queryset, many=True)
