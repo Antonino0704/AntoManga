@@ -105,7 +105,7 @@ export default {
 	},
 	computed: {
 		isTypesPubslihers() {
-			return this.types.length > 3 && this.publishers > 0 && this.user.is_authenticated;
+			return this.types.length > 5 && this.publishers > 0 && this.user.is_authenticated;
 		}
 	},
 	methods: {
@@ -122,7 +122,9 @@ export default {
 				.then(() => {
 					if (this.$route.query.type != undefined) {
 						this.types.forEach((type) => {
-							type.applied = this.$route.query.type!.includes(String(type.id));
+							type.applied = Array.isArray(this.$route.query.type)
+								? this.$route.query.type!.includes(String(type.id))
+								: [this.$route.query.type]!.includes(String(type.id));
 						});
 					}
 					if (this.$route.query.filterbyname != undefined)
