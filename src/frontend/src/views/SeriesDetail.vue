@@ -54,6 +54,14 @@
 									onclick="navigator.clipboard.writeText(window.location.href); return false;"
 									@click="copyAction()"
 								></a>
+								<div class="mt-3" v-if="ReadyToRead() || series.is_discontinued">
+									<div class="alert alert-warning" role="alert" v-if="ReadyToRead()">
+										This series has unread volumes
+									</div>
+									<div class="alert alert-danger" role="alert" v-if="series.is_discontinued">
+										This series is discontinued
+									</div>
+								</div>
 							</small>
 						</p>
 					</div>
@@ -128,6 +136,9 @@ export default {
 			setTimeout(() => {
 				shareButton.className = 'bi bi-share-fill fs-6';
 			}, 2000);
+		},
+		ReadyToRead() {
+			return this.series.volumes_read != this.series.volumes_bought && this.user.is_authenticated;
 		}
 	},
 	created() {

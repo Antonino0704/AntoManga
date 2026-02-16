@@ -93,11 +93,11 @@ export default {
 	data() {
 		return {
 			types: [
-				{ id: 0, name: 'clear', applied: false },
-				{ id: -1, name: 'incomplete', applied: false },
+				{ id: 0, name: 'Clear', applied: false },
+				{ id: -1, name: 'Incomplete', applied: false },
 				{ id: -2, name: 'Ready To Read', applied: false },
-				{ id: -3, name: 'exclude discontinued series', applied: false },
-				{ id: -4, name: 'discontinued series only', applied: false }
+				{ id: -3, name: 'Exclude Discontinued Series', applied: false },
+				{ id: -4, name: 'Discontinued Series Only', applied: false }
 			] as Array<Typev2>,
 			publishers: 0,
 			user: {} as User
