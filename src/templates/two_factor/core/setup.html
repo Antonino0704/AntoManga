@@ -4,7 +4,7 @@
 
 
 {% block supertitle %}<h1 class="text-light text-break">Enable Two-Factor Authentication</h1>{% endblock %}
-{% block divOuterAreaParams %}class="outer-area" style="max-width: 90vw;"{% endblock %}
+
 
 {% block buttonForm %}
 <div class="d-grid gap-2 mt-5">
@@ -48,7 +48,7 @@
 {% block content2 %}
 
 {% if wizard.steps.current == 'welcome' %}
-<div class="alert alert-info mt-2 mb-5 container-sm text-center" role="alert">
+<div class="alert alert-info mt-2 mb-5 container-sm text-center position-absolute top-0 start-50 translate-middle-x" role="alert">
     To start using a token generator, please use your
     smartphone to scan the QR code below. For example, use Bitwarden Authenticator
 </div>

@@ -11,11 +11,12 @@
 {% endblock %}
 
 {% block content %}
-<div class="position-absolute top-50 start-50 translate-middle">
+<div class="d-flex justify-content-center align-items-start vh-100">
     <div {% block divOuterAreaParams %}class="outer-area"{% endblock %}>
         <div {% block divOuterBoxParams %}class="auth-box text-center"{% endblock %}>
             {% block supertitle %}<h1 class="text-light">AntoManga</h1>{% endblock %}
             {% block title_form %}{% endblock %}
+            {% block logo %}<a href="/"><img src="/media/icon.png" width="50" height="50" alt="logo"></a>{% endblock %}
             <div class="form-container">
               {% block details %}{% endblock %}
                 <form method="POST">
