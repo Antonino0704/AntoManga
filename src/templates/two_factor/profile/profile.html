@@ -14,7 +14,7 @@
 
 {% block content %}
 
-<div class="position-absolute top-50 start-50 translate-middle">
+<div class="d-flex justify-content-center align-items-start vh-100">
   <div class="outer-area">
     <div class="auth-box text-center">
       <h1 class="text-light">AntoManga</h1>
@@ -38,6 +38,8 @@
         <h3 class="text-info">Disable Two-Factor Authentication</h3>
         <p class="fs-6 text-danger">we strongly discourage you to do</p>
         <a href="{% url 'two_factor:disable' %}" class="btn btn-danger">Disable Two-Factor Authentication</a>
+        <hr />
+        <a class="btn btn-block btn-secondary" href="/">Back To Home</a>
 
         {% else %}
         <p>Two-factor authentication is not enabled for your
