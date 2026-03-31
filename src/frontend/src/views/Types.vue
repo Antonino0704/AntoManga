@@ -3,7 +3,7 @@
 		<h1>Types</h1>
 
 		<TypesComponent v-if="user.is_authenticated" @newTypeEvent="getTypesData()" />
-		
+
 		<ul class="list-group mt-2">
 			<li
 				class="list-group-item d-flex justify-content-between align-items-center"
@@ -66,12 +66,13 @@ export default {
 		},
 		editType(id: number) {
 			if (this.checkData(id)) {
-				const type = this.types.find(t => t.id == id)
-				if(type != undefined) {
-				apiService(`${endpoints.types}${id}/`, 'PUT', type);
-				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-					`type: ${type.name} updated`
-				); }
+				const type = this.types.find((t) => t.id == id);
+				if (type != undefined) {
+					apiService(`${endpoints.types}${id}/`, 'PUT', type);
+					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+						`type: ${type.name} updated`
+					);
+				}
 			} else {
 				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
 					'invalid names'
@@ -79,42 +80,39 @@ export default {
 			}
 		},
 		checkData(id: number): boolean {
-			const type = this.types.find(t => t.id == id)
-			if(type != undefined) {
-			document.querySelector(`#typeID${type.id}`)!.className = 'form-control';
-			if (!type.name || type.name.length > 20) {
+			const type = this.types.find((t) => t.id == id);
+			if (type != undefined) {
+				document.querySelector(`#typeID${type.id}`)!.className = 'form-control';
+				if (!type.name || type.name.length > 20) {
 					document.querySelector(`#typeID${type.id}`)!.className = 'form-control is-invalid';
 					return false;
 				}
-				return true
+				return true;
 			}
-			return false
+			return false;
 		},
 		deleteType(id: number) {
-			const tmp = this.types.filter(t => t.id != id)
+			const tmp = this.types.filter((t) => t.id != id);
 			apiService(`${endpoints.types}${id}/`, 'DELETE').then((reason) => {
-						if (reason.protectedErrorDetail) {
-							(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-								reason.protectedErrorDetail
-							);
-						}
-						else  {
-							const name = this.types.find(t => t.id == id)!.name
-							this.types = tmp;
-							(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-								`type: ${name} was deleted`
-							);
-						}
-					});
+				if (reason.protectedErrorDetail) {
+					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+						reason.protectedErrorDetail
+					);
+				} else {
+					const name = this.types.find((t) => t.id == id)!.name;
+					this.types = tmp;
+					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+						`type: ${name} was deleted`
+					);
+				}
+			});
 		},
 		isAuthenticated() {
 			apiService(endpoints.userMe, 'GET').then((response: User) => {
 				this.user = response;
 			});
 		},
-		newTypeEventAction() {
-
-		}
+		newTypeEventAction() {}
 	},
 	created() {
 		this.getTypesData();
