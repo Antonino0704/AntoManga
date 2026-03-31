@@ -27,7 +27,9 @@ class TypologyViewset(viewsets.ModelViewSet):
             self.perform_destroy(instance)
         except ProtectedError:
             return Response(
-                {"protectedErrorDetail": "Cannot delete some instances of 'Type'"},
+                {
+                    "protectedErrorDetail": "Cannot delete this Type because other users are using it"
+                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
         return Response(status=status.HTTP_204_NO_CONTENT)
