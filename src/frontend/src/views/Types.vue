@@ -17,6 +17,7 @@
 					class="form-control border border-secondary-subtle border-opacity-10"
 					aria-describedby="addon-wrapping"
 					v-model="type.name"
+					:disabled="!user.is_authenticated"
 				/>
 				<i
 					fill="currentColor"
