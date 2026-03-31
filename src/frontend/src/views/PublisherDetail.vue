@@ -14,7 +14,8 @@
 			<button
 				@click="deletePublisher()"
 				type="button"
-				class="btn btn-outline-warning ms-2"
+				:class="`btn ${!seriesLength ? 'btn-outline-warning' : 'btn-outline-secondary'} ms-2`"
+				:disabled="Boolean(seriesLength)"
 				v-if="user.is_authenticated"
 			>
 				Delete

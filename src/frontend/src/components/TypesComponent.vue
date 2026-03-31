@@ -1,38 +1,53 @@
 <template>
 	<div class="types-component mb-3">
-		<p>
-			<button
-				class="btn btn-outline-success mt-3"
-				type="button"
-				data-bs-toggle="collapse"
-				data-bs-target="#collapse"
-				aria-expanded="false"
-				aria-controls="collapse"
-			>
-				Add a new Type
-			</button>
-		</p>
-		<div style="min-height: 120px">
-			<form @submit.prevent="post">
-				<div class="collapse collapse-horizontal" id="collapse">
-					<div class="mb-3">
-						<label for="titleType" class="form-label">Insert a new Type</label>
-						<input
-							type="text"
-							class="form-control"
-							id="titleType"
-							placeholder="Title"
-							v-model="type.name"
-						/>
-					</div>
+		<button
+			class="btn btn-outline-success mt-3"
+			type="button"
+			data-bs-toggle="modal"
+			data-bs-target="#typeModal"
+			data-bs-whatever="@mdo"
+		>
+			Add a new Type
+		</button>
 
-					<div class="col-auto">
-						<button type="submit" class="btn btn-outline-success mb-3">ADD</button>
+		<div
+			class="modal fade"
+			id="typeModal"
+			tabindex="-1"
+			aria-labelledby="typeModalLabel"
+			aria-hidden="true"
+		>
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="typeModalLabel">New type</h1>
+						<button
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="modal"
+							aria-label="Close"
+						></button>
 					</div>
+					<div class="modal-body">
+						<form>
+							<div class="mb-3">
+								<textarea
+									class="form-control"
+									id="titleType"
+									v-model="type.name"
+									placeholder="Title"
+								></textarea>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-outline-success" @click="post">Add</button>
+					</div>
+					<div class="alert alert-danger ms-2 me-2" role="alert" v-if="errors">invalid title</div>
 				</div>
-			</form>
+			</div>
 		</div>
-
 		<Notification ref="notification" />
 	</div>
 </template>
@@ -41,6 +56,7 @@
 import { apiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import { endpoints } from '@/utils/endpoints';
+import { Modal } from 'bootstrap';
 
 export default {
 	name: 'TypesComponent',
@@ -48,7 +64,8 @@ export default {
 		return {
 			type: {
 				name: ''
-			}
+			},
+			errors: false
 		};
 	},
 	components: {
@@ -58,22 +75,27 @@ export default {
 		post() {
 			if (this.checkdata()) {
 				apiService(endpoints.types, 'POST', this.type).then(() => {
+					this.$emit('newTypeEvent');
+					Modal.getInstance(document.getElementById('typeModal')).hide();
+					this.reset();
 					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
 						'type created with success'
 					);
-					setTimeout(() => this.$router.go(0), 1000);
 				});
 			}
 		},
 		checkdata() {
 			if (!this.type.name || this.type.name.length > 20) {
 				document.querySelector('#titleType')!.className = 'form-control is-invalid';
-				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-					'invalid title'
-				);
+				this.errors = true;
 				return false;
 			}
 			return true;
+		},
+		reset() {
+			this.type.name = '';
+			document.querySelector('#titleType')!.classList.remove('is-invalid');
+			this.errors = false;
 		}
 	}
 };
