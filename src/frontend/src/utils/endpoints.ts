@@ -13,7 +13,8 @@ const endpoints = {
 	license: `${apiVersion}license/`,
 	userMe: `${apiVersion}user-me/`,
 	validateImage: `${apiVersion}image/validate/`,
-	publisherStats: `${apiVersion}publisher-stats/`
+	publisherStats: `${apiVersion}publisher-stats/`,
+	publishersShort: `${apiVersion}short-version/publishers/`
 };
 
 export { endpoints };

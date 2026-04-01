@@ -5,7 +5,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.db.models.deletion import ProtectedError
 
-from publishers.api.serializers import PublisherSerializer, ImagePublisherSerializer
+from publishers.api.serializers import (
+    PublisherSerializer,
+    ImagePublisherSerializer,
+    PublisherSerializerShortVersion,
+)
 from publishers.models import Publisher
 
 from series.models import Typology, Series
@@ -50,3 +54,9 @@ class PublisherStatsView(APIView):
             )
         )
         return Response({"count": seriesObjects.count()})
+
+
+class PublisherViewShortVersion(generics.ListAPIView):
+    queryset = Publisher.objects.all()
+    serializer_class = PublisherSerializerShortVersion
+    pagination_class = None

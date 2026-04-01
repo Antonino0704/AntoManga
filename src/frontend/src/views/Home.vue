@@ -203,17 +203,27 @@ export default {
 					}
 				}
 
-				this.changeUrl(types, search);
+				let publishers: number[] = [];
+				if (this.$route.query.publisher != undefined) {
+					if (Array.isArray(this.$route.query.publisher)) {
+						publishers = this.$route.query.publisher.map((t) => Number(t)).filter((n) => !isNaN(n));
+					} else {
+						publishers = Array.of(Number(this.$route.query.publisher));
+					}
+				}
+
+				this.changeUrl(types, search, publishers);
 				return this.setLayout();
 			}
 		},
-		changeUrl(types: number[], search: string = '') {
+		changeUrl(types: number[], search: string = '', publishers: number[]) {
 			if (this.next.nextCard != null) {
 				this.$router.replace({
 					query: {
 						dataset: Number(this.next.nextCard.replace(/\S*page=/g, '').replace(/&\S*/g, '')) - 1,
 						type: types.length != 0 ? types : undefined,
-						filterbyname: search != '' ? search : undefined
+						filterbyname: search != '' ? search : undefined,
+						publisher: publishers.length != 0 ? publishers : undefined
 					}
 				});
 			} else {
@@ -221,14 +231,16 @@ export default {
 					query: {
 						dataset: -1,
 						type: types.length != 0 ? types : undefined,
-						filterbyname: search != '' ? search : undefined
+						filterbyname: search != '' ? search : undefined,
+						publisher: publishers.length != 0 ? publishers : undefined
 					}
 				});
 			}
 		},
-		async search(types: number[], searchBarText: string) {
+		async search(types: number[], searchBarText: string, publishers: number[]) {
 			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
-			if (types.length == 0 && searchBarText === '') {
+
+			if (types.length == 0 && searchBarText === '' && publishers.length == 0) {
 				await this.$router.replace({
 					query: {}
 				});
@@ -239,10 +251,16 @@ export default {
 				types.length == 0
 					? `${endpoints.series}?filterbyname=${searchBarText}`
 					: `${endpoints.series}?${this.createTypeUrl(types)}&filterbyname=${searchBarText}`;
+
+			if (publishers.length != 0) url = `${url}&${this.createPubslisherUrl(publishers)}`;
+
 			let imageUrl =
 				types.length == 0
 					? `${endpoints.imgSeries}?filterbyname=${searchBarText}`
 					: `${endpoints.imgSeries}?${this.createTypeUrl(types)}&filterbyname=${searchBarText}`;
+
+			if (publishers.length != 0) imageUrl = `${imageUrl}&${this.createPubslisherUrl(publishers)}`;
+
 			apiService(url)
 				.then((data: RequestObject) => {
 					this.series = data.results;
@@ -259,7 +277,7 @@ export default {
 							}
 						})
 						.then(() => {
-							this.changeUrl(types, searchBarText);
+							this.changeUrl(types, searchBarText, publishers);
 							return this.setLayout();
 						});
 				});
@@ -278,6 +296,16 @@ export default {
 			if (this.$route.query.filterbyname != undefined) {
 				filter += 'filterbyname=' + this.$route.query.filterbyname;
 			}
+			if (this.$route.query.publisher != undefined) {
+				filter += '&';
+				if (Array.isArray(this.$route.query.publisher)) {
+					filter +=
+						'publisher=' +
+						this.$route.query.publisher.map((p) => Number(p)).filter((n) => !isNaN(n));
+				} else {
+					filter += 'publisher=' + this.$route.query.publisher;
+				}
+			}
 			return filter;
 		},
 		isAuthenticated() {
@@ -290,6 +318,14 @@ export default {
 			let newType = types.slice(1); // create a new type array because we don't want to change the 'types' instance
 			newType.forEach((type) => {
 				url += `%2C${type}`;
+			});
+			return url;
+		},
+		createPubslisherUrl(publishers: number[]) {
+			let url = `publisher=${publishers[0]}`;
+			let newPub = publishers.slice(1);
+			newPub.forEach((publisher) => {
+				url += `%2C${publisher}`;
 			});
 			return url;
 		}
