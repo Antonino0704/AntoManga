@@ -1,5 +1,6 @@
 from series.models import Series
 from core.randomString import is_number
+from django.db.models import F
 
 
 def filters(queryset, request):
