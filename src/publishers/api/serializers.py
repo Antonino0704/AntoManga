@@ -14,3 +14,9 @@ class ImagePublisherSerializer(serializers.ModelSerializer):
     class Meta:
         model = Publisher
         fields = ["image"]
+
+
+class PublisherSerializerShortVersion(serializers.ModelSerializer):
+    class Meta:
+        model = Publisher
+        fields = ["id", "name"]

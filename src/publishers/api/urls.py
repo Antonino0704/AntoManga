@@ -5,6 +5,7 @@ from publishers.api.views import (
     PublisherViewSet,
     ImagePublisherViewSet,
     PublisherStatsView,
+    PublisherViewShortVersion,
 )
 
 router = DefaultRouter()
@@ -17,5 +18,10 @@ urlpatterns = [
         "publisher-stats/<slug:publisher>/<str:type>/",
         PublisherStatsView.as_view(),
         name="publisherStats-view",
+    ),
+    path(
+        "short-version/publishers/",
+        PublisherViewShortVersion.as_view(),
+        name="publisherShortVersions-view",
     ),
 ]

@@ -21,6 +21,12 @@
 								>{{ type.name }} <i class="bi bi-check-lg text-success" v-show="type.applied"></i
 							></a>
 						</li>
+						<hr />
+						<li v-for="(type, index) in publishersList" :key="type.id" @click="toggle(index, true)">
+							<a class="dropdown-item"
+								>{{ type.name }} <i class="bi bi-check-lg text-success" v-show="type.applied"></i
+							></a>
+						</li>
 					</ul>
 				</div>
 
@@ -99,6 +105,7 @@ export default {
 				{ id: -3, name: 'Exclude Discontinued Series', applied: false },
 				{ id: -4, name: 'Discontinued Series Only', applied: false }
 			] as Array<Typev2>,
+			publishersList: [] as Array<Typev2>,
 			publishers: 0,
 			user: {} as User
 		};
@@ -133,6 +140,26 @@ export default {
 						);
 				});
 		},
+		getPublishersList() {
+			apiService(endpoints.publishersShort)
+				.then((data: Array<Type>) => {
+					this.publishersList.push(
+						...data.map((t) => ({
+							...t,
+							applied: false
+						}))
+					);
+				})
+				.then(() => {
+					if (this.$route.query.publisher != undefined) {
+						this.publishersList.forEach((publisher) => {
+							publisher.applied = Array.isArray(this.$route.query.publisher)
+								? this.$route.query.publisher!.includes(String(publisher.id))
+								: [this.$route.query.publisher]!.includes(String(publisher.id));
+						});
+					}
+				});
+		},
 		getPublishersLength() {
 			apiService(endpoints.publishers).then((data: Array<Publisher>) => {
 				this.publishers = data.length;
@@ -142,15 +169,23 @@ export default {
 			this.$emit(
 				'filterEvent',
 				this.types.filter((type) => type.applied).map((t) => t.id),
-				document.querySelector<HTMLInputElement>('#searchBar')!.value.toLowerCase()
+				document.querySelector<HTMLInputElement>('#searchBar')!.value.toLowerCase(),
+				this.publishersList.filter((publisher) => publisher.applied).map((p) => p.id)
 			);
 		},
-		toggle(index: number) {
+		toggle(index: number, is_publisher = false) {
+			if (is_publisher) {
+				this.publishersList[index].applied = !this.publishersList[index].applied;
+				return;
+			}
+
 			if (index == 3) this.types[4].applied = false;
 			if (index == 4) this.types[3].applied = false;
 
-			if (index == 0) this.types.map((t) => (t.applied = false));
-			else this.types[index].applied = !this.types[index].applied;
+			if (index == 0) {
+				this.types.map((t) => (t.applied = false));
+				this.publishersList.map((p) => (p.applied = false));
+			} else this.types[index].applied = !this.types[index].applied;
 		},
 		getLogo() {
 			return `${document.location.origin}/media/icon.png`;
@@ -163,6 +198,7 @@ export default {
 	},
 	created() {
 		this.getTypes();
+		this.getPublishersList();
 		this.getPublishersLength();
 		this.isAuthenticated();
 	}
