@@ -1,5 +1,6 @@
 from series.models import Series
 from core.randomString import is_number
+from django.db.models import F
 
 
 def filters(queryset, request):
@@ -7,6 +8,7 @@ def filters(queryset, request):
     if "type" in request.query_params:
         filters = request.query_params["type"].split(",")
         filters = list(filter(lambda filter: filter.strip(), filters))
+        print(filters)
 
         if "-3" in filters:
             if "-4" not in filters:
