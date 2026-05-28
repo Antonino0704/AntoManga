@@ -199,6 +199,7 @@ export default {
 				apiService(`${endpoints.series}${this.slug}/`, 'PUT', this.series).then(() => {
 					resetErrors();
 					this.edit(true);
+					this.$emit('changeStatsEvent', this.series.volumes_read, this.series.volumes_bought);
 				});
 			} else {
 				resetErrors();
