@@ -67,7 +67,7 @@
 					</div>
 				</div>
 				<hr class="mt-3" />
-				<p class="card-text"><seriesDetailStats :slug="slug" /></p>
+				<p class="card-text"><seriesDetailStats :slug="slug" @changeStatsEvent="updateData" /></p>
 			</div>
 		</div>
 
@@ -124,6 +124,10 @@ export default {
 				`${endpoints.series}${this.slug}/`
 			);
 			window.scrollTo(0, 0);
+		},
+		updateData(volumes_read: number, volumes_bought: number) {
+			this.series.volumes_read = volumes_read;
+			this.series.volumes_bought = volumes_bought;
 		},
 		isAuthenticated() {
 			apiService(endpoints.userMe, 'GET').then((response: User) => {
