@@ -33,7 +33,7 @@
 			<!--n volumes-->
 			<li class="list-group-item disabled statistics" aria-disabled="true">
 				<div class="input-group flex-nowrap">
-					<span class="input-group-text" >N. Volumes</span>
+					<span class="input-group-text">N. Volumes</span>
 					<input
 						id="inputNVol"
 						type="number"
@@ -48,7 +48,7 @@
 			<!--volumes_bought-->
 			<li class="list-group-item disabled statistics" aria-disabled="true">
 				<div class="input-group flex-nowrap">
-					<span class="input-group-text" >Vol. Bought</span>
+					<span class="input-group-text">Vol. Bought</span>
 					<input
 						id="inputBought"
 						type="number"
@@ -57,14 +57,14 @@
 						aria-describedby="addon-wrapping"
 						v-model="series.volumes_bought"
 					/>
-					<span class="input-group-text" > {{ getVolumesBought100 }} %</span>
+					<span class="input-group-text"> {{ getVolumesBought100 }} %</span>
 				</div>
 			</li>
 
 			<!--volumes_read-->
 			<li class="list-group-item disabled statistics" aria-disabled="true">
 				<div class="input-group flex-nowrap">
-					<span class="input-group-text" >Vol. Read</span>
+					<span class="input-group-text">Vol. Read</span>
 					<input
 						id="inputRead"
 						type="number"
@@ -72,20 +72,20 @@
 						aria-describedby="addon-wrapping"
 						v-model="series.volumes_read"
 					/>
-					<span class="input-group-text" > {{ getVolumesReadx100 }} %</span>
+					<span class="input-group-text"> {{ getVolumesReadx100 }} %</span>
 				</div>
 			</li>
 
 			<!--missed_volumes-->
 			<li class="list-group-item disabled statistics-x100" aria-disabled="true">
 				<div class="input-group flex-nowrap">
-					<span class="input-group-text" >Missed Volumes</span>
-					<span class="form-control" aria-describedby="addon-wrapping" >{{getMissedVolumes}}</span>
-					<span class="input-group-text" > {{ getMissedVolumesx100 }} %</span>
+					<span class="input-group-text">Missed Volumes</span>
+					<span class="form-control" aria-describedby="addon-wrapping">{{ getMissedVolumes }}</span>
+					<span class="input-group-text"> {{ getMissedVolumesx100 }} %</span>
 				</div>
 			</li>
 		</ul>
-		
+
 		<Notification ref="notification" />
 	</div>
 </template>
@@ -131,7 +131,7 @@ export default {
 		},
 		getMissedVolumes(): number {
 			return this.series.n_volumes - this.series.volumes_bought;
-		},
+		}
 	},
 	methods: {
 		async getDataSeries() {
@@ -140,7 +140,7 @@ export default {
 				return this.isAuthenticated();
 			});
 		},
-		
+
 		edit(disabled = false) {
 			this.changeEditIcon();
 			let statisticsElements = document.getElementsByClassName('statistics');
