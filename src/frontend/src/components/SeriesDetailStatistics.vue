@@ -29,11 +29,11 @@
 			</i>
 		</div>
 
-		<ul class="list-group mt-2">
+		<ul class="list-group mt-2 pb-3">
 			<!--n volumes-->
 			<li class="list-group-item disabled statistics" aria-disabled="true">
 				<div class="input-group flex-nowrap">
-					<span class="input-group-text" id="addon-wrapping">N. Volumes</span>
+					<span class="input-group-text">N. Volumes</span>
 					<input
 						id="inputNVol"
 						type="number"
@@ -48,7 +48,7 @@
 			<!--volumes_bought-->
 			<li class="list-group-item disabled statistics" aria-disabled="true">
 				<div class="input-group flex-nowrap">
-					<span class="input-group-text" id="addon-wrapping">Vol. Bought</span>
+					<span class="input-group-text">Vol. Bought</span>
 					<input
 						id="inputBought"
 						type="number"
@@ -57,13 +57,14 @@
 						aria-describedby="addon-wrapping"
 						v-model="series.volumes_bought"
 					/>
+					<span class="input-group-text"> {{ getVolumesBought100 }} %</span>
 				</div>
 			</li>
 
 			<!--volumes_read-->
 			<li class="list-group-item disabled statistics" aria-disabled="true">
 				<div class="input-group flex-nowrap">
-					<span class="input-group-text" id="addon-wrapping">Vol. Read</span>
+					<span class="input-group-text">Vol. Read</span>
 					<input
 						id="inputRead"
 						type="number"
@@ -71,61 +72,20 @@
 						aria-describedby="addon-wrapping"
 						v-model="series.volumes_read"
 					/>
+					<span class="input-group-text"> {{ getVolumesReadx100 }} %</span>
 				</div>
 			</li>
 
 			<!--missed_volumes-->
 			<li class="list-group-item disabled statistics-x100" aria-disabled="true">
 				<div class="input-group flex-nowrap">
-					<span class="input-group-text" id="addon-wrapping">Missed Volumes</span>
-					<input
-						type="number"
-						class="form-control"
-						aria-describedby="addon-wrapping"
-						:value="getMissedVolumes()"
-					/>
-				</div>
-			</li>
-
-			<!--volumes_read %-->
-			<li class="list-group-item disabled statistics-x100" aria-disabled="true">
-				<div class="input-group flex-nowrap">
-					<span class="input-group-text" id="addon-wrapping">Vol. Read %</span>
-					<input
-						type="text"
-						class="form-control"
-						aria-describedby="addon-wrapping"
-						:value="getVolumesReadx100() + '%'"
-					/>
-				</div>
-			</li>
-
-			<!--volumes_bought %-->
-			<li class="list-group-item disabled statistics-x100" aria-disabled="true">
-				<div class="input-group flex-nowrap">
-					<span class="input-group-text" id="addon-wrapping">Vol. Bought %</span>
-					<input
-						type="text"
-						class="form-control"
-						aria-describedby="addon-wrapping"
-						:value="getVolumesBought100() + '%'"
-					/>
-				</div>
-			</li>
-
-			<!--missed_volumes %-->
-			<li class="list-group-item disabled statistics-x100" aria-disabled="true">
-				<div class="input-group flex-nowrap">
-					<span class="input-group-text" id="addon-wrapping">Missed Volumes %</span>
-					<input
-						type="text"
-						class="form-control"
-						aria-describedby="addon-wrapping"
-						:value="getMissedVolumesx100() + '%'"
-					/>
+					<span class="input-group-text">Missed Volumes</span>
+					<span class="form-control" aria-describedby="addon-wrapping">{{ getMissedVolumes }}</span>
+					<span class="input-group-text"> {{ getMissedVolumesx100 }} %</span>
 				</div>
 			</li>
 		</ul>
+
 		<Notification ref="notification" />
 	</div>
 </template>
@@ -159,13 +119,7 @@ export default {
 		Notification,
 		spinnerLoading
 	},
-	methods: {
-		async getDataSeries() {
-			return apiService(`${endpoints.series}${this.slug}/`).then((data: Series) => {
-				this.series = data;
-				return this.isAuthenticated();
-			});
-		},
+	computed: {
 		getVolumesReadx100(): string {
 			return ((100 / this.series.n_volumes) * this.series.volumes_read).toFixed(2);
 		},
@@ -173,11 +127,20 @@ export default {
 			return ((100 / this.series.n_volumes) * this.series.volumes_bought).toFixed(2);
 		},
 		getMissedVolumesx100(): string {
-			return ((100 / this.series.n_volumes) * this.getMissedVolumes()).toFixed(2);
+			return ((100 / this.series.n_volumes) * this.getMissedVolumes).toFixed(2);
 		},
 		getMissedVolumes(): number {
 			return this.series.n_volumes - this.series.volumes_bought;
+		}
+	},
+	methods: {
+		async getDataSeries() {
+			return apiService(`${endpoints.series}${this.slug}/`).then((data: Series) => {
+				this.series = data;
+				return this.isAuthenticated();
+			});
 		},
+
 		edit(disabled = false) {
 			this.changeEditIcon();
 			let statisticsElements = document.getElementsByClassName('statistics');
