@@ -232,7 +232,7 @@ export default {
 		toggle(index: number, is_publisher = false, is_sortByList = false) {
 			if (is_publisher) {
 				this.publishersList[index].applied = !this.publishersList[index].applied;
-				this.showClearButton = this.publishersList.some((publisher) => publisher.applied);
+				this.hideClearButtonOnCreated();
 				return;
 			}
 
@@ -240,7 +240,7 @@ export default {
 				if (index == 0) this.sortByList[1].applied = false;
 				if (index == 1) this.sortByList[0].applied = false;
 				this.sortByList[index].applied = !this.sortByList[index].applied;
-				this.showClearButton = this.sortByList.some((sbl) => sbl.applied);
+				this.hideClearButtonOnCreated();
 				return;
 			}
 
@@ -252,7 +252,7 @@ export default {
 				this.publishersList.map((p) => (p.applied = false));
 				this.sortByList.map((p) => (p.applied = false));
 			} else this.types[index].applied = !this.types[index].applied;
-			this.showClearButton = this.types.some((type) => type.applied);
+			this.hideClearButtonOnCreated();
 		},
 		getLogo() {
 			return `${document.location.origin}/media/icon.png`;
@@ -269,6 +269,11 @@ export default {
 				this.$route.query.purchased_at != undefined
 			)
 				this.showClearButton = true;
+		},
+		hideClearButtonOnCreated() {
+			this.showClearButton = this.types
+				.concat(this.publishersList, this.sortByList)
+				.some((a) => a.applied);
 		}
 	},
 	created() {
