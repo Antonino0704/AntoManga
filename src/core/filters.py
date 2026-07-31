@@ -42,4 +42,18 @@ def filters(queryset, request):
         seriesObjects = seriesObjects.filter(
             name__contains=request.query_params["filterbyname"]
         )
+
+    if "purchased_at" in request.query_params:
+        if (
+            request.query_params["purchased_at"] == "desc"
+            or request.query_params["purchased_at"] == "asc"
+        ):
+            order = (
+                "purchased_at"
+                if request.query_params["purchased_at"] == "asc"
+                else "-purchased_at"
+            )
+            seriesObjects = seriesObjects.order_by(order)
+            seriesObjects = seriesObjects.exclude(purchased_at=None)
+
     return seriesObjects

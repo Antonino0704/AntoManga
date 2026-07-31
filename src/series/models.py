@@ -22,6 +22,7 @@ class Series(models.Model):
     missed_volumes = models.IntegerField()
     volumes_read = models.IntegerField()
     is_discontinued = models.BooleanField(default=False)
+    purchased_at = models.DateField(null=True)
     publisher = models.ForeignKey(
         Publisher, on_delete=models.PROTECT, related_name="series"
     )

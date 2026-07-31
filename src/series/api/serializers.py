@@ -13,6 +13,7 @@ class TypologySerializer(serializers.ModelSerializer):
 class SeriesSerializer(serializers.ModelSerializer):
     slug = serializers.SlugField(read_only=True)
     missed_volumes = serializers.IntegerField(read_only=True)
+    purchased_at = serializers.DateField(read_only=True)
     typology_name = serializers.CharField(source="typology.name", read_only=True)
     publisher_name = serializers.CharField(source="publisher.name", read_only=True)
     publisher_slug = serializers.CharField(source="publisher.slug", read_only=True)

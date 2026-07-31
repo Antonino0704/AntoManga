@@ -14,6 +14,7 @@ export interface Series {
 	typology: number;
 	publisher: string;
 	is_discontinued: Boolean;
+	purchased_at: String;
 }
 
 export interface SeriesViewsetInstance extends Series {

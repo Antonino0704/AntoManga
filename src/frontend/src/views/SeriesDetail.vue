@@ -23,12 +23,14 @@
 							<small class="text-body-secondary">
 								Publisher:
 								<router-link
-									class="text-body-prmary"
 									:to="{ name: 'PublisherDetail', params: { slug: series.publisher_slug } }"
 								>
 									{{ series.publisher_name }}</router-link
 								></small
 							>
+							<small class="text-body-secondary">
+								<p v-if="series.purchased_at">Latest purchase: {{ series.purchased_at }}</p>
+							</small>
 						</p>
 						<p class="card-text">
 							<small class="text-body-secondary"
@@ -126,6 +128,10 @@ export default {
 			window.scrollTo(0, 0);
 		},
 		updateData(volumes_read: number, volumes_bought: number) {
+			if (volumes_bought > this.series.volumes_bought)
+				this.series.purchased_at = new Date().toISOString().slice(0, 10);
+			else if (volumes_bought < this.series.volumes_bought) this.series.purchased_at = '';
+
 			this.series.volumes_read = volumes_read;
 			this.series.volumes_bought = volumes_bought;
 		},
