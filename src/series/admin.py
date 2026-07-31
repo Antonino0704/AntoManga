@@ -18,14 +18,14 @@ class SeriesAdmin(admin.ModelAdmin):
         "owner_display",
     ]
 
-    list_filter = ["owner", "publisher", "typology", "is_discontinued"]
+    list_filter = ["owner", "publisher", "typology", "purchased_at", "is_discontinued"]
     search_fields = ["name"]
 
     fieldsets = (
         (
             None,
             {
-                "fields": ("name", "image", "is_discontinued"),
+                "fields": ("name", "image", "is_discontinued", "purchased_at"),
             },
         ),
         (

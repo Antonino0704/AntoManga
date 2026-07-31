@@ -13,17 +13,57 @@
 						data-bs-auto-close="outside"
 						aria-expanded="false"
 					>
-						Filters
+						<i class="bi bi-filter"></i>
 					</button>
 					<ul class="dropdown-menu">
+						<li>
+							<i
+								class="dropdown-item bi bi-x-circle text-danger"
+								v-if="showClearButton"
+								@click="toggle(-1)"
+							>
+								Clear</i
+							>
+						</li>
+						<hr class="dropdown-divider" v-if="showClearButton" />
+						<li>
+							<a
+								class="dropdown-item border-bottom bi bi-arrow-return-right text-primary-emphasis"
+								@click="showTypes = !showTypes"
+								>TYPES</a
+							>
+						</li>
 						<li v-for="(type, index) in types" :key="type.id" @click="toggle(index)">
-							<a class="dropdown-item"
+							<a class="dropdown-item" v-show="showTypes"
 								>{{ type.name }} <i class="bi bi-check-lg text-success" v-show="type.applied"></i
 							></a>
 						</li>
-						<hr />
-						<li v-for="(type, index) in publishersList" :key="type.id" @click="toggle(index, true)">
-							<a class="dropdown-item"
+
+						<li>
+							<hr class="dropdown-divider" v-show="showTypes" />
+							<a
+								class="dropdown-item border-bottom bi bi-arrow-return-right text-primary-emphasis"
+								@click="showPublishers = !showPublishers"
+								>PUBLISHERS</a
+							>
+						</li>
+						<li
+							v-for="(publisher, index) in publishersList"
+							:key="publisher.id"
+							@click="toggle(index, true)"
+						>
+							<a class="dropdown-item" v-show="showPublishers"
+								>{{ publisher.name }}
+								<i class="bi bi-check-lg text-success" v-show="publisher.applied"></i
+							></a>
+						</li>
+						<hr class="dropdown-divider" v-show="showPublishers" />
+						<li
+							v-for="(type, index) in sortByList"
+							:key="type.id"
+							@click="toggle(index, false, true)"
+						>
+							<a :class="'dropdown-item ' + type.class"
 								>{{ type.name }} <i class="bi bi-check-lg text-success" v-show="type.applied"></i
 							></a>
 						</li>
@@ -99,15 +139,21 @@ export default {
 	data() {
 		return {
 			types: [
-				{ id: 0, name: 'Clear', applied: false },
 				{ id: -1, name: 'Incomplete', applied: false },
 				{ id: -2, name: 'Ready To Read', applied: false },
 				{ id: -3, name: 'Exclude Discontinued Series', applied: false },
 				{ id: -4, name: 'Discontinued Series Only', applied: false }
 			] as Array<Typev2>,
+			sortByList: [
+				{ id: 1, name: ' Most Recent', applied: false, class: 'bi bi-sort-down' },
+				{ id: 2, name: ' Least Recent', applied: false, class: 'bi bi-sort-up' }
+			],
 			publishersList: [] as Array<Typev2>,
 			publishers: 0,
-			user: {} as User
+			user: {} as User,
+			showTypes: false,
+			showPublishers: false,
+			showClearButton: false
 		};
 	},
 	computed: {
@@ -138,6 +184,15 @@ export default {
 						document.querySelector<HTMLInputElement>('#searchBar')!.value = String(
 							this.$route.query.filterbyname
 						);
+					if (this.$route.query.purchased_at != undefined) {
+						if (this.$route.query.purchased_at == 'desc') {
+							this.sortByList[0].applied = true;
+							this.sortByList[1].applied = false;
+						} else {
+							this.sortByList[0].applied = false;
+							this.sortByList[1].applied = true;
+						}
+					}
 				});
 		},
 		getPublishersList() {
@@ -170,22 +225,34 @@ export default {
 				'filterEvent',
 				this.types.filter((type) => type.applied).map((t) => t.id),
 				document.querySelector<HTMLInputElement>('#searchBar')!.value.toLowerCase(),
-				this.publishersList.filter((publisher) => publisher.applied).map((p) => p.id)
+				this.publishersList.filter((publisher) => publisher.applied).map((p) => p.id),
+				this.sortByList.filter((sbl) => sbl.applied).map((s) => s.id)
 			);
 		},
-		toggle(index: number, is_publisher = false) {
+		toggle(index: number, is_publisher = false, is_sortByList = false) {
 			if (is_publisher) {
 				this.publishersList[index].applied = !this.publishersList[index].applied;
+				this.showClearButton = this.publishersList.some((publisher) => publisher.applied);
+				return;
+			}
+
+			if (is_sortByList) {
+				if (index == 0) this.sortByList[1].applied = false;
+				if (index == 1) this.sortByList[0].applied = false;
+				this.sortByList[index].applied = !this.sortByList[index].applied;
+				this.showClearButton = this.sortByList.some((sbl) => sbl.applied);
 				return;
 			}
 
 			if (index == 3) this.types[4].applied = false;
 			if (index == 4) this.types[3].applied = false;
 
-			if (index == 0) {
+			if (index == -1) {
 				this.types.map((t) => (t.applied = false));
 				this.publishersList.map((p) => (p.applied = false));
+				this.sortByList.map((p) => (p.applied = false));
 			} else this.types[index].applied = !this.types[index].applied;
+			this.showClearButton = this.types.some((type) => type.applied);
 		},
 		getLogo() {
 			return `${document.location.origin}/media/icon.png`;
@@ -194,12 +261,21 @@ export default {
 			apiService(endpoints.userMe, 'GET').then((response: User) => {
 				this.user = response;
 			});
+		},
+		showClearButtonOnCreated() {
+			if (
+				this.$route.query.publisher != undefined ||
+				this.$route.query.type != undefined ||
+				this.$route.query.purchased_at != undefined
+			)
+				this.showClearButton = true;
 		}
 	},
 	created() {
 		this.getTypes();
 		this.getPublishersList();
 		this.getPublishersLength();
+		this.showClearButtonOnCreated();
 		this.isAuthenticated();
 	}
 };

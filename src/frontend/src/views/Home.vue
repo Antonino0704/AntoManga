@@ -43,6 +43,7 @@
 									></i>
 								</h5>
 								<p class="card-text fst-italic">Type: {{ serie.typology_name }}</p>
+								<p class="card-text" v-if="serie.purchased_at">Latest purchase: {{ serie.purchased_at }}</p>
 
 								<router-link
 									:to="{
@@ -212,18 +213,28 @@ export default {
 					}
 				}
 
-				this.changeUrl(types, search, publishers);
+				let sortByList: number[] = [];
+				if (this.$route.query.purchased_at != undefined) {
+					sortByList = Array.of(this.$route.query.purchased_at == 'desc' ? 1 : 2);
+				}
+
+				this.changeUrl(types, search, publishers, sortByList);
 				return this.setLayout();
 			}
 		},
-		changeUrl(types: number[], search: string = '', publishers: number[]) {
+		/**
+		 *
+		 * This method is used to create a URL for the frontend
+		 */
+		changeUrl(types: number[], search: string = '', publishers: number[], sortByList: number[]) {
 			if (this.next.nextCard != null) {
 				this.$router.replace({
 					query: {
 						dataset: Number(this.next.nextCard.replace(/\S*page=/g, '').replace(/&\S*/g, '')) - 1,
 						type: types.length != 0 ? types : undefined,
 						filterbyname: search != '' ? search : undefined,
-						publisher: publishers.length != 0 ? publishers : undefined
+						publisher: publishers.length != 0 ? publishers : undefined,
+						purchased_at: sortByList.length != 0 ? (sortByList[0] == 1 ? 'desc' : 'asc') : undefined
 					}
 				});
 			} else {
@@ -232,15 +243,30 @@ export default {
 						dataset: -1,
 						type: types.length != 0 ? types : undefined,
 						filterbyname: search != '' ? search : undefined,
-						publisher: publishers.length != 0 ? publishers : undefined
+						publisher: publishers.length != 0 ? publishers : undefined,
+						purchased_at: sortByList.length != 0 ? (sortByList[0] == 1 ? 'desc' : 'asc') : undefined
 					}
 				});
 			}
 		},
-		async search(types: number[], searchBarText: string, publishers: number[]) {
+		/**
+		 *
+		 * This method sends the search request to the backend
+		 */
+		async search(
+			types: number[],
+			searchBarText: string,
+			publishers: number[],
+			sortByList: number[]
+		) {
 			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
 
-			if (types.length == 0 && searchBarText === '' && publishers.length == 0) {
+			if (
+				types.length == 0 &&
+				searchBarText === '' &&
+				publishers.length == 0 &&
+				sortByList.length == 0
+			) {
 				await this.$router.replace({
 					query: {}
 				});
@@ -254,12 +280,16 @@ export default {
 
 			if (publishers.length != 0) url = `${url}&${this.createPubslisherUrl(publishers)}`;
 
+			if (sortByList.length != 0) url = `${url}&${this.createOrderByUrl(sortByList)}`;
+
 			let imageUrl =
 				types.length == 0
 					? `${endpoints.imgSeries}?filterbyname=${searchBarText}`
 					: `${endpoints.imgSeries}?${this.createTypeUrl(types)}&filterbyname=${searchBarText}`;
 
 			if (publishers.length != 0) imageUrl = `${imageUrl}&${this.createPubslisherUrl(publishers)}`;
+
+			if (sortByList.length != 0) imageUrl = `${imageUrl}&${this.createOrderByUrl(sortByList)}`;
 
 			apiService(url)
 				.then((data: RequestObject) => {
@@ -277,11 +307,16 @@ export default {
 							}
 						})
 						.then(() => {
-							this.changeUrl(types, searchBarText, publishers);
+							this.changeUrl(types, searchBarText, publishers, sortByList);
 							return this.setLayout();
 						});
 				});
 		},
+		/**
+		 * Similar to method search,
+		 * it creates the filter URL for requests to be sent to the backend
+		 * when method getDataSeries is invoked at created
+		 */
 		filter() {
 			let filter = '?';
 
@@ -306,6 +341,10 @@ export default {
 					filter += 'publisher=' + this.$route.query.publisher;
 				}
 			}
+
+			if (this.$route.query.purchased_at != undefined) {
+				filter += 'purchased_at=' + this.$route.query.purchased_at;
+			}
 			return filter;
 		},
 		isAuthenticated() {
@@ -328,6 +367,9 @@ export default {
 				url += `%2C${publisher}`;
 			});
 			return url;
+		},
+		createOrderByUrl(order: number[]) {
+			return `purchased_at=${order[0] == 1 ? 'desc' : 'asc'}`;
 		}
 	},
 	async created() {
