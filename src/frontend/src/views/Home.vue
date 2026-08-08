@@ -172,7 +172,7 @@ export default {
 				this.gridClick(true);
 			}
 			this.readReadyToReadCockie();
-			document.querySelector('span')!.className = 'badge rounded-pill text-bg-info me-2';
+			document.querySelectorAll('span')[1]!.className = 'badge rounded-pill text-bg-info me-2';
 			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 		},
 		mouseEnter(id: string) {

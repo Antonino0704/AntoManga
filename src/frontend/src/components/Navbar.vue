@@ -1,131 +1,133 @@
 <template>
-	<div class="navabar row justify-content-center">
-		<div class="col-auto">
-			<nav class="navbar navbar-expand-lg bg-body-tertiary">
+	<div class="row justify-content-center">
+		<nav class="navbar navbar-expand-lg bg-body-tertiary">
+			<div class="container-fluid">
 				<a class="navbar-brand ms-3 mb-2" href="/">
 					<img :src="getLogo()" width="30" height="30" alt="logo" />
 				</a>
-				<div class="btn-group me-3 dropstart">
-					<button
-						class="btn btn-outline-secondary dropdown-toggle"
-						type="button"
-						data-bs-toggle="dropdown"
-						data-bs-auto-close="outside"
-						aria-expanded="false"
-					>
-						<i class="bi bi-filter"></i>
-					</button>
-					<ul class="dropdown-menu">
-						<li>
-							<i
-								class="dropdown-item bi bi-x-circle text-danger"
-								v-if="showClearButton"
-								@click="toggle(-1)"
-							>
-								Clear</i
-							>
-						</li>
-						<hr class="dropdown-divider" v-if="showClearButton" />
-						<li>
-							<a
-								class="dropdown-item border-bottom bi bi-arrow-return-right text-primary-emphasis"
-								@click="showTypes = !showTypes"
-								>TYPES</a
-							>
-						</li>
-						<li v-for="(type, index) in types" :key="type.id" @click="toggle(index)">
-							<a class="dropdown-item" v-show="showTypes"
-								>{{ type.name }} <i class="bi bi-check-lg text-success" v-show="type.applied"></i
-							></a>
-						</li>
-
-						<li>
-							<hr class="dropdown-divider" v-show="showTypes" />
-							<a
-								class="dropdown-item border-bottom bi bi-arrow-return-right text-primary-emphasis"
-								@click="showPublishers = !showPublishers"
-								>PUBLISHERS</a
-							>
-						</li>
-						<li
-							v-for="(publisher, index) in publishersList"
-							:key="publisher.id"
-							@click="toggle(index, true)"
-						>
-							<a class="dropdown-item" v-show="showPublishers"
-								>{{ publisher.name }}
-								<i class="bi bi-check-lg text-success" v-show="publisher.applied"></i
-							></a>
-						</li>
-						<hr class="dropdown-divider" v-show="showPublishers" />
-						<li
-							v-for="(type, index) in sortByList"
-							:key="type.id"
-							@click="toggle(index, false, true)"
-						>
-							<a :class="'dropdown-item ' + type.class"
-								>{{ type.name }} <i class="bi bi-check-lg text-success" v-show="type.applied"></i
-							></a>
-						</li>
-					</ul>
-				</div>
-
-				<div class="d-flex ps-2" role="search">
-					<input
-						id="searchBar"
-						class="form-control me-2"
-						type="search"
-						placeholder="Search"
-						aria-label="Search"
-						@keydown.enter="search()"
-					/>
-					<button class="btn btn-outline-success" @click="search()">Search</button>
-				</div>
-
-				<li class="nav-item dropdown btn btn-outline-secondary me-2 ms-1 mt-2 mb-2">
-					<a
-						class="nav-link dropdown-toggle"
-						href="#"
-						role="button"
-						data-bs-toggle="dropdown"
-						aria-expanded="false"
-					>
-						Menu
-					</a>
-					<ul class="dropdown-menu">
-						<li>
-							<router-link :to="{ name: 'TypeView' }" type="button" class="dropdown-item">
+				<button
+					class="navbar-toggler"
+					type="button"
+					data-bs-toggle="collapse"
+					data-bs-target="#navbarSupportedContent"
+					aria-controls="navbarSupportedContent"
+					aria-expanded="false"
+					aria-label="Toggle navigation"
+				>
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+						<li class="nav-item me-2">
+							<router-link :to="{ name: 'TypeView' }" type="button" class="badge text-bg-secondary">
 								Types
 							</router-link>
 						</li>
-						<li>
-							<router-link :to="{ name: 'PublishersRank' }" type="button" class="dropdown-item">
+						<li class="nav-item me-2">
+							<router-link
+								:to="{ name: 'PublishersRank' }"
+								type="button"
+								class="badge text-bg-secondary"
+							>
 								Publishers Rank
 							</router-link>
 						</li>
-						<li v-if="user.is_authenticated"><hr class="dropdown-divider" /></li>
-						<li v-if="user.is_authenticated">
+						<li class="nav-item me-2" v-if="user.is_authenticated">
 							<router-link
 								:to="{ name: 'AddPublisher' }"
 								type="button"
-								class="dropdown-item bi bi-plus-circle"
+								class="badge text-bg-secondary bi bi-plus-circle"
 							>
 								New Publisher
 							</router-link>
 						</li>
-						<li v-if="isTypesPubslihers">
+						<li class="nav-item me-2" v-if="isTypesPubslihers">
 							<router-link
 								:to="{ name: 'AddSeries' }"
 								type="button"
-								class="dropdown-item bi bi-plus-circle"
+								class="badge text-bg-secondary bi bi-plus-circle"
 							>
 								New Series
 							</router-link>
 						</li>
 					</ul>
-				</li>
-			</nav>
-		</div>
+					<li class="d-flex dropdown">
+						<a
+							class="dropdown-toggle btn btn-outline-secondary mb-2 mb-lg-0"
+							type="button"
+							data-bs-toggle="dropdown"
+							data-bs-auto-close="outside"
+							aria-expanded="false"
+							><i class="bi bi-filter"></i>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<i
+									class="dropdown-item bi bi-x-circle text-danger"
+									v-if="showClearButton"
+									@click="toggle(-1)"
+								>
+									Clear</i
+								>
+							</li>
+							<hr class="dropdown-divider" v-if="showClearButton" />
+							<li>
+								<a
+									class="dropdown-item border-bottom bi bi-arrow-return-right text-primary-emphasis"
+									@click="showTypes = !showTypes"
+									>TYPES</a
+								>
+							</li>
+							<li v-for="(type, index) in types" :key="type.id" @click="toggle(index)">
+								<a class="dropdown-item" v-show="showTypes"
+									>{{ type.name }} <i class="bi bi-check-lg text-success" v-show="type.applied"></i
+								></a>
+							</li>
+
+							<li>
+								<hr class="dropdown-divider" v-show="showTypes" />
+								<a
+									class="dropdown-item border-bottom bi bi-arrow-return-right text-primary-emphasis"
+									@click="showPublishers = !showPublishers"
+									>PUBLISHERS</a
+								>
+							</li>
+							<li
+								v-for="(publisher, index) in publishersList"
+								:key="publisher.id"
+								@click="toggle(index, true)"
+							>
+								<a class="dropdown-item" v-show="showPublishers"
+									>{{ publisher.name }}
+									<i class="bi bi-check-lg text-success" v-show="publisher.applied"></i
+								></a>
+							</li>
+							<hr class="dropdown-divider" v-show="showPublishers" />
+							<li
+								v-for="(type, index) in sortByList"
+								:key="type.id"
+								@click="toggle(index, false, true)"
+							>
+								<a :class="'dropdown-item ' + type.class"
+									>{{ type.name }} <i class="bi bi-check-lg text-success" v-show="type.applied"></i
+								></a>
+							</li>
+						</ul>
+					</li>
+					<div class="d-flex ps-2" role="search">
+						<input
+							id="searchBar"
+							class="form-control me-2"
+							type="search"
+							placeholder="Search"
+							aria-label="Search"
+							@keydown.enter="search()"
+						/>
+						<button class="btn btn-outline-success" @click="search()">Search</button>
+					</div>
+				</div>
+			</div>
+		</nav>
 	</div>
 </template>
 
@@ -287,9 +289,9 @@ export default {
 </script>
 
 <style>
-.navabar {
+/* .navabar {
 	list-style-type: none;
-}
+} */
 
 .select-style {
 	font-family: 'Times New Roman', Times, serif;
