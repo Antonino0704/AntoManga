@@ -4,7 +4,9 @@
 			<div class="container-fluid">
 				<a class="navbar-brand ms-3 mb-2" href="/">
 					<img :src="getLogo()" width="30" height="30" alt="logo" />
+					AntoManga
 				</a>
+
 				<button
 					class="navbar-toggler"
 					type="button"
@@ -18,12 +20,12 @@
 				</button>
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-						<li class="nav-item me-2">
+						<li class="nav-item me-2 mb-2">
 							<router-link :to="{ name: 'TypeView' }" type="button" class="badge text-bg-secondary">
 								Types
 							</router-link>
 						</li>
-						<li class="nav-item me-2">
+						<li class="nav-item me-2 mb-2">
 							<router-link
 								:to="{ name: 'PublishersRank' }"
 								type="button"
@@ -32,7 +34,7 @@
 								Publishers Rank
 							</router-link>
 						</li>
-						<li class="nav-item me-2" v-if="user.is_authenticated">
+						<li class="nav-item me-2 mb-2" v-if="user.is_authenticated">
 							<router-link
 								:to="{ name: 'AddPublisher' }"
 								type="button"
@@ -41,7 +43,7 @@
 								New Publisher
 							</router-link>
 						</li>
-						<li class="nav-item me-2" v-if="isTypesPubslihers">
+						<li class="nav-item me-2 mb-2" v-if="isTypesPubslihers">
 							<router-link
 								:to="{ name: 'AddSeries' }"
 								type="button"
@@ -114,17 +116,17 @@
 							</li>
 						</ul>
 					</li>
-					<div class="d-flex ps-2" role="search">
-						<input
-							id="searchBar"
-							class="form-control me-2"
-							type="search"
-							placeholder="Search"
-							aria-label="Search"
-							@keydown.enter="search()"
-						/>
-						<button class="btn btn-outline-success" @click="search()">Search</button>
-					</div>
+				</div>
+				<div class="d-flex ps-2 pt-2 pe-2 pt-lg-0" role="search">
+					<input
+						id="searchBar"
+						class="form-control me-2"
+						type="search"
+						placeholder="Search"
+						aria-label="Search"
+						@keydown.enter="search()"
+					/>
+					<button class="btn btn-outline-success" @click="search()">Search</button>
 				</div>
 			</div>
 		</nav>

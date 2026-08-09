@@ -44,7 +44,9 @@
 								</h5>
 								<p class="card-text fst-italic">Type: {{ serie.typology_name }}</p>
 								<p class="card-text" v-if="serie.purchased_at">
-									Latest purchase: {{ serie.purchased_at }}
+									<small class="text-body-secondary"
+										>Latest purchase: {{ serie.purchased_at }}</small
+									>
 								</p>
 
 								<router-link
