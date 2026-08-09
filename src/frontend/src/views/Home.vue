@@ -44,7 +44,9 @@
 								</h5>
 								<p class="card-text fst-italic">Type: {{ serie.typology_name }}</p>
 								<p class="card-text" v-if="serie.purchased_at">
-									Latest purchase: {{ serie.purchased_at }}
+									<small class="text-body-secondary"
+										>Latest purchase: {{ serie.purchased_at }}</small
+									>
 								</p>
 
 								<router-link
@@ -172,7 +174,7 @@ export default {
 				this.gridClick(true);
 			}
 			this.readReadyToReadCockie();
-			document.querySelector('span')!.className = 'badge rounded-pill text-bg-info me-2';
+			document.querySelectorAll('span')[1]!.className = 'badge rounded-pill text-bg-info me-2';
 			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 		},
 		mouseEnter(id: string) {

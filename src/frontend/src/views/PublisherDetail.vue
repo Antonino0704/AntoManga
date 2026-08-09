@@ -245,7 +245,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .publisher-detail {
 	text-align: justify;
 }
