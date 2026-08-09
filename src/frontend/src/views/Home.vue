@@ -347,7 +347,7 @@ export default {
 			}
 
 			if (this.$route.query.purchased_at != undefined) {
-				filter += 'purchased_at=' + this.$route.query.purchased_at;
+				filter += '&purchased_at=' + this.$route.query.purchased_at;
 			}
 			return filter;
 		},
