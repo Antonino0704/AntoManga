@@ -157,7 +157,8 @@ export default {
 					document.querySelector<HTMLOptionElement>(
 						`#IDPublisher-${this.series.publisher}`
 					)!.selected = true;
-					document.querySelector('#publisherSelect')!.className = 'form-select form-select-sm w-auto d-inline-block';
+					document.querySelector('#publisherSelect')!.className =
+						'form-select form-select-sm w-auto d-inline-block';
 				});
 		},
 		async getImageSeries() {

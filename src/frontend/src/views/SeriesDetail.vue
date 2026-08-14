@@ -9,7 +9,10 @@
 			v-if="user.is_authenticated"
 			>Add A New Series
 		</router-link>
-		<div class="card mb-3 card-border-sm" style="max-width: 540px; margin-left: auto; margin-right: auto">
+		<div
+			class="card mb-3 card-border-sm"
+			style="max-width: 540px; margin-left: auto; margin-right: auto"
+		>
 			<div class="row g-0">
 				<div class="col-8 offset-2 col-md-4 offset-md-0 text-center">
 					<img :src="imageSeries" class="img-fluid rounded-start" />
