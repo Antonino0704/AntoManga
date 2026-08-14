@@ -6,7 +6,10 @@
 					<img :src="getLogo()" width="30" height="30" alt="logo" />
 					AntoManga
 				</a>
-
+				<MobileSearchComponent
+					class="d-block d-sm-block d-md-block d-lg-none"
+					@mobileSearch="search"
+				/>
 				<button
 					class="navbar-toggler"
 					type="button"
@@ -115,18 +118,22 @@
 								></a>
 							</li>
 						</ul>
+						<i
+							class="bi bi-funnel-fill fs-5 ms-2 d-block d-sm-block d-md-block d-lg-none"
+							@click="search()"
+						></i>
+						<div class="d-flex ps-2 pt-2 pe-3 pt-lg-0 d-none d-md-none d-lg-flex" role="search">
+							<input
+								id="searchBar"
+								class="form-control me-2"
+								type="search"
+								placeholder="Search"
+								aria-label="Search"
+								@keydown.enter="search()"
+							/>
+							<button class="btn btn-outline-success" @click="search()">Search</button>
+						</div>
 					</li>
-				</div>
-				<div class="d-flex ps-2 pt-2 pe-2 pt-lg-0" role="search">
-					<input
-						id="searchBar"
-						class="form-control me-2"
-						type="search"
-						placeholder="Search"
-						aria-label="Search"
-						@keydown.enter="search()"
-					/>
-					<button class="btn btn-outline-success" @click="search()">Search</button>
 				</div>
 			</div>
 		</nav>
@@ -137,6 +144,7 @@
 import { apiService } from '../utils/APIService';
 import type { Type, Typev2, Publisher, User } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
+import MobileSearchComponent from './MobileSearch.vue';
 
 export default {
 	name: 'NavBar',
@@ -157,8 +165,12 @@ export default {
 			user: {} as User,
 			showTypes: false,
 			showPublishers: false,
-			showClearButton: false
+			showClearButton: false,
+			test: false
 		};
+	},
+	components: {
+		MobileSearchComponent
 	},
 	computed: {
 		isTypesPubslihers() {
