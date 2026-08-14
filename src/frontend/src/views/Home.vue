@@ -148,33 +148,89 @@ export default {
 
 			if (localStorage.getItem('grid-cookie') && localStorage.getItem('grid-cookie') == 'true') {
 				if (nCard < 2) {
-					cardGroup!.classList.remove('row-cols-2', 'row-cols-md-3', 'row-cols-lg-4');
+					cardGroup!.classList.remove(
+						'row-cols-2',
+						'row-cols-md-2',
+						'row-cols-md-3',
+						'row-cols-lg-2',
+						'row-cols-lg-3',
+						'row-cols-lg-4'
+					);
 					cardGroup!.classList.add('row-cols-1', 'row-cols-md-1', 'row-cols-lg-1');
 				} else if (nCard < 3) {
-					cardGroup!.classList.remove('row-cols-md-1', 'row-cols-lg-1');
-					cardGroup!.classList.add('row-cols-md-2', 'row-cols-lg-2');
+					cardGroup!.classList.remove(
+						'row-cols-2',
+						'row-cols-md-1',
+						'row-cols-md-3',
+						'row-cols-lg-1',
+						'row-cols-lg-3',
+						'row-cols-lg-4'
+					);
+					cardGroup!.classList.add('row-cols-1', 'row-cols-md-2', 'row-cols-lg-2');
 				} else if (nCard < 4) {
-					cardGroup!.classList.remove('row-cols-lg-2');
-					cardGroup!.classList.add('row-cols-lg-3');
+					cardGroup!.classList.remove(
+						'row-cols-2',
+						'row-cols-md-1',
+						'row-cols-md-3',
+						'row-cols-lg-1',
+						'row-cols-lg-2',
+						'row-cols-lg-4'
+					);
+					cardGroup!.classList.add('row-cols-1', 'row-cols-md-2', 'row-cols-lg-3');
 				} else {
-					cardGroup!.classList.remove('row-cols-2', 'row-cols-md-3', 'row-cols-lg-4');
+					cardGroup!.classList.remove(
+						'row-cols-2',
+						'row-cols-md-1',
+						'row-cols-md-3',
+						'row-cols-lg-1',
+						'row-cols-lg-2',
+						'row-cols-lg-4'
+					);
 					cardGroup!.classList.add('row-cols-1', 'row-cols-md-2', 'row-cols-lg-3');
 				}
 				return;
 			}
 
 			if (nCard < 2) {
-				cardGroup!.classList.remove('row-cols-2', 'row-cols-md-3', 'row-cols-lg-4');
+				cardGroup!.classList.remove(
+					'row-cols-2',
+					'row-cols-md-2',
+					'row-cols-md-3',
+					'row-cols-lg-2',
+					'row-cols-lg-3',
+					'row-cols-lg-4'
+				);
 				cardGroup!.classList.add('row-cols-1', 'row-cols-md-1', 'row-cols-lg-1');
 			} else if (nCard < 3) {
-				cardGroup!.classList.remove('row-cols-1', 'row-cols-md-1', 'row-cols-lg-1');
+				cardGroup!.classList.remove(
+					'row-cols-1',
+					'row-cols-md-1',
+					'row-cols-md-3',
+					'row-cols-lg-1',
+					'row-cols-lg-3',
+					'row-cols-lg-4'
+				);
 				cardGroup!.classList.add('row-cols-2', 'row-cols-md-2', 'row-cols-lg-2');
 			} else if (nCard < 4) {
-				cardGroup!.classList.remove('row-cols-md-2', 'row-cols-lg-2');
-				cardGroup!.classList.add('row-cols-md-3', 'row-cols-lg-3');
+				cardGroup!.classList.remove(
+					'row-cols-1',
+					'row-cols-md-1',
+					'row-cols-md-2',
+					'row-cols-lg-1',
+					'row-cols-lg-2',
+					'row-cols-lg-4'
+				);
+				cardGroup!.classList.add('row-cols-2', 'row-cols-md-3', 'row-cols-lg-3');
 			} else {
-				cardGroup!.classList.remove('row-cols-lg-3');
-				cardGroup!.classList.add('row-cols-lg-4');
+				cardGroup!.classList.remove(
+					'row-cols-1',
+					'row-cols-md-1',
+					'row-cols-md-2',
+					'row-cols-lg-1',
+					'row-cols-lg-2',
+					'row-cols-lg-3'
+				);
+				cardGroup!.classList.add('row-cols-2', 'row-cols-md-3', 'row-cols-lg-4');
 			}
 		},
 		getReadyToReadClick(serie: SeriesViewsetInstance) {
