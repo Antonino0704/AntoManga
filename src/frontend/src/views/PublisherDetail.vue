@@ -55,7 +55,7 @@
 			</div>
 			<publisherStats :slug="slug" :seriesLength="seriesLength" v-if="publisher" />
 			<h5 class="mt-3">
-				{{ publisher.name?.toUpperCase() }}'s manga list
+				{{ publisher.name?.toUpperCase() }}'s list
 				<a
 					class="bi bi-share-fill ms-1 fs-6"
 					onclick="navigator.clipboard.writeText(window.location.href); return false;"

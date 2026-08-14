@@ -23,7 +23,7 @@
 					<div class="modal-body">
 						<toggleTheme />
 						<hr />
-						<i id="gridButton" class="bi bi-grid fs-5" @click="setGrid()"></i>
+						<i id="gridButton" class="bi bi-card-image fs-5" @click="setGrid()"></i>
 						<hr />
 						<a
 							type="button"
@@ -103,8 +103,8 @@ export default {
 			if (localStorage.getItem('grid-cookie')) {
 				this.grid = localStorage.getItem('grid-cookie') == 'true' ? false : true;
 				document.querySelector('#gridButton')!.className = !this.grid
-					? 'bi bi-card-image fs-5'
-					: 'bi bi-grid fs-5';
+					? 'bi bi-grid fs-5'
+					: 'bi bi-card-image fs-5';
 			}
 		},
 		getReadyToRead() {
@@ -117,7 +117,6 @@ export default {
 			}
 		},
 		setGrid() {
-			console.log(this.grid);
 			localStorage.setItem('grid-cookie', String(this.grid));
 			if (this.$route.name === 'Home') this.$router.go(0);
 			else this.gridClick();

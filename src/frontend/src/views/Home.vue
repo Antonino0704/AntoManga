@@ -17,17 +17,22 @@
 					</router-link>
 				</div>
 				<SearchNoResults message="it is so empty here" v-if="!seriesLength" class="mt-2" />
-				<div class="row">
-					<div colspan="2" class="list col mt-3" v-for="(serie, index) in series" :key="serie.id">
+				<div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4 mt-3 me-2 ms-2" id="cardGroup">
+					<div class="col" v-for="(serie, index) in series" :key="serie.id">
 						<div
 							:id="'cardid-' + serie.id"
-							class="card mt-2"
-							style="width: 18rem"
+							class="card card-border-sm"
 							@mouseenter="mouseEnter('cardid-' + serie.id)"
 							@mouseleave="mouseLeave('cardid-' + serie.id)"
 						>
 							<router-link :to="{ name: 'SeriesDetail', params: { slug: serie.slug } }">
-								<img :src="imagesSeries[index]" class="card-img-top" alt="..." height="410" />
+								<div class="ratio ratio-1x1">
+									<img
+										:src="imagesSeries[index]"
+										class="card-img-top card-fit object-fit-contain object-fit-md-cover"
+										alt="..."
+									/>
+								</div>
 							</router-link>
 
 							<div class="card-body">
@@ -137,28 +142,40 @@ export default {
 			}
 			return this.setLayout();
 		},
-		gridClick(load: boolean = false) {
-			const listElement = document.querySelectorAll('.list');
-			for (let i = 0; i < listElement.length; i++) {
-				if (!this.grid) {
-					listElement[i].querySelector('div')!.style.removeProperty('width');
-					listElement[i].querySelector('div')!.style.setProperty('min-width', '12rem');
-					listElement[i].querySelector('div')!.style.border = 'none';
-					listElement[i]!.className = 'list col-6 col-md-4 col-lg-3 mt-3 me-auto';
-					listElement[i].querySelector('a > img')!.removeAttribute('height');
-					listElement[i].querySelector('a > img')!.classList.add('card-fit');
+		gridClick() {
+			const cardGroup = document.querySelector('#cardGroup');
+			const nCard = this.series.length;
+
+			if (localStorage.getItem('grid-cookie') && localStorage.getItem('grid-cookie') == 'true') {
+				if (nCard < 2) {
+					cardGroup!.classList.remove('row-cols-2', 'row-cols-md-3', 'row-cols-lg-4');
+					cardGroup!.classList.add('row-cols-1', 'row-cols-md-1', 'row-cols-lg-1');
+				} else if (nCard < 3) {
+					cardGroup!.classList.remove('row-cols-md-1', 'row-cols-lg-1');
+					cardGroup!.classList.add('row-cols-md-2', 'row-cols-lg-2');
+				} else if (nCard < 4) {
+					cardGroup!.classList.remove('row-cols-lg-2');
+					cardGroup!.classList.add('row-cols-lg-3');
 				} else {
-					listElement[i].querySelector('div')!.style.setProperty('width', '18rem');
-					listElement[i].querySelector('div')!.style.removeProperty('min-width');
-					listElement[i].querySelector('div')!.style.border = '1';
-					listElement[i]!.className = 'list col mt-3';
-					listElement[i].querySelector('a > img')!.setAttribute('height', '410');
-					listElement[i].querySelector('a > img')!.classList.remove('card-fit');
+					cardGroup!.classList.remove('row-cols-2', 'row-cols-md-3', 'row-cols-lg-4');
+					cardGroup!.classList.add('row-cols-1', 'row-cols-md-2', 'row-cols-lg-3');
 				}
+				return;
 			}
 
-			this.grid = !this.grid;
-			if (!load) localStorage.setItem('grid-cookie', String(this.grid));
+			if (nCard < 2) {
+				cardGroup!.classList.remove('row-cols-2', 'row-cols-md-3', 'row-cols-lg-4');
+				cardGroup!.classList.add('row-cols-1', 'row-cols-md-1', 'row-cols-lg-1');
+			} else if (nCard < 3) {
+				cardGroup!.classList.remove('row-cols-1', 'row-cols-md-1', 'row-cols-lg-1');
+				cardGroup!.classList.add('row-cols-2', 'row-cols-md-2', 'row-cols-lg-2');
+			} else if (nCard < 4) {
+				cardGroup!.classList.remove('row-cols-md-2', 'row-cols-lg-2');
+				cardGroup!.classList.add('row-cols-md-3', 'row-cols-lg-3');
+			} else {
+				cardGroup!.classList.remove('row-cols-lg-3');
+				cardGroup!.classList.add('row-cols-lg-4');
+			}
 		},
 		getReadyToReadClick(serie: SeriesViewsetInstance) {
 			return (
@@ -169,20 +186,20 @@ export default {
 			this.readyToRead = localStorage.getItem('readytoread-cookie') == 'true' ? true : false;
 		},
 		async setLayout() {
-			if (localStorage.getItem('grid-cookie')) {
-				this.grid = localStorage.getItem('grid-cookie') == 'true' ? false : true;
-				this.gridClick(true);
-			}
+			this.gridClick();
 			this.readReadyToReadCockie();
 			document.querySelectorAll('span')[1]!.className = 'badge rounded-pill text-bg-info me-2';
 			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 		},
 		mouseEnter(id: string) {
-			document.querySelector(`#${id}`)!.className =
-				'card mt-2 border border-primary border-3 opacity-50';
+			document
+				.querySelector(`#${id}`)!
+				.classList.add('border', 'border-primary', 'border-3', 'opacity-50');
 		},
 		mouseLeave(id: string) {
-			document.querySelector(`#${id}`)!.className = 'card mt-2';
+			document
+				.querySelector(`#${id}`)!
+				.classList.remove('border', 'border-primary', 'border-3', 'opacity-50');
 		},
 		async moreSeries() {
 			if (this.next.nextCard != null && this.next.nextImageCard != null) {
@@ -388,9 +405,15 @@ export default {
 a {
 	text-decoration: none;
 }
-.card-fit {
-	width: 12rem;
-	height: 12rem;
-	object-fit: contain;
+
+@media (min-width: 768px) {
+	.card-fit {
+		object-position: top;
+	}
+}
+@media (max-width: 767.98px) {
+	.card-border-sm {
+		border: none;
+	}
 }
 </style>

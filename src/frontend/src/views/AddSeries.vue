@@ -2,7 +2,7 @@
 	<div class="add-series container-sm mt-2">
 		<spinnerLoading ref="spinner" />
 		<form class="list-inline" @submit.prevent="addSeries">
-			<h1 class="list-inline-item">ADD A New Manga</h1>
+			<h1 class="list-inline-item">ADD A New Series</h1>
 			<div class="list-inline-item row g-2">
 				<div class="col-md">
 					<div class="form-floating list-inline-item">
@@ -31,16 +31,24 @@
 				<SeriesImagePreview class="list-inline-item" ref="preview" />
 			</div>
 
-			<div class="placeholder-glow mt-3">
-				<select id="typeSelect" class="form-select-sm placeholder" v-model="series.typology">
+			<div class="placeholder-glow mt-3 container-fluid">
+				<select
+					id="typeSelect"
+					class="form-select form-select-sm placeholder"
+					v-model="series.typology"
+				>
 					<option v-for="type in types" :key="type.id" :value="type.id" :id="'IDType-' + type.id">
 						{{ type.name }}
 					</option>
 				</select>
 			</div>
 
-			<div class="placeholder-glow mt-3">
-				<select id="publisherSelect" class="form-select-sm placeholder" v-model="series.publisher">
+			<div class="placeholder-glow mt-3 container-fluid">
+				<select
+					id="publisherSelect"
+					class="form-select form-select-sm placeholder"
+					v-model="series.publisher"
+				>
 					<option
 						v-for="publisher in publishers"
 						:key="publisher.id"
@@ -155,7 +163,8 @@ export default {
 						document.querySelector<HTMLOptionElement>('#typeSelect > option')!.value
 					);
 					document.querySelector<HTMLOptionElement>('#typeSelect > option')!.selected = true;
-					document.querySelector<HTMLSelectElement>('#typeSelect')!.className = 'form-select-sm';
+					document.querySelector<HTMLSelectElement>('#typeSelect')!.className =
+						'form-select form-select-sm w-auto d-inline-block';
 				});
 		},
 		async getPublishers() {
@@ -171,7 +180,7 @@ export default {
 					)!.value;
 					document.querySelector<HTMLOptionElement>('#publisherSelect > option')!.selected = true;
 					document.querySelector<HTMLSelectElement>('#publisherSelect')!.className =
-						'form-select-sm';
+						'form-select form-select-sm w-auto d-inline-block';
 				});
 		},
 		async addImage(event: Event) {
@@ -247,12 +256,13 @@ export default {
 			}
 			if (!this.types.length) {
 				this.error = 'there is no type';
-				document.querySelector('#typeSelect')!.className = 'form-select-sm placeholder bg-danger';
+				document.querySelector('#typeSelect')!.className =
+					'form-select form-select-sm placeholder bg-danger';
 			}
 			if (!this.publishers.length) {
 				this.error = 'there is no publisher';
 				document.querySelector('#publisherSelect')!.className =
-					'form-select-sm placeholder bg-danger';
+					'form-select form-select-sm placeholder bg-danger';
 			}
 		},
 		resetErrors() {
