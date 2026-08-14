@@ -164,7 +164,7 @@ export default {
 					);
 					document.querySelector<HTMLOptionElement>('#typeSelect > option')!.selected = true;
 					document.querySelector<HTMLSelectElement>('#typeSelect')!.className =
-						'form-select form-select-sm';
+						'form-select form-select-sm w-auto d-inline-block';
 				});
 		},
 		async getPublishers() {
@@ -180,7 +180,7 @@ export default {
 					)!.value;
 					document.querySelector<HTMLOptionElement>('#publisherSelect > option')!.selected = true;
 					document.querySelector<HTMLSelectElement>('#publisherSelect')!.className =
-						'form-select form-select-sm';
+						'form-select form-select-sm w-auto d-inline-block';
 				});
 		},
 		async addImage(event: Event) {

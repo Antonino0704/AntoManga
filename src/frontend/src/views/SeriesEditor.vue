@@ -143,7 +143,7 @@ export default {
 					document.querySelector<HTMLOptionElement>(`#IDType-${this.series.typology}`)!.selected =
 						true;
 					document.querySelector<HTMLSelectElement>('#typeSelect')!.className =
-						'form-select form-select-sm';
+						'form-select form-select-sm w-auto d-inline-block';
 				});
 		},
 		async getPublishers() {
@@ -157,7 +157,7 @@ export default {
 					document.querySelector<HTMLOptionElement>(
 						`#IDPublisher-${this.series.publisher}`
 					)!.selected = true;
-					document.querySelector('#publisherSelect')!.className = 'form-select form-select-sm';
+					document.querySelector('#publisherSelect')!.className = 'form-select form-select-sm w-auto d-inline-block';
 				});
 		},
 		async getImageSeries() {
