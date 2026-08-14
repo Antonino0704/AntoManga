@@ -1,7 +1,7 @@
 <template>
 	<div class="mobile-search-component">
 		<i
-			class="bi bi-search fs-2"
+			:class="`bi bi-search fs-2 ${text ? 'text-success' : ''}`"
 			type="button"
 			data-bs-toggle="modal"
 			data-bs-target="#SearchModal"
@@ -9,13 +9,7 @@
 		>
 		</i>
 
-		<div
-			class="modal fade"
-			id="SearchModal"
-			tabindex="-1"
-			aria-labelledby="SearchModalLabel"
-			aria-hidden="true"
-		>
+		<div class="modal fade" id="SearchModal" tabindex="-1" aria-labelledby="SearchModalLabel">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
 					<div class="modal-body">
@@ -26,6 +20,7 @@
 								id="searchText"
 								placeholder="Search"
 								@keydown.enter="search()"
+								v-model="text"
 							/>
 						</div>
 					</div>
@@ -45,15 +40,23 @@ import { Modal } from 'bootstrap';
 export default {
 	name: 'MobileSearchComponent',
 	data() {
-		return {};
+		return {
+			text: ''
+		};
 	},
 	methods: {
 		search() {
-			document.querySelector<HTMLInputElement>('#searchBar')!.value =
-				document.querySelector<HTMLInputElement>('#searchText')!.value;
+			document.querySelector<HTMLInputElement>('#searchBar')!.value = this.text;
 			Modal.getInstance(document.getElementById('SearchModal')).hide();
 			this.$emit('mobileSearch');
+		},
+		getText() {
+			if (this.$route.query.filterbyname != undefined)
+				this.text = String(this.$route.query.filterbyname);
 		}
+	},
+	created() {
+		this.getText();
 	}
 };
 </script>
