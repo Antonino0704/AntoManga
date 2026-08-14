@@ -34,16 +34,24 @@
 				<PreviewComponent class="list-inline-item" ref="preview" />
 			</div>
 
-			<div class="placeholder-glow mt-3">
-				<select id="typeSelect" class="placeholder form-select-sm" v-model="series.typology">
+			<div class="placeholder-glow mt-3 container-fluid">
+				<select
+					id="typeSelect"
+					class="placeholder form-select form-select-sm"
+					v-model="series.typology"
+				>
 					<option v-for="type in types" :key="type.id" :value="type.id" :id="'IDType-' + type.id">
 						{{ type.name }}
 					</option>
 				</select>
 			</div>
 
-			<div class="placeholder-glow mt-3">
-				<select id="publisherSelect" class="placeholder form-select-sm" v-model="series.publisher">
+			<div class="placeholder-glow mt-3 container-fluid">
+				<select
+					id="publisherSelect"
+					class="placeholder form-select form-select-sm"
+					v-model="series.publisher"
+				>
 					<option
 						v-for="publisher in publishers"
 						:key="publisher.id"
@@ -134,7 +142,8 @@ export default {
 				.then(() => {
 					document.querySelector<HTMLOptionElement>(`#IDType-${this.series.typology}`)!.selected =
 						true;
-					document.querySelector<HTMLSelectElement>('#typeSelect')!.className = 'form-select-sm';
+					document.querySelector<HTMLSelectElement>('#typeSelect')!.className =
+						'form-select form-select-sm';
 				});
 		},
 		async getPublishers() {
@@ -148,7 +157,7 @@ export default {
 					document.querySelector<HTMLOptionElement>(
 						`#IDPublisher-${this.series.publisher}`
 					)!.selected = true;
-					document.querySelector('#publisherSelect')!.className = 'form-select-sm';
+					document.querySelector('#publisherSelect')!.className = 'form-select form-select-sm';
 				});
 		},
 		async getImageSeries() {

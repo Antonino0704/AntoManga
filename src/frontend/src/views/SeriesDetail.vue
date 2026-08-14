@@ -7,7 +7,7 @@
 			:to="{ name: 'AddSeries' }"
 			class="btn btn-outline-info mb-3"
 			v-if="user.is_authenticated"
-			>Add A New Manga
+			>Add A New Series
 		</router-link>
 		<div class="card mb-3" style="max-width: 540px; margin-left: auto; margin-right: auto">
 			<div class="row g-0">
