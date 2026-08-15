@@ -37,6 +37,24 @@
 								Publishers Rank
 							</router-link>
 						</li>
+						<li class="nav-item me-2 mb-2">
+							<router-link
+								:to="{ name: 'StatsView' }"
+								type="button"
+								class="badge text-bg-secondary bi bi-bar-chart-line"
+							>
+								Stats
+							</router-link>
+						</li>
+						<li class="nav-item me-2 mb-2">
+							<router-link
+								:to="{ name: 'InfoView' }"
+								type="button"
+								class="badge text-bg-secondary bi bi-info-circle"
+							>
+								Info
+							</router-link>
+						</li>
 						<li class="nav-item me-2 mb-2" v-if="user.is_authenticated">
 							<router-link
 								:to="{ name: 'AddPublisher' }"

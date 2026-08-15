@@ -7,14 +7,12 @@
 				<div class="fs-1">
 					Home
 					<i class="bi bi-house"></i>
-					<div class="fs-6" v-if="user.is_authenticated">Welcome {{ user.username }}</div>
+					<div class="fs-6" v-if="user.is_authenticated">
+						Welcome {{ user.username }}<i class="bi bi-person"></i>
+					</div>
 				</div>
 				<div>
 					<span class="badge rounded-pill me-2 placeholder">Length: {{ seriesLength }}</span>
-					<router-link :to="{ name: 'StatsView' }" type="button" class="bi bi-bar-chart-line me-2">
-					</router-link>
-					<router-link :to="{ name: 'InfoView' }" type="button" class="bi bi-info-circle">
-					</router-link>
 				</div>
 				<SearchNoResults message="it is so empty here" v-if="!seriesLength" class="mt-2" />
 				<div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4 mt-3 me-2 ms-2" id="cardGroup">
