@@ -22,10 +22,13 @@
 					<div class="card" style="width: 18rem">
 						<img :src="imagePreview" class="card-img-top" alt="preview1" height="410" />
 					</div>
+					<div class="carousel-caption d-none d-md-block">
+						<h5>Preview</h5>
+					</div>
 				</div>
 				<div class="carousel-item">
 					<div class="card" style="border: none">
-						<img :src="imagePreview" class="card-img-top card-fit" alt="preview2" />
+						<img :src="imagePreview" class="card-img-top card-fit-pw" alt="preview2" />
 
 						<div>
 							<span class="horizontal-line-bottom"></span>
@@ -108,5 +111,11 @@ export default {
 	right: 14%;
 	top: 0%;
 	position: absolute;
+}
+
+.card-fit-pw {
+	width: 12rem;
+	height: 12rem;
+	object-fit: contain;
 }
 </style>
