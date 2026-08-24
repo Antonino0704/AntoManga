@@ -45,6 +45,20 @@
   {% endfor %}
 </div>
 {% endif %}
+
+<div class="checkbox-inline mb-3">
+  {% render_field form.tos class="form-check-input" id="tos" %}
+  <label class="form-check-label" for="tos">
+    I agree to <a href="/info/">TOS</a>
+  </label>
+</div>
+{% if form.tos.errors %}
+<div class="text-danger my-2">
+  {% for error in form.tos.errors %}
+  {{ error }}
+  {% endfor %}
+</div>
+{% endif %}
                 
 {% if form.errors %}
 <div class="text-danger my-3">
@@ -53,5 +67,7 @@
   {% endfor %}
 </div>
 {% endif %}
+
+
             
 {% endblock %}
