@@ -118,7 +118,7 @@ export default {
 			(this.$refs.actionNotification as InstanceType<typeof ActionNotification>).sendNotification(
 				'Are you sure?',
 				'Account disabled',
-				`${endpoints.userMe}`
+				endpoints.userMe
 			);
 		}
 	},
