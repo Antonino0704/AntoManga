@@ -11,6 +11,7 @@ import StatsView from '../views/Stats.vue';
 import InfoView from '../views/Info.vue';
 import NotFound from '../views/NotFound.vue';
 import PublishersRank from '@/views/PublishersRank.vue';
+import MyAccount from '@/views/MyAccount.vue';
 
 const router = createRouter({
 	history: createWebHistory('/'),
@@ -73,6 +74,11 @@ const router = createRouter({
 			path: '/publishers-rank/',
 			name: 'PublishersRank',
 			component: PublishersRank
+		},
+		{
+			path: '/my-account/',
+			name: 'MyAccount',
+			component: MyAccount
 		},
 		{
 			path: '/:pathMatch(.*)*',

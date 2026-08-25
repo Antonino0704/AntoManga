@@ -7,7 +7,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["username", "is_authenticated", "is_staff"]
+        fields = ["username", "is_authenticated", "is_staff", "is_active"]
 
     def get_is_authenticated(self, obj):
         return not obj.is_anonymous
