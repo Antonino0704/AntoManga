@@ -43,18 +43,11 @@
 						<hr v-if="user.is_authenticated" />
 						<a
 							type="button"
-							class="btn btn-secondary"
+							class="btn btn-secondary bi bi-person-fill-gear"
 							v-if="user.is_authenticated"
-							href="/account/two_factor/"
-							>Two-factor authentication</a
+							href="/my-account/"
 						>
-						<hr v-if="user.is_authenticated" />
-						<a
-							type="button"
-							class="btn btn-secondary"
-							v-if="user.is_authenticated"
-							href="/change-password/"
-							>Change Password</a
+							My Account</a
 						>
 						<hr v-if="user.is_authenticated" />
 						<a type="button" class="btn btn-secondary" v-if="user.is_staff" href="/admin/">Admin</a>
