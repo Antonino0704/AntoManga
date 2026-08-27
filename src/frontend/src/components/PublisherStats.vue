@@ -74,20 +74,20 @@ export default {
 							nSeries: data.count
 						});
 
-						document.querySelector('#load')!.className = '';
+						document.querySelector('#load')!.classList.remove('placeholder');
 					}
 				);
 			}
 		},
 		async next() {
-			document.querySelector('#load')!.className = 'placeholder';
+			document.querySelector('#load')!.classList.add('placeholder');
 			this.current++;
-			document.querySelector('#load')!.className = '';
+			document.querySelector('#load')!.classList.remove('placeholder');
 		},
 		previous() {
-			document.querySelector('#load')!.className = 'placeholder';
+			document.querySelector('#load')!.classList.add('placeholder');
 			this.current--;
-			document.querySelector('#load')!.className = '';
+			document.querySelector('#load')!.classList.remove('placeholder');
 		}
 	},
 	computed: {
