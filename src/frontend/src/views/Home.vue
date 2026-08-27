@@ -15,7 +15,7 @@
 					<span class="badge rounded-pill me-2 placeholder">Length: {{ seriesLength }}</span>
 				</div>
 				<SearchNoResults message="it is so empty here" v-if="!seriesLength" class="mt-2" />
-				<div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4 mt-3 me-2 ms-2" id="cardGroup">
+				<div :class="`row ${getLayoutClasses} g-4 mt-3 me-2 ms-2`" id="cardGroup`">
 					<div class="col" v-for="(serie, index) in series" :key="serie.id">
 						<div
 							:id="'cardid-' + serie.id"
@@ -99,13 +99,19 @@ export default {
 			next: {
 				nextCard: null as string | null,
 				nextImageCard: null as string | null
-			}
+			},
+			numberOfCol: [2, 3, 4]
 		};
 	},
 	components: {
 		navbar,
 		spinnerLoading,
 		SearchNoResults
+	},
+	computed: {
+		getLayoutClasses() {
+			return `row-cols-${this.numberOfCol[0]} row-cols-md-${this.numberOfCol[1]} row-cols-lg-${this.numberOfCol[2]}`;
+		}
 	},
 	methods: {
 		async getDataSeries() {
@@ -141,95 +147,13 @@ export default {
 			return this.setLayout();
 		},
 		gridClick() {
-			const cardGroup = document.querySelector('#cardGroup');
 			const nCard = this.series.length;
+			const max = [2, 3, 4];
 
-			if (localStorage.getItem('grid-cookie') && localStorage.getItem('grid-cookie') == 'true') {
-				if (nCard < 2) {
-					cardGroup!.classList.remove(
-						'row-cols-2',
-						'row-cols-md-2',
-						'row-cols-md-3',
-						'row-cols-lg-2',
-						'row-cols-lg-3',
-						'row-cols-lg-4'
-					);
-					cardGroup!.classList.add('row-cols-1', 'row-cols-md-1', 'row-cols-lg-1');
-				} else if (nCard < 3) {
-					cardGroup!.classList.remove(
-						'row-cols-2',
-						'row-cols-md-1',
-						'row-cols-md-3',
-						'row-cols-lg-1',
-						'row-cols-lg-3',
-						'row-cols-lg-4'
-					);
-					cardGroup!.classList.add('row-cols-1', 'row-cols-md-2', 'row-cols-lg-2');
-				} else if (nCard < 4) {
-					cardGroup!.classList.remove(
-						'row-cols-2',
-						'row-cols-md-1',
-						'row-cols-md-3',
-						'row-cols-lg-1',
-						'row-cols-lg-2',
-						'row-cols-lg-4'
-					);
-					cardGroup!.classList.add('row-cols-1', 'row-cols-md-2', 'row-cols-lg-3');
-				} else {
-					cardGroup!.classList.remove(
-						'row-cols-2',
-						'row-cols-md-1',
-						'row-cols-md-3',
-						'row-cols-lg-1',
-						'row-cols-lg-2',
-						'row-cols-lg-4'
-					);
-					cardGroup!.classList.add('row-cols-1', 'row-cols-md-2', 'row-cols-lg-3');
-				}
-				return;
-			}
+			if (localStorage.getItem('grid-cookie') && localStorage.getItem('grid-cookie') == 'true')
+				max.forEach((v, i) => (max[i] = v - 1));
 
-			if (nCard < 2) {
-				cardGroup!.classList.remove(
-					'row-cols-2',
-					'row-cols-md-2',
-					'row-cols-md-3',
-					'row-cols-lg-2',
-					'row-cols-lg-3',
-					'row-cols-lg-4'
-				);
-				cardGroup!.classList.add('row-cols-1', 'row-cols-md-1', 'row-cols-lg-1');
-			} else if (nCard < 3) {
-				cardGroup!.classList.remove(
-					'row-cols-1',
-					'row-cols-md-1',
-					'row-cols-md-3',
-					'row-cols-lg-1',
-					'row-cols-lg-3',
-					'row-cols-lg-4'
-				);
-				cardGroup!.classList.add('row-cols-2', 'row-cols-md-2', 'row-cols-lg-2');
-			} else if (nCard < 4) {
-				cardGroup!.classList.remove(
-					'row-cols-1',
-					'row-cols-md-1',
-					'row-cols-md-2',
-					'row-cols-lg-1',
-					'row-cols-lg-2',
-					'row-cols-lg-4'
-				);
-				cardGroup!.classList.add('row-cols-2', 'row-cols-md-3', 'row-cols-lg-3');
-			} else {
-				cardGroup!.classList.remove(
-					'row-cols-1',
-					'row-cols-md-1',
-					'row-cols-md-2',
-					'row-cols-lg-1',
-					'row-cols-lg-2',
-					'row-cols-lg-3'
-				);
-				cardGroup!.classList.add('row-cols-2', 'row-cols-md-3', 'row-cols-lg-4');
-			}
+			max.forEach((v, i) => (this.numberOfCol[i] = nCard >= v ? v : nCard));
 		},
 		getReadyToReadClick(serie: SeriesViewsetInstance) {
 			return (
