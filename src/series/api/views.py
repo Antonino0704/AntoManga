@@ -86,7 +86,7 @@ class LengthView(APIView):
     def get(self, request):
         volumes_read_tot = 0
         volumes_bought_tot = 0
-        
+
         queryset = filters(Series.objects.all(), request)
         serializer = LegthSeriesSerializer(queryset, many=True)
 
