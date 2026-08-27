@@ -46,7 +46,7 @@
 				</h2>
 				<div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordion">
 					<div class="accordion-body container-sm">
-						<strong class="prova"> {{ publisher.description }} </strong>
+						<strong> {{ publisher.description }} </strong>
 					</div>
 				</div>
 			</div>

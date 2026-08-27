@@ -86,17 +86,8 @@ class LengthView(APIView):
     def get(self, request):
         volumes_read_tot = 0
         volumes_bought_tot = 0
-        queryset = (
-            Series.objects.all()
-            if not "type" in self.request.query_params
-            else (
-                Series.objects.filter(typology=int(self.request.query_params["type"]))
-                if int(self.request.query_params["type"]) != -1
-                else Series.objects.exclude(
-                    n_volumes=F("volumes_bought")
-                )  # it should be removed
-            )
-        )
+
+        queryset = filters(Series.objects.all(), request)
         serializer = LegthSeriesSerializer(queryset, many=True)
 
         for series in serializer.data:
