@@ -1,13 +1,13 @@
 from django.contrib import admin
 
-from users.models import InviteToken
+from users.models import InviteToken, Ticket
 
 from django.urls import reverse
 from django.utils.html import format_html
 
 
 class InviteTokenAdmin(admin.ModelAdmin):
-    list_display = ["token", "is_valid", "author", "link"]
+    list_display = ["token", "is_valid", "author_display", "link"]
     readonly_fields = [
         "token",
         "date_of_use",
@@ -70,4 +70,78 @@ class InviteTokenAdmin(admin.ModelAdmin):
         return super().save_model(request, obj, form, change)
 
 
+class TicketAdmin(admin.ModelAdmin):
+    list_display = [
+        "title_preview",
+        "description_preview",
+        "label_display",
+        "status_display",
+    ]
+    readonly_fields = [
+        "title",
+        "description",
+        "author",
+        "email",
+        "date",
+    ]
+
+    list_filter = ["label", "status", "date"]
+
+    fieldsets = (
+        (
+            "User Info",
+            {
+                "fields": (
+                    "email",
+                    "author",
+                ),
+            },
+        ),
+        (
+            "Details",
+            {
+                "fields": (
+                    "title",
+                    "description",
+                    "date",
+                ),
+            },
+        ),
+        (
+            "Admin Section",
+            {
+                "fields": (
+                    "label",
+                    "status",
+                ),
+            },
+        ),
+    )
+
+    def title_preview(self, obj):
+        if len(obj.title) <= 10:
+            return obj.title
+        return f"{obj.title[:10]}..."
+
+    def description_preview(self, obj):
+        if len(obj.description) <= 10:
+            return obj.description
+        return f"{obj.description[:10]}..."
+
+    def label_display(self, obj):
+        if obj.label == "bug":
+            return format_html(f'<p style="color: red;">{obj.label}</p>')
+        elif obj.label == "feature":
+            return format_html(f'<p style="color: green;">{obj.label}</p>')
+
+    def status_display(self, obj):
+        if obj.status:
+            return format_html(f'<p style="color: green;">Closed</p>')
+        return format_html(f'<p style="color: red;">Open</p>')
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+
 admin.site.register(InviteToken, InviteTokenAdmin)
+admin.site.register(Ticket, TicketAdmin)

@@ -12,6 +12,7 @@ import InfoView from '../views/Info.vue';
 import NotFound from '../views/NotFound.vue';
 import PublishersRank from '@/views/PublishersRank.vue';
 import MyAccount from '@/views/MyAccount.vue';
+import Ticket from '@/views/Ticket.vue';
 
 const router = createRouter({
 	history: createWebHistory('/'),
@@ -79,6 +80,11 @@ const router = createRouter({
 			path: '/my-account/',
 			name: 'MyAccount',
 			component: MyAccount
+		},
+		{
+			path: '/ticket/create/',
+			name: 'Ticket',
+			component: Ticket
 		},
 		{
 			path: '/:pathMatch(.*)*',

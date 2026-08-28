@@ -14,7 +14,8 @@ const endpoints = {
 	userMe: `${apiVersion}user-me/`,
 	validateImage: `${apiVersion}image/validate/`,
 	publisherStats: `${apiVersion}publisher-stats/`,
-	publishersShort: `${apiVersion}short-version/publishers/`
+	publishersShort: `${apiVersion}short-version/publishers/`,
+	createTicket: `${apiVersion}ticket/create/`
 };
 
 export { endpoints };
