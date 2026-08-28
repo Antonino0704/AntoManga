@@ -201,12 +201,16 @@ export default {
 	},
 	computed: {
 		isTypesPubslihers() {
-			return this.types.length > this.minimTypesLength && this.publishers > 0 && this.user.is_authenticated;
+			return (
+				this.types.length > this.minimTypesLength &&
+				this.publishers > 0 &&
+				this.user.is_authenticated
+			);
 		}
 	},
 	methods: {
 		getTypes() {
-			this.minimTypesLength = this.types.length
+			this.minimTypesLength = this.types.length;
 			apiService(endpoints.types)
 				.then((data: Array<Type>) => {
 					this.types.push(
