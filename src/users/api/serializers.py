@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from users.models import Ticket
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -11,3 +12,10 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_is_authenticated(self, obj):
         return not obj.is_anonymous
+
+
+class TicketSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Ticket
+        exclude = ["status", "author", "date"]

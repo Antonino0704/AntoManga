@@ -55,6 +55,15 @@
 								Info
 							</router-link>
 						</li>
+						<li class="nav-item me-2 mb-2">
+							<router-link
+								:to="{ name: 'Ticket' }"
+								type="button"
+								class="badge text-bg-secondary bi bi-question-circle"
+							>
+								Help
+							</router-link>
+						</li>
 						<li class="nav-item me-2 mb-2" v-if="user.is_authenticated">
 							<router-link
 								:to="{ name: 'AddPublisher' }"
@@ -184,7 +193,7 @@ export default {
 			showTypes: false,
 			showPublishers: false,
 			showClearButton: false,
-			test: false
+			minimTypesLength: 0
 		};
 	},
 	components: {
@@ -192,11 +201,12 @@ export default {
 	},
 	computed: {
 		isTypesPubslihers() {
-			return this.types.length > 5 && this.publishers > 0 && this.user.is_authenticated;
+			return this.types.length > this.minimTypesLength && this.publishers > 0 && this.user.is_authenticated;
 		}
 	},
 	methods: {
 		getTypes() {
+			this.minimTypesLength = this.types.length
 			apiService(endpoints.types)
 				.then((data: Array<Type>) => {
 					this.types.push(

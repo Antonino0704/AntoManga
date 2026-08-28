@@ -1,8 +1,10 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import generics
+from rest_framework.permissions import AllowAny
 
-from users.api.serializers import UserSerializer
+from users.api.serializers import UserSerializer, TicketSerializer
 from django.contrib.auth.models import User
 
 
@@ -43,3 +45,14 @@ class UserView(APIView):
             serializer.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class TicketView(generics.CreateAPIView):
+    serializer_class = TicketSerializer
+    permission_classes = [AllowAny]
+
+    def perform_create(self, serializer):
+        if self.request.user.is_anonymous:
+            serializer.save()
+        else:
+            serializer.save(author=self.request.user)
