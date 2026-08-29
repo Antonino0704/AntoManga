@@ -49,7 +49,7 @@
 				<option value="bug">Bug</option>
 				<option value="feature">Feature</option>
 			</select>
-			<button  class="btn btn-outline-success">Send</button>
+			<button class="btn btn-outline-success">Send</button>
 		</form>
 	</div>
 </template>
