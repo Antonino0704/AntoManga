@@ -78,6 +78,7 @@ class TicketAdmin(admin.ModelAdmin):
         "status_display",
     ]
     readonly_fields = [
+        "id",
         "title",
         "description",
         "author",
@@ -101,6 +102,7 @@ class TicketAdmin(admin.ModelAdmin):
             "Details",
             {
                 "fields": (
+                    "id",
                     "title",
                     "description",
                     "date",

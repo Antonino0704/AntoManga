@@ -7,7 +7,7 @@
 		<h1 class="text-center mt-2 mb-3">
 			<i class="bi bi-question-circle text-info"></i> AntoManga Support
 		</h1>
-		<form>
+		<form @submit.prevent="sendReport">
 			<div class="form-floating mb-3">
 				<input
 					v-model="request.title"
@@ -49,7 +49,7 @@
 				<option value="bug">Bug</option>
 				<option value="feature">Feature</option>
 			</select>
-			<button type="button" class="btn btn-success" @click="sendReport()">Send</button>
+			<button  class="btn btn-outline-success">Send</button>
 		</form>
 	</div>
 </template>
