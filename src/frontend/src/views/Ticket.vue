@@ -68,7 +68,7 @@ export default {
 	name: 'Ticket',
 	data() {
 		return {
-			ticket: {} as Ticket,
+			ticket: { title: '' } as Ticket,
 			labels: [] as Array<Label>,
 			sent: false,
 			regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
