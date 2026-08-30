@@ -14,6 +14,7 @@
 							class="form-control"
 							id="floatingInputGrid"
 							v-model="publisher.name"
+							maxlength="50"
 						/>
 						<label for="floatingInputGrid">Publisher's Title</label>
 						<div class="invalid-feedback">Invalid title</div>
