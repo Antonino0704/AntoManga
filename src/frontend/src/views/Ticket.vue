@@ -54,7 +54,7 @@
 			<select
 				v-model="ticket.label"
 				class="form-select mb-3 placeholder"
-				aria-label="Default select example"
+				aria-label="select_label"
 			>
 				<option v-for="label in labels" :key="label.id" :value="label.id">
 					{{ label.name }}
