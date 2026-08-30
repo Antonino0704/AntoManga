@@ -82,7 +82,7 @@ const router = createRouter({
 			component: MyAccount
 		},
 		{
-			path: '/ticket/create/',
+			path: '/help/',
 			name: 'Ticket',
 			component: Ticket
 		},

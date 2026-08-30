@@ -4,7 +4,8 @@ from rest_framework import status
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 
-from users.api.serializers import UserSerializer, TicketSerializer
+from users.api.serializers import UserSerializer, TicketSerializer, LabelSerializer
+from users.models import Label
 from django.contrib.auth.models import User
 
 
@@ -56,3 +57,9 @@ class TicketView(generics.CreateAPIView):
             serializer.save()
         else:
             serializer.save(author=self.request.user)
+
+
+class LabelView(generics.ListAPIView):
+    queryset = Label.objects.all()
+    serializer_class = LabelSerializer
+    pagination_class = None

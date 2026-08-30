@@ -27,7 +27,7 @@ from django.views.static import serve
 from core.views import IndexTemplate
 from users.views import InviteView
 
-apiVersion = "v6/"
+apiVersion = "v7/"
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -55,4 +55,7 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += [
+        re_path("api-auth/", include("rest_framework.urls", namespace="rest_framework"))
+    ]
 urlpatterns += [re_path("", IndexTemplate.as_view())]

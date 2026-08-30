@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from users.models import InviteToken, Ticket
+from users.models import InviteToken, Ticket, Label
 
 from django.urls import reverse
 from django.utils.html import format_html
@@ -70,9 +70,17 @@ class InviteTokenAdmin(admin.ModelAdmin):
         return super().save_model(request, obj, form, change)
 
 
+class LabelAdmin(admin.ModelAdmin):
+    list_display = ["name", "color_display"]
+
+    def color_display(self, obj):
+        return format_html(f'<p style="color: {obj.color}">{obj.color}</p>')
+
+
 class TicketAdmin(admin.ModelAdmin):
     list_display = [
         "title_preview",
+        "ticket_id",
         "description_preview",
         "label_display",
         "status_display",
@@ -120,6 +128,9 @@ class TicketAdmin(admin.ModelAdmin):
         ),
     )
 
+    def ticket_id(self, obj):
+        return obj.id
+
     def title_preview(self, obj):
         if len(obj.title) <= 10:
             return obj.title
@@ -131,19 +142,22 @@ class TicketAdmin(admin.ModelAdmin):
         return f"{obj.description[:10]}..."
 
     def label_display(self, obj):
-        if obj.label == "bug":
-            return format_html(f'<p style="color: red;">{obj.label}</p>')
-        elif obj.label == "feature":
-            return format_html(f'<p style="color: green;">{obj.label}</p>')
+        return format_html(f'<p style="color: {obj.label.color};">{obj.label}</p>')
 
     def status_display(self, obj):
         if obj.status:
             return format_html(f'<p style="color: green;">Closed</p>')
-        return format_html(f'<p style="color: red;">Open</p>')
+        return format_html(
+            f'<p style="color: red;">Open ({obj.date.strftime("%Y-%b-%d")})</p>'
+        )
 
     def has_add_permission(self, request, obj=None):
         return False
 
+    def get_ordering(self, request):
+        return ["date"]
+
 
 admin.site.register(InviteToken, InviteTokenAdmin)
 admin.site.register(Ticket, TicketAdmin)
+admin.site.register(Label, LabelAdmin)

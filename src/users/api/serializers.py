@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from users.models import Ticket
+from users.models import Ticket, Label
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -19,3 +19,10 @@ class TicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ticket
         exclude = ["status", "author", "date"]
+
+
+class LabelSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Label
+        fields = "__all__"

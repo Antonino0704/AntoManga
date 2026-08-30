@@ -15,17 +15,27 @@ class InviteToken(models.Model):
         return self.token
 
 
-class Ticket(models.Model):
-
+class Label(models.Model):
     label_choices = [
-        ("bug", "Bug"),
-        ("feature", "Feature"),
+        ("red", "Red"),
+        ("green", "Green"),
+        ("blue", "Blue"),
+        ("Yellow", "Yellow"),
     ]
+
+    name = models.CharField(max_length=20, unique=True)
+    color = models.CharField(max_length=20, choices=label_choices)
+
+    def __str__(self):
+        return self.name
+
+
+class Ticket(models.Model):
 
     title = models.CharField(max_length=20)
     email = models.EmailField()
     description = models.TextField()
-    label = models.CharField(max_length=20, choices=label_choices)
+    label = models.ForeignKey(Label, on_delete=models.PROTECT, related_name="tickets")
     status = models.BooleanField(default=False)  # False = open while True + close
     author = models.ForeignKey(
         User, on_delete=models.PROTECT, related_name="tickets", null=True
