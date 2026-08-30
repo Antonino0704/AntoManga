@@ -24,6 +24,7 @@ class Label(models.Model):
     ]
 
     name = models.CharField(max_length=20, unique=True)
+    description = models.CharField(max_length=20)
     color = models.CharField(max_length=20, choices=label_choices)
 
     def __str__(self):

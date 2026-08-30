@@ -71,7 +71,7 @@ class InviteTokenAdmin(admin.ModelAdmin):
 
 
 class LabelAdmin(admin.ModelAdmin):
-    list_display = ["name", "color_display"]
+    list_display = ["name", "color_display", "description"]
 
     def color_display(self, obj):
         return format_html(f'<p style="color: {obj.color}">{obj.color}</p>')

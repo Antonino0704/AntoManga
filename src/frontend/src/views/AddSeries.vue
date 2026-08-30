@@ -6,7 +6,13 @@
 			<div class="list-inline-item row g-2">
 				<div class="col-md">
 					<div class="form-floating list-inline-item">
-						<input type="text" class="form-control" id="floatingInputGrid" v-model="series.name" />
+						<input
+							maxlength="50"
+							type="text"
+							class="form-control"
+							id="floatingInputGrid"
+							v-model="series.name"
+						/>
 						<label for="floatingInputGrid">Series's Title</label>
 						<div class="invalid-feedback">Invalid title</div>
 					</div>

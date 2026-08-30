@@ -36,6 +36,7 @@
 									id="titleType"
 									v-model="type.name"
 									placeholder="Title"
+									maxlength="20"
 								></textarea>
 							</div>
 						</form>

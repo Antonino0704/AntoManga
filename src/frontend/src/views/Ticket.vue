@@ -4,7 +4,11 @@
 		<Notification ref="notification" />
 		<spinnerLoading ref="spinner" />
 	</div>
-	<div class="ticket container-sm" v-if="!sent">
+	<div class="alert alert-danger container-sm mt-5 text-center" role="alert" v-if="labelError">
+		Missing Labels<br />
+		If you are an administrator, add a label to the database
+	</div>
+	<div class="ticket container-sm" v-if="!sent && !labelError">
 		<h1 class="text-center mt-2 mb-3">
 			<i class="bi bi-question-circle text-info"></i> AntoManga Support
 		</h1>
@@ -15,6 +19,7 @@
 					type="text"
 					class="form-control"
 					id="titleInput"
+					maxlength="20"
 					placeholder="there is a bug..."
 				/>
 				<label for="titleInput">Title</label>
@@ -46,7 +51,11 @@
 				<div id="descriptionTextArea" class="invalid-feedback">It can't be blank</div>
 			</div>
 
-			<select v-model="ticket.label" class="form-select mb-3" aria-label="Default select example">
+			<select
+				v-model="ticket.label"
+				class="form-select mb-3 placeholder"
+				aria-label="Default select example"
+			>
 				<option v-for="label in labels" :key="label.id" :value="label.id">
 					{{ label.name }}
 				</option>
@@ -71,7 +80,8 @@ export default {
 			ticket: { title: '' } as Ticket,
 			labels: [] as Array<Label>,
 			sent: false,
-			regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+			regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+			labelError: false
 		};
 	},
 	components: {
@@ -82,8 +92,13 @@ export default {
 		async getLabes() {
 			return apiService(endpoints.labels)
 				.then((labels: Array<Label>) => {
-					this.labels.push(...labels);
-					this.ticket.label = labels[0].id;
+					if (!labels.length) {
+						this.labelError = true;
+					} else {
+						this.labels.push(...labels);
+						this.ticket.label = labels[0].id;
+						document.querySelector('select')!.classList.remove('placeholder');
+					}
 				})
 				.then(() => {
 					(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();

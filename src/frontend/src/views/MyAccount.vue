@@ -21,6 +21,7 @@
 									placeholder="Username"
 									aria-label="Username"
 									aria-describedby="username-addon"
+									maxlength="150"
 									v-model="user.username"
 								/>
 							</div>

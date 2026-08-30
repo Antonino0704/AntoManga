@@ -16,6 +16,7 @@
 					type="text"
 					class="form-control border border-secondary-subtle border-opacity-10"
 					aria-describedby="addon-wrapping"
+					maxlength="20"
 					v-model="type.name"
 					:disabled="!user.is_authenticated"
 				/>
