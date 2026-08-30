@@ -1,4 +1,4 @@
-const apiVersion = 'v6/';
+const apiVersion = 'v7/';
 const endpoints = {
 	publishers: `${apiVersion}publishers/`,
 	imgPublishers: `${apiVersion}image/publishers/`,
@@ -15,7 +15,8 @@ const endpoints = {
 	validateImage: `${apiVersion}image/validate/`,
 	publisherStats: `${apiVersion}publisher-stats/`,
 	publishersShort: `${apiVersion}short-version/publishers/`,
-	createTicket: `${apiVersion}ticket/create/`
+	createTicket: `${apiVersion}ticket/create/`,
+	labels: `${apiVersion}ticket/labels/`
 };
 
 export { endpoints };

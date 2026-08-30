@@ -67,3 +67,16 @@ export interface PublisherStats {
 export interface Typev2 extends Type {
 	applied: Boolean;
 }
+
+export interface Ticket {
+	title: string;
+	email: string;
+	description: string;
+	label: number;
+}
+
+export interface Label {
+	id: number;
+	name: string;
+	color: string;
+}
