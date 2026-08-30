@@ -51,11 +51,7 @@
 				<div id="descriptionTextArea" class="invalid-feedback">It can't be blank</div>
 			</div>
 
-			<select
-				v-model="ticket.label"
-				class="form-select mb-3 placeholder"
-				aria-label="select_label"
-			>
+			<select v-model="ticket.label" class="form-select mb-3 placeholder" aria-label="select_label">
 				<option v-for="label in labels" :key="label.id" :value="label.id">
 					{{ label.name }}
 				</option>
