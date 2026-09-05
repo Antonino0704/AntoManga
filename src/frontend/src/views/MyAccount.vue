@@ -3,9 +3,17 @@
 		<spinnerLoading ref="spinner" />
 		<div class="card mb-3 mt-5">
 			<div class="row g-0">
-				<i class="bi bi-person-circle fs-1 card-img-top col-md-4 text-center">
-					<p class="fs-6">Custom pfp <b class="text-danger-emphasis">coming soon</b>...</p>
+				<img
+					:src="profile.avatar"
+					class="rounded-circle avatar mx-auto mt-2"
+					v-if="profile.avatar"
+				/>
+				<i
+					class="bi bi-person-circle fs-1 card-img-top col-md-4 text-center"
+					v-if="!profile.avatar"
+				>
 				</i>
+
 				<div class="card-body">
 					<div class="card-title">
 						<div class="w-auto d-inline-block">
@@ -22,8 +30,25 @@
 									aria-label="Username"
 									aria-describedby="username-addon"
 									maxlength="150"
-									v-model="user.username"
+									v-model="profile.user.username"
 								/>
+							</div>
+
+							<h1 class="text-secondary fs-6">Change PFP</h1>
+							<input
+								type="file"
+								accept="image/*"
+								class="form-control mb-1"
+								@change="updateImage($event)"
+								id="file-input"
+							/>
+							<div class="input-group">
+								<p @click="updateAvatar()" class="text-success mt-2" v-if="imageUploaded">
+									change pfp
+								</p>
+								<p @click="updateAvatar(true)" class="text-danger mt-2 ms-2" v-if="prevAvatar">
+									remove pfp
+								</p>
 							</div>
 						</div>
 					</div>
@@ -57,9 +82,10 @@
 </template>
 
 <script lang="ts">
-import { apiService } from '../utils/APIService';
+import { apiService, imageApiService } from '../utils/APIService';
 import { endpoints } from '@/utils/endpoints';
-import type { User } from '../@types/interfaces';
+import { validateImage } from '@/utils/supportedImageExtensions';
+import type { User, Profile } from '../@types/interfaces';
 import spinnerLoading from '../components/SpinnerLoading.vue';
 import Notification from '../components/Notification.vue';
 import ActionNotification from '../components/ActionNotification.vue';
@@ -68,7 +94,10 @@ export default {
 	name: 'MyAccount',
 	data() {
 		return {
-			user: {} as User
+			profile: { user: { username: '' } } as Profile,
+			formData: new FormData(),
+			imageUploaded: false,
+			prevAvatar: ''
 		};
 	},
 	components: {
@@ -87,17 +116,21 @@ export default {
 	},
 	methods: {
 		getUser() {
-			apiService(endpoints.userMe, 'GET')
+			apiService(endpoints.userMe)
 				.then((user: User) => {
-					this.user = user;
+					this.profile.user = user;
 				})
 				.then(() => {
-					(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
+					apiService(endpoints.myAvatar).then((avatarProfile: Profile) => {
+						this.profile.avatar = avatarProfile.avatar;
+						this.prevAvatar = avatarProfile.avatar;
+						(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
+					});
 				});
 		},
 		changeUsername() {
 			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
-			apiService(endpoints.userMe, 'PUT', { username: this.user.username }).then(
+			apiService(endpoints.userMe, 'PUT', { username: this.profile.user.username }).then(
 				(response: any) => {
 					if (response.updated) {
 						(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
@@ -115,6 +148,41 @@ export default {
 				}
 			);
 		},
+		async updateImage(event: Event) {
+			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
+			try {
+				if (await validateImage(event.target as InstanceType<typeof HTMLInputElement>)) {
+					this.formData.append(
+						'avatar',
+						(event.target as InstanceType<typeof HTMLInputElement>).files![0]
+					);
+					this.profile.avatar = URL.createObjectURL(
+						(event.target as InstanceType<typeof HTMLInputElement>).files![0]
+					);
+					this.imageUploaded = true;
+				} else {
+					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+						'unsupported image '
+					);
+					document.querySelector<HTMLInputElement>('#file-input')!.value = '';
+					this.profile.avatar = this.prevAvatar;
+					this.imageUploaded = false;
+				}
+			} catch (error) {
+				console.log(error);
+			}
+			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
+		},
+		updateAvatar(reset = false) {
+			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
+			if (reset) this.formData.set('avatar', '');
+			imageApiService(endpoints.myAvatar, 'PUT', this.formData).then(() => {
+				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+					'pfp updated'
+				);
+				this.$router.go(0);
+			});
+		},
 		disableAccount() {
 			(this.$refs.actionNotification as InstanceType<typeof ActionNotification>).sendNotification(
 				'Are you sure?',
@@ -128,3 +196,11 @@ export default {
 	}
 };
 </script>
+
+<style>
+.avatar {
+	vertical-align: middle;
+	width: 50px;
+	height: 50px;
+}
+</style>

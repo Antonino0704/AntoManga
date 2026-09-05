@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from users.models import InviteToken, Ticket, Label
+from users.models import InviteToken, Ticket, Label, Profile
 
 from django.urls import reverse
 from django.utils.html import format_html
@@ -158,6 +158,11 @@ class TicketAdmin(admin.ModelAdmin):
         return ["date"]
 
 
+class ProfileAdmin(admin.ModelAdmin):
+    pass
+
+
 admin.site.register(InviteToken, InviteTokenAdmin)
 admin.site.register(Ticket, TicketAdmin)
 admin.site.register(Label, LabelAdmin)
+admin.site.register(Profile, ProfileAdmin)

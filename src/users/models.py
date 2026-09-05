@@ -32,12 +32,11 @@ class Label(models.Model):
 
 
 class Ticket(models.Model):
-
     title = models.CharField(max_length=20)
     email = models.EmailField()
     description = models.TextField()
     label = models.ForeignKey(Label, on_delete=models.PROTECT, related_name="tickets")
-    status = models.BooleanField(default=False)  # False = open while True + close
+    status = models.BooleanField(default=False)  # False = open while True = close
     author = models.ForeignKey(
         User, on_delete=models.PROTECT, related_name="tickets", null=True
     )
@@ -45,3 +44,11 @@ class Ticket(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    avatar = models.ImageField(blank=True, null=True)
+
+    def __str__(self):
+        return self.user.username

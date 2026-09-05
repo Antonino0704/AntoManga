@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from users.models import Ticket, Label
+from users.models import Ticket, Label, Profile
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -26,3 +26,10 @@ class LabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Label
         fields = "__all__"
+
+
+class AvatarProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Profile
+        fields = ["avatar"]

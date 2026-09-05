@@ -1,22 +1,28 @@
 const apiVersion = 'v7/';
 const endpoints = {
-	publishers: `${apiVersion}publishers/`,
-	imgPublishers: `${apiVersion}image/publishers/`,
-	series: `${apiVersion}series/`,
-	imgSeries: `${apiVersion}image/series/`,
-	types: `${apiVersion}types/`,
-	isAuthenticated: `${apiVersion}isAuthenticated/`,
-	seriesLength: `${apiVersion}series-length/`,
-	seriesList: `${apiVersion}series-list/`,
-	imgSeriesList: `${apiVersion}image/series-list/`,
-	version: `${apiVersion}version/`,
-	license: `${apiVersion}license/`,
-	userMe: `${apiVersion}user-me/`,
-	validateImage: `${apiVersion}image/validate/`,
-	publisherStats: `${apiVersion}publisher-stats/`,
-	publishersShort: `${apiVersion}short-version/publishers/`,
-	createTicket: `${apiVersion}ticket/create/`,
-	labels: `${apiVersion}ticket/labels/`
+	publishers: 'publishers/',
+	imgPublishers: 'image/publishers/',
+	series: 'series/',
+	imgSeries: 'image/series/',
+	types: 'types/',
+	seriesLength: 'series-length/',
+	seriesList: 'series-list/',
+	imgSeriesList: 'image/series-list/',
+	version: 'version/',
+	license: 'license/',
+	userMe: 'user-me/',
+	validateImage: 'image/validate/',
+	publisherStats: 'publisher-stats/',
+	publishersShort: 'short-version/publishers/',
+	createTicket: 'ticket/create/',
+	labels: 'ticket/labels/',
+	myAvatar: 'my-avatar/'
 };
 
+Object.keys(endpoints).forEach(
+	(key) =>
+		(endpoints[key as keyof typeof endpoints] = `${apiVersion}${
+			endpoints[key as keyof typeof endpoints]
+		}`)
+);
 export { endpoints };

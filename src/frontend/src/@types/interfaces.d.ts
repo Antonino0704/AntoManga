@@ -80,3 +80,8 @@ export interface Label {
 	name: string;
 	color: string;
 }
+
+export interface Profile {
+	user: User;
+	avatar: string;
+}
