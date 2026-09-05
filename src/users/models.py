@@ -37,7 +37,7 @@ class Ticket(models.Model):
     email = models.EmailField()
     description = models.TextField()
     label = models.ForeignKey(Label, on_delete=models.PROTECT, related_name="tickets")
-    status = models.BooleanField(default=False)  # False = open while True + close
+    status = models.BooleanField(default=False)  # False = open while True = close
     author = models.ForeignKey(
         User, on_delete=models.PROTECT, related_name="tickets", null=True
     )
