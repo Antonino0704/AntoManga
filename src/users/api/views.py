@@ -2,10 +2,15 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import generics
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
-from users.api.serializers import UserSerializer, TicketSerializer, LabelSerializer
-from users.models import Label
+from users.api.serializers import (
+    UserSerializer,
+    TicketSerializer,
+    LabelSerializer,
+    AvatarProfileSerializer,
+)
+from users.models import Label, Profile
 from django.contrib.auth.models import User
 
 
@@ -63,3 +68,22 @@ class LabelView(generics.ListAPIView):
     queryset = Label.objects.all()
     serializer_class = LabelSerializer
     pagination_class = None
+
+
+class AvatarProfilView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = AvatarProfileSerializer(
+            Profile.objects.get_or_create(user=request.user)[0]
+        )
+        return Response(serializer.data)
+
+    def put(self, request):
+        profile = Profile.objects.get_or_create(user=request.user)[0]
+        serializer = AvatarProfileSerializer(profile, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)

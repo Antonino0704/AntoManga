@@ -15,7 +15,8 @@ const endpoints = {
 	publisherStats: 'publisher-stats/',
 	publishersShort: 'short-version/publishers/',
 	createTicket: 'ticket/create/',
-	labels: 'ticket/labels/'
+	labels: 'ticket/labels/',
+	myAvatar: 'my-avatar/'
 };
 
 Object.keys(endpoints).forEach(

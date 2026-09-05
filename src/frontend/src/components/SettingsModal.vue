@@ -67,19 +67,32 @@
 			class="bi bi-gear-fill position-absolute top-0 end-0 pe-3 pt-2 mb-2"
 			data-bs-toggle="modal"
 			data-bs-target="#settingsModal"
+			v-if="!avatar"
 		></i>
+		<img
+			:src="avatar"
+			data-bs-toggle="modal"
+			data-bs-target="#settingsModal"
+			class="rounded-circle avatar2 position-absolute top-0 end-0 me-3 mt-2"
+			v-else
+		/>
 	</div>
 </template>
 
 <script lang="ts">
 import toggleTheme from './ToggleTheme.vue';
+import type { Profile } from '../@types/interfaces';
+import { apiService } from '../utils/APIService';
+import { endpoints } from '@/utils/endpoints';
+
 export default {
 	name: 'SettingsModal',
 	data() {
 		return {
 			grid: true,
 			readyToRead: false,
-			ReadyToReadButtonText: 'Show Ready to Read'
+			ReadyToReadButtonText: 'Show Ready to Read',
+			avatar: ''
 		};
 	},
 	props: {
@@ -118,11 +131,17 @@ export default {
 			localStorage.setItem('readytoread-cookie', String(!this.readyToRead));
 			if (this.$route.name === 'Home') this.$router.go(0);
 			else this.getReadyToRead();
+		},
+		getAvatar() {
+			apiService(endpoints.myAvatar).then((avatarProfile: Profile) => {
+				this.avatar = avatarProfile.avatar;
+			});
 		}
 	},
 	mounted() {
 		this.gridClick();
 		this.getReadyToRead();
+		this.getAvatar();
 	}
 };
 </script>
@@ -130,5 +149,11 @@ export default {
 <style>
 .settingsmodal {
 	text-align: center;
+}
+
+.avatar2 {
+	vertical-align: middle;
+	width: 30px;
+	height: 30px;
 }
 </style>
