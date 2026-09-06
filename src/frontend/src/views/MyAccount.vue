@@ -89,6 +89,7 @@ import type { User, Profile } from '../@types/interfaces';
 import spinnerLoading from '../components/SpinnerLoading.vue';
 import Notification from '../components/Notification.vue';
 import ActionNotification from '../components/ActionNotification.vue';
+import imageCompression from 'browser-image-compression';
 
 export default {
 	name: 'MyAccount',
@@ -97,7 +98,12 @@ export default {
 			profile: { user: { username: '' } } as Profile,
 			formData: new FormData(),
 			imageUploaded: false,
-			prevAvatar: ''
+			prevAvatar: '',
+			config: {
+				maxSizeMB: 1,
+				maxWidthOrHeight: 100,
+				useWebWorker: true
+			}
 		};
 	},
 	components: {
@@ -152,13 +158,17 @@ export default {
 			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
 			try {
 				if (await validateImage(event.target as InstanceType<typeof HTMLInputElement>)) {
-					this.formData.append(
-						'avatar',
-						(event.target as InstanceType<typeof HTMLInputElement>).files![0]
+					const resizedImageBlob = await imageCompression(
+						(event.target as InstanceType<typeof HTMLInputElement>).files![0],
+						this.config
 					);
-					this.profile.avatar = URL.createObjectURL(
-						(event.target as InstanceType<typeof HTMLInputElement>).files![0]
+					const resizedImage = new File(
+						[resizedImageBlob],
+						(event.target as InstanceType<typeof HTMLInputElement>).files![0].name,
+						{ type: 'image/webp' }
 					);
+					this.formData.append('avatar', resizedImage);
+					this.profile.avatar = URL.createObjectURL(resizedImage);
 					this.imageUploaded = true;
 				} else {
 					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
