@@ -372,8 +372,8 @@ export default {
 		}
 	},
 	async created() {
-		await this.getDataSeries();
 		this.isAuthenticated();
+		await this.getDataSeries();
 		window.scrollTo(0, history.state?.scroll?.top || 0);
 	}
 };
