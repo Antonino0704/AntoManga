@@ -167,7 +167,6 @@ export default {
 			this.gridClick();
 			this.readReadyToReadCockie();
 			document.querySelectorAll('span')[1]!.className = 'badge rounded-pill text-bg-info me-2';
-			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 		},
 		mouseEnter(id: string) {
 			document
@@ -349,6 +348,7 @@ export default {
 		isAuthenticated() {
 			apiService(endpoints.userMe, 'GET').then((response: User) => {
 				this.user = response;
+				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 			});
 		},
 		createTypeUrl(types: number[]) {
