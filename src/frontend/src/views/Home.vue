@@ -1,5 +1,6 @@
 <template>
-	<div class="HomeView row justify-content-center">
+	<WelcomeComponent v-if="!welcomePage && !user.is_authenticated" />
+	<div v-else class="HomeView row justify-content-center">
 		<navbar @filterEvent="search" />
 		<spinnerLoading ref="spinner" />
 		<div class="col-auto">
@@ -79,12 +80,15 @@
 
 <script lang="ts">
 import { apiService } from '../utils/APIService';
-import type { SeriesViewsetInstance, RequestObject, User } from '../@types/interfaces';
+import type { SeriesViewsetInstance, RequestObject } from '../@types/interfaces';
 import navbar from '../components/Navbar.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
 import SearchNoResults from '../components/SearchNoResults.vue';
+import WelcomeComponent from '../components/WelcomeComponent.vue';
 import { endpoints } from '@/utils/endpoints';
 import { moreData, moreDataImage } from '../utils/getSeries';
+import { useUserStore } from '@/stores/userStore';
+import { mapState } from 'pinia';
 
 export default {
 	name: 'HomeView',
@@ -95,7 +99,6 @@ export default {
 			seriesLength: 1,
 			grid: false,
 			readyToRead: false,
-			user: {} as User,
 			next: {
 				nextCard: null as string | null,
 				nextImageCard: null as string | null
@@ -106,12 +109,18 @@ export default {
 	components: {
 		navbar,
 		spinnerLoading,
-		SearchNoResults
+		SearchNoResults,
+		WelcomeComponent
 	},
 	computed: {
 		getLayoutClasses() {
 			return `row-cols-${this.numberOfCol[0]} row-cols-md-${this.numberOfCol[1]} row-cols-lg-${this.numberOfCol[2]}`;
-		}
+		},
+		welcomePage() {
+			if (sessionStorage.getItem('welcomeSeen')) return true;
+			return false;
+		},
+		...mapState(useUserStore, ['user'])
 	},
 	methods: {
 		async getDataSeries() {
@@ -346,11 +355,6 @@ export default {
 			}
 			return filter;
 		},
-		isAuthenticated() {
-			apiService(endpoints.userMe, 'GET').then((response: User) => {
-				this.user = response;
-			});
-		},
 		createTypeUrl(types: number[]) {
 			let url = `type=${types[0]}`;
 			let newType = types.slice(1); // create a new type array because we don't want to change the 'types' instance
@@ -372,7 +376,6 @@ export default {
 		}
 	},
 	async created() {
-		this.isAuthenticated();
 		await this.getDataSeries();
 		window.scrollTo(0, history.state?.scroll?.top || 0);
 	}

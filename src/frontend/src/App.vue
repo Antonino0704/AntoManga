@@ -1,7 +1,7 @@
 <template>
 	<isNotAuthenticated v-if="!user.is_authenticated" />
 	<div class="position-relative pb-5">
-		<SettingsModal :user="user" />
+		<SettingsModal />
 	</div>
 	<nav class="navabar row justify-content-center mt-2" v-if="isHome">
 		<div class="col-auto">
@@ -20,16 +20,14 @@
 <script lang="ts">
 import isNotAuthenticated from './components/IsNotAuthenticated.vue';
 import scrollTop from './components/ScrollTop.vue';
-import { apiService } from './utils/APIService';
-import { endpoints } from '@/utils/endpoints';
-import type { User } from './@types/interfaces';
 import SettingsModal from './components/SettingsModal.vue';
+import { useUserStore } from '@/stores/userStore';
+import { mapState } from 'pinia';
 
 export default {
 	name: 'App',
 	data() {
 		return {
-			user: { is_authenticated: true } as User,
 			scrollY: 0
 		};
 	},
@@ -41,7 +39,8 @@ export default {
 	computed: {
 		isHome() {
 			return this.$route.name !== 'Home';
-		}
+		},
+		...mapState(useUserStore, ['user'])
 	},
 	methods: {
 		theme() {
@@ -55,12 +54,6 @@ export default {
 				document.documentElement.setAttribute('data-bs-theme', 'dark');
 			}
 		},
-		isAuthenticated() {
-			console.log('%cNothing to see here', 'color: yellow; font-size: xx-large');
-			apiService(endpoints.userMe, 'GET').then((response: User) => {
-				this.user = response;
-			});
-		},
 		getLogo() {
 			return `${document.location.origin}/media/icon.png`;
 		},
@@ -73,7 +66,7 @@ export default {
 	},
 	created() {
 		this.theme();
-		this.isAuthenticated();
+		console.log('%cNothing to see here', 'color: yellow; font-size: xx-large');
 		window.addEventListener('scroll', this.handleScroll);
 	}
 };

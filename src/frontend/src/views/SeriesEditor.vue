@@ -92,7 +92,7 @@ import Notification from '../components/Notification.vue';
 import NotFound from '../views/NotFound.vue';
 import PreviewComponent from '../components/SeriesImagePreview.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
-import type { SeriesViewsetInstance, Type, Publisher, User } from '../@types/interfaces';
+import type { SeriesViewsetInstance, Type, Publisher } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 import { validateImage } from '@/utils/supportedImageExtensions';
 
@@ -120,15 +120,6 @@ export default {
 		NotFound,
 		PreviewComponent,
 		spinnerLoading
-	},
-	beforeRouteEnter(to, from, next) {
-		apiService(endpoints.userMe, 'GET').then((response: User) => {
-			if (response.is_authenticated) {
-				next();
-			} else {
-				next('/not-found');
-			}
-		});
 	},
 	methods: {
 		async getSeriesData() {

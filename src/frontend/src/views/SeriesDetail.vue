@@ -88,8 +88,10 @@ import { apiService } from '../utils/APIService';
 import seriesDetailStats from '../components/SeriesDetailStatistics.vue';
 import ActionNotification from '../components/ActionNotification.vue';
 import NotFound from '../views/NotFound.vue';
-import type { SeriesViewsetInstance, User } from '../@types/interfaces';
+import type { SeriesViewsetInstance } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
+import { useUserStore } from '@/stores/userStore';
+import { mapState } from 'pinia';
 
 export default {
 	name: 'SeriesDetail',
@@ -102,14 +104,16 @@ export default {
 	data() {
 		return {
 			series: {} as SeriesViewsetInstance,
-			imageSeries: '',
-			user: {} as User
+			imageSeries: ''
 		};
 	},
 	components: {
 		seriesDetailStats,
 		ActionNotification,
 		NotFound
+	},
+	computed: {
+		...mapState(useUserStore, ['user'])
 	},
 	methods: {
 		getSeriesData() {
@@ -138,11 +142,6 @@ export default {
 			this.series.volumes_read = volumes_read;
 			this.series.volumes_bought = volumes_bought;
 		},
-		isAuthenticated() {
-			apiService(endpoints.userMe, 'GET').then((response: User) => {
-				this.user = response;
-			});
-		},
 		copyAction() {
 			let shareButton = document.querySelector('.bi-share-fill') as HTMLElement;
 			shareButton.className = 'bi bi-check-square-fill text-success fs-6';
@@ -157,7 +156,6 @@ export default {
 	created() {
 		this.getSeriesData();
 		this.getImageSeries();
-		this.isAuthenticated();
 	}
 };
 </script>

@@ -32,12 +32,14 @@ const router = createRouter({
 			path: '/series/:slug/edit',
 			name: 'SeriesEditor',
 			component: SeriesEditor,
-			props: true
+			props: true,
+			meta: { requiresAuth: true }
 		},
 		{
 			path: '/add/series/',
 			name: 'AddSeries',
-			component: AddSeries
+			component: AddSeries,
+			meta: { requiresAuth: true }
 		},
 		{
 			path: '/publisher/:slug',
@@ -49,12 +51,14 @@ const router = createRouter({
 			path: '/publisher/:slug/edit',
 			name: 'PublisherEditor',
 			component: PublisherEditor,
-			props: true
+			props: true,
+			meta: { requiresAuth: true }
 		},
 		{
 			path: '/add/publisher/',
 			name: 'AddPublisher',
-			component: AddPublisher
+			component: AddPublisher,
+			meta: { requiresAuth: true }
 		},
 		{
 			path: '/types/',
@@ -79,7 +83,8 @@ const router = createRouter({
 		{
 			path: '/my-account/',
 			name: 'MyAccount',
-			component: MyAccount
+			component: MyAccount,
+			meta: { requiresAuth: true }
 		},
 		{
 			path: '/help/',
