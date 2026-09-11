@@ -15,7 +15,7 @@ app.use(pinia);
 
 router.beforeEach(async (to, from, next) => {
 	const store = useUserStore();
-	await store.userMe();
+	if (!store.loaded) await store.userMe();
 
 	if (to.meta.requiresAuth && !store.user.is_authenticated) return next('/not-found');
 	return next();

@@ -7,7 +7,8 @@ export const useUserStore = defineStore('user', {
 	state: () => ({
 		profile: {
 			user: {} as User
-		} as Profile
+		} as Profile,
+		loaded: false
 	}),
 	getters: {
 		user(state) {
@@ -22,6 +23,7 @@ export const useUserStore = defineStore('user', {
 			await apiService(endpoints.myAvatar).then((avatarProfile: Profile) => {
 				this.profile.avatar = avatarProfile.avatar;
 			});
+			this.loaded = true;
 		}
 	}
 });
