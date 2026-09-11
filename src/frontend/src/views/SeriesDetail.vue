@@ -56,7 +56,10 @@
 								</i>
 								<a
 									class="bi bi-share-fill fs-6"
-									onclick="navigator.clipboard.writeText(window.location.href); return false;"
+									onclick="
+										navigator.clipboard.writeText(window.location.href);
+										return false;
+									"
 									@click="copyAction()"
 								></a>
 								<div class="mt-3" v-if="ReadyToRead() || series.is_discontinued">
