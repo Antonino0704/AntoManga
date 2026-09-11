@@ -28,34 +28,36 @@
 						<a
 							type="button"
 							class="btn btn-success"
-							v-if="!user.is_authenticated"
+							v-if="!profile.user.is_authenticated"
 							href="/account/login/"
 							>LOGIN</a
 						>
 						<button
 							id="ReadyToReadButton"
 							class="btn btn-secondary"
-							v-if="user.is_authenticated"
+							v-if="profile.user.is_authenticated"
 							@click="setReadyToRead()"
 						>
 							{{ ReadyToReadButtonText }}
 						</button>
-						<hr v-if="user.is_authenticated" />
+						<hr v-if="profile.user.is_authenticated" />
 						<a
 							type="button"
 							class="btn btn-secondary bi bi-person-fill-gear"
-							v-if="user.is_authenticated"
+							v-if="profile.user.is_authenticated"
 							href="/my-account/"
 						>
 							My Account</a
 						>
-						<hr v-if="user.is_authenticated" />
-						<a type="button" class="btn btn-secondary" v-if="user.is_staff" href="/admin/">Admin</a>
-						<hr v-if="user.is_staff" />
+						<hr v-if="profile.user.is_authenticated" />
+						<a type="button" class="btn btn-secondary" v-if="profile.user.is_staff" href="/admin/"
+							>Admin</a
+						>
+						<hr v-if="profile.user.is_staff" />
 						<a
 							type="button"
 							class="btn btn-danger"
-							v-if="user.is_authenticated"
+							v-if="profile.user.is_authenticated"
 							href="/accounts/logout/"
 							>LOGOUT</a
 						>
@@ -67,10 +69,10 @@
 			class="bi bi-gear-fill position-absolute top-0 end-0 pe-3 pt-2 mb-2"
 			data-bs-toggle="modal"
 			data-bs-target="#settingsModal"
-			v-if="!avatar"
+			v-if="!profile.avatar"
 		></i>
 		<img
-			:src="avatar"
+			:src="profile.avatar"
 			data-bs-toggle="modal"
 			data-bs-target="#settingsModal"
 			class="rounded-circle avatar2 position-absolute top-0 end-0 me-3 mt-2"
@@ -81,9 +83,8 @@
 
 <script lang="ts">
 import toggleTheme from './ToggleTheme.vue';
-import type { Profile } from '../@types/interfaces';
-import { apiService } from '../utils/APIService';
-import { endpoints } from '@/utils/endpoints';
+import { useUserStore } from '@/stores/userStore';
+import { mapState } from 'pinia';
 
 export default {
 	name: 'SettingsModal',
@@ -91,18 +92,14 @@ export default {
 		return {
 			grid: true,
 			readyToRead: false,
-			ReadyToReadButtonText: 'Show Ready to Read',
-			avatar: ''
+			ReadyToReadButtonText: 'Show Ready to Read'
 		};
-	},
-	props: {
-		user: {
-			type: Object,
-			required: true
-		}
 	},
 	components: {
 		toggleTheme
+	},
+	computed: {
+		...mapState(useUserStore, ['profile'])
 	},
 	methods: {
 		gridClick() {
@@ -131,17 +128,22 @@ export default {
 			localStorage.setItem('readytoread-cookie', String(!this.readyToRead));
 			if (this.$route.name === 'Home') this.$router.go(0);
 			else this.getReadyToRead();
-		},
-		getAvatar() {
-			apiService(endpoints.myAvatar).then((avatarProfile: Profile) => {
-				this.avatar = avatarProfile.avatar;
-			});
+		}
+	},
+	watch: {
+		profile: {
+			handler(newProfile, oldProfile) {
+				if (newProfile.user.is_authenticated) {
+					this.$nextTick(() => {
+						this.getReadyToRead();
+					});
+				}
+			},
+			deep: true
 		}
 	},
 	mounted() {
 		this.gridClick();
-		this.getReadyToRead();
-		this.getAvatar();
 	}
 };
 </script>

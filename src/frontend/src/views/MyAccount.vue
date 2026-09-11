@@ -1,6 +1,6 @@
 <template>
 	<div class="my-class container-sm">
-		<spinnerLoading ref="spinner" />
+		<spinnerLoading ref="spinner" :startWithLoadingFalse="true" />
 		<div class="card mb-3 mt-5">
 			<div class="row g-0">
 				<img
@@ -85,20 +85,20 @@
 import { apiService, imageApiService } from '../utils/APIService';
 import { endpoints } from '@/utils/endpoints';
 import { validateImage } from '@/utils/supportedImageExtensions';
-import type { User, Profile } from '../@types/interfaces';
 import spinnerLoading from '../components/SpinnerLoading.vue';
 import Notification from '../components/Notification.vue';
 import ActionNotification from '../components/ActionNotification.vue';
 import imageCompression from 'browser-image-compression';
+import { useUserStore } from '@/stores/userStore';
+import { mapState } from 'pinia';
 
 export default {
 	name: 'MyAccount',
 	data() {
 		return {
-			profile: { user: { username: '' } } as Profile,
 			formData: new FormData(),
 			imageUploaded: false,
-			prevAvatar: '',
+			prevAvatar: useUserStore().profile.avatar,
 			config: {
 				maxSizeMB: 1,
 				maxWidthOrHeight: 100,
@@ -111,29 +111,10 @@ export default {
 		Notification,
 		ActionNotification
 	},
-	beforeRouteEnter(to, from, next) {
-		apiService(endpoints.userMe, 'GET').then((response: User) => {
-			if (response.is_authenticated) {
-				next();
-			} else {
-				next('/not-found');
-			}
-		});
+	computed: {
+		...mapState(useUserStore, ['profile'])
 	},
 	methods: {
-		getUser() {
-			apiService(endpoints.userMe)
-				.then((user: User) => {
-					this.profile.user = user;
-				})
-				.then(() => {
-					apiService(endpoints.myAvatar).then((avatarProfile: Profile) => {
-						this.profile.avatar = avatarProfile.avatar;
-						this.prevAvatar = avatarProfile.avatar;
-						(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
-					});
-				});
-		},
 		changeUsername() {
 			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
 			apiService(endpoints.userMe, 'PUT', { username: this.profile.user.username }).then(
@@ -200,9 +181,6 @@ export default {
 				endpoints.userMe
 			);
 		}
-	},
-	created() {
-		this.getUser();
 	}
 };
 </script>

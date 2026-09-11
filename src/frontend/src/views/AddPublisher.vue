@@ -59,7 +59,7 @@ import { apiService, imageApiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import PublisherImagePreview from '../components/PublisherImagePreview.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
-import type { Publisher, User } from '../@types/interfaces';
+import type { Publisher } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 import { validateImage } from '@/utils/supportedImageExtensions';
 
@@ -80,15 +80,6 @@ export default {
 		Notification,
 		PublisherImagePreview,
 		spinnerLoading
-	},
-	beforeRouteEnter(to, from, next) {
-		apiService(endpoints.userMe, 'GET').then((response: User) => {
-			if (response.is_authenticated) {
-				next();
-			} else {
-				next('/not-found');
-			}
-		});
 	},
 	methods: {
 		async addImage(event: Event) {

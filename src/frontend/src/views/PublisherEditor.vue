@@ -63,7 +63,7 @@ import Notification from '../components/Notification.vue';
 import NotFound from '../views/NotFound.vue';
 import PublisherImagePreview from '../components/PublisherImagePreview.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
-import type { PublisherDetail, User } from '../@types/interfaces';
+import type { PublisherDetail } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 import { validateImage } from '@/utils/supportedImageExtensions';
 
@@ -89,15 +89,6 @@ export default {
 			type: String,
 			required: true
 		}
-	},
-	beforeRouteEnter(to, from, next) {
-		apiService(endpoints.userMe, 'GET').then((response: User) => {
-			if (response.is_authenticated) {
-				next();
-			} else {
-				next('/not-found');
-			}
-		});
 	},
 	methods: {
 		async getPublisherData() {

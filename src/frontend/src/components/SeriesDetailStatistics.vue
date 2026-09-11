@@ -94,9 +94,11 @@
 import { apiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
-import type { Series, User } from '../@types/interfaces';
+import type { Series } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 import { checkDataStats, showErrors, resetErrors } from '@/utils/StatsErrorsChecks';
+import { useUserStore } from '@/stores/userStore';
+import { mapState } from 'pinia';
 
 export default {
 	name: 'seriesDetailStats',
@@ -111,7 +113,6 @@ export default {
 			series: {} as Series,
 			editIcon: false,
 			errors: '',
-			user: {} as User,
 			error: ''
 		};
 	},
@@ -131,13 +132,14 @@ export default {
 		},
 		getMissedVolumes(): number {
 			return this.series.n_volumes - this.series.volumes_bought;
-		}
+		},
+		...mapState(useUserStore, ['user'])
 	},
 	methods: {
 		async getDataSeries() {
 			return apiService(`${endpoints.series}${this.slug}/`).then((data: Series) => {
 				this.series = data;
-				return this.isAuthenticated();
+				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 			});
 		},
 
@@ -169,12 +171,6 @@ export default {
 				this.error = showErrors(this.series);
 				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(this.error);
 			}
-		},
-		async isAuthenticated() {
-			return apiService(endpoints.userMe, 'GET').then((response: User) => {
-				this.user = response;
-				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
-			});
 		}
 	},
 	async created() {

@@ -45,20 +45,24 @@
 import { apiService } from '../utils/APIService';
 import Notification from '../components/Notification.vue';
 import TypesComponent from '../components/TypesComponent.vue';
-import type { Type, User } from '../@types/interfaces';
+import type { Type } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
+import { useUserStore } from '@/stores/userStore';
+import { mapState } from 'pinia';
 
 export default {
 	name: 'typeView',
 	data() {
 		return {
-			types: [] as Array<Type>,
-			user: {} as User
+			types: [] as Array<Type>
 		};
 	},
 	components: {
 		Notification,
 		TypesComponent
+	},
+	computed: {
+		...mapState(useUserStore, ['user'])
 	},
 	methods: {
 		getTypesData() {
@@ -108,17 +112,10 @@ export default {
 					);
 				}
 			});
-		},
-		isAuthenticated() {
-			apiService(endpoints.userMe, 'GET').then((response: User) => {
-				this.user = response;
-			});
-		},
-		newTypeEventAction() {}
+		}
 	},
 	created() {
 		this.getTypesData();
-		this.isAuthenticated();
 	}
 };
 </script>

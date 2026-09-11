@@ -169,9 +169,11 @@
 
 <script lang="ts">
 import { apiService } from '../utils/APIService';
-import type { Type, Typev2, Publisher, User } from '../@types/interfaces';
+import type { Type, Typev2, Publisher } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 import MobileSearchComponent from './MobileSearch.vue';
+import { useUserStore } from '@/stores/userStore';
+import { mapState } from 'pinia';
 
 export default {
 	name: 'NavBar',
@@ -189,7 +191,6 @@ export default {
 			],
 			publishersList: [] as Array<Typev2>,
 			publishers: 0,
-			user: {} as User,
 			showTypes: false,
 			showPublishers: false,
 			showClearButton: false,
@@ -206,7 +207,8 @@ export default {
 				this.publishers > 0 &&
 				this.user.is_authenticated
 			);
-		}
+		},
+		...mapState(useUserStore, ['user'])
 	},
 	methods: {
 		getTypes() {
@@ -305,11 +307,6 @@ export default {
 		getLogo() {
 			return `${document.location.origin}/media/icon.png`;
 		},
-		isAuthenticated() {
-			apiService(endpoints.userMe, 'GET').then((response: User) => {
-				this.user = response;
-			});
-		},
 		showClearButtonOnCreated() {
 			if (
 				this.$route.query.publisher != undefined ||
@@ -329,7 +326,6 @@ export default {
 		this.getPublishersList();
 		this.getPublishersLength();
 		this.showClearButtonOnCreated();
-		this.isAuthenticated();
 	}
 };
 </script>

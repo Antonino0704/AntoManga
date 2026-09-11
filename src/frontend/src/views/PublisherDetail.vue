@@ -58,7 +58,10 @@
 				{{ publisher.name?.toUpperCase() }}'s list
 				<a
 					class="bi bi-share-fill ms-1 fs-6"
-					onclick="navigator.clipboard.writeText(window.location.href); return false;"
+					onclick="
+						navigator.clipboard.writeText(window.location.href);
+						return false;
+					"
 					@click="copyAction()"
 				></a>
 			</h5>
@@ -103,9 +106,11 @@ import ActionNotification from '../components/ActionNotification.vue';
 import NotFound from '../views/NotFound.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
 import publisherStats from '../components/PublisherStats.vue';
-import type { Series, PublisherDetail, RequestObject, User } from '../@types/interfaces';
+import type { Series, PublisherDetail, RequestObject } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 import { moreData, moreDataImage } from '../utils/getSeries';
+import { useUserStore } from '@/stores/userStore';
+import { mapState } from 'pinia';
 
 export default {
 	name: 'PublisherDetail',
@@ -126,8 +131,7 @@ export default {
 			next: {
 				nextCard: null as string | null,
 				nextImageCard: null as string | null
-			},
-			user: {} as User
+			}
 		};
 	},
 	components: {
@@ -140,6 +144,9 @@ export default {
 		if (history.state)
 			if (history.state.scroll) if (from.name !== 'SeriesDetail') history.state.scroll.top = 0;
 		next();
+	},
+	computed: {
+		...mapState(useUserStore, ['user'])
 	},
 	methods: {
 		getPublisherData() {
@@ -222,11 +229,6 @@ export default {
 				});
 			}
 		},
-		isAuthenticated() {
-			apiService(endpoints.userMe, 'GET').then((response: User) => {
-				this.user = response;
-			});
-		},
 		copyAction() {
 			let shareButton = document.querySelector('.bi-share-fill') as HTMLElement;
 			shareButton.className = 'bi bi-check-square-fill text-success ms-1 fs-6';
@@ -239,7 +241,6 @@ export default {
 		this.getPublisherData();
 		this.getImagePublisherData();
 		await this.getseriesData();
-		this.isAuthenticated();
 		window.scrollTo(0, history.state?.scroll?.top || 0);
 	}
 };

@@ -3,7 +3,7 @@
 		"useUnknownInCatchVariables": false,
 		"module": "ESNext",
 		"allowSyntheticDefaultImports": true,
-		"moduleResolution": "node",
+		"moduleResolution": "Bundler",
 		"strict": true,
 		"rootDir": "./"
 	}
