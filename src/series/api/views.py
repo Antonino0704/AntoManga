@@ -36,7 +36,6 @@ class TypologyViewset(viewsets.ModelViewSet):
 
 
 class SeriesViewset(viewsets.ModelViewSet):
-    queryset = Series.objects.all()
     lookup_field = "slug"
     serializer_class = SeriesSerializer
 
@@ -61,7 +60,6 @@ class SeriesListView(generics.ListAPIView):
 
 
 class ImageSeriesViewset(viewsets.ModelViewSet):
-    queryset = Series.objects.all()
     lookup_field = "slug"
     serializer_class = ImageSeriesSerializer
 

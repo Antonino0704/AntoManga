@@ -12,8 +12,8 @@ from series.api.views import (
 
 router = DefaultRouter()
 router.register("types", TypologyViewset)
-router.register("series", SeriesViewset)
-router.register("image/series", ImageSeriesViewset)
+router.register("series", SeriesViewset, basename="series")
+router.register("image/series", ImageSeriesViewset, basename="image-series")
 
 urlpatterns = [
     path("", include(router.urls)),

@@ -55,5 +55,7 @@ def filters(queryset, request):
             )
             seriesObjects = seriesObjects.order_by(order)
             seriesObjects = seriesObjects.exclude(purchased_at=None)
+    else:
+        return seriesObjects.order_by("id")
 
     return seriesObjects

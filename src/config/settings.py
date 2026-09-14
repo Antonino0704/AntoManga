@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import sys
 from dotenv import load_dotenv
 import os
 from core.setup import get_bool
@@ -178,3 +179,6 @@ VITE_NETWORK = get_bool(
     os.getenv("VITE_NETWORK")
 )  # it allows the server to be used for lan
 BETA = get_bool(os.getenv("BETA"))
+
+if "test" in sys.argv:
+    DEFAULT_FILE_STORAGE = "inmemorystorage.InMemoryStorage"
