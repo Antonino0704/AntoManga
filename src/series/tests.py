@@ -166,7 +166,7 @@ class SeriesViewsetTestCase(APITestCase):
         data = {
             "name": "series_test",
             "n_volumes": 1,
-            "volumes_bought": 2,  # here
+            "volumes_bought": 1,  # here
             "volumes_read": 1,
             "publisher": self.publisher.pk,
             "typology": self.type.pk,
