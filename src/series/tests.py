@@ -1,18 +1,18 @@
-from io import BytesIO
-from PIL import Image
-from django.core.files.uploadedfile import SimpleUploadedFile
 import json
+
 from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
-from datetime import date
 
+from datetime import date
 
 from django.contrib.auth.models import User
 from series.models import Typology, Series
 from publishers.models import Publisher
 
-from series.api.serializers import TypologySerializer
+from series.api.serializers import TypologySerializer, SeriesSerializer
+
+from core.testImage import get_test_image
 
 
 class TypologyViewsetTestCase(APITestCase):
@@ -119,6 +119,10 @@ class SeriesViewsetTestCase(APITestCase):
     def api_authentication(self):
         self.client.login(username="Test", password="test_password_123")
 
+    def other_user(self):
+        user = User.objects.create_user(username="Test2", password="test_password_123")
+        self.client.force_authenticate(user=user)
+
     def test_series_list_un_authenticated(self):
         self.client.force_authenticate(user=None)
         response = self.client.get(self.url)
@@ -198,9 +202,97 @@ class SeriesViewsetTestCase(APITestCase):
         ):
             self.client.post(self.url, data)
 
+    def test_single_series_retrive_un_authenticated(self):
+        self.client.force_authenticate(user=None)
+        serializer_data = SeriesSerializer(self.series).data
+        response = self.client.get(
+            reverse("series-detail", kwargs={"slug": self.series.slug})
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response_data = json.loads(response.content)
+        self.assertEqual(response_data, serializer_data)
 
-# TO DO
-# Not Authenticated, Authenticated, and Different User, single retrive, put and delete
+    def test_single_series_retrive_owner(self):
+        serializer_data = SeriesSerializer(self.series).data
+        response = self.client.get(
+            reverse("series-detail", kwargs={"slug": self.series.slug})
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response_data = json.loads(response.content)
+        self.assertEqual(response_data, serializer_data)
+
+    def test_single_series_retrive_not_owner(self):
+        self.other_user()
+        response = self.client.get(
+            reverse("series-detail", kwargs={"slug": self.series.slug})
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_single_series_update_un_authenticated(self):
+        self.client.force_authenticate(user=None)
+        data = {
+            "name": "series_test_updated",
+            "n_volumes": 2,
+            "volumes_bought": 1,
+            "volumes_read": 1,
+            "publisher": self.publisher.pk,
+            "typology": self.type.pk,
+        }
+        response = self.client.put(
+            reverse("series-detail", kwargs={"slug": self.series.slug}), data
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_single_series_update_owner(self):
+        data = {
+            "name": "series_test_updated",
+            "n_volumes": 2,
+            "volumes_bought": 1,
+            "volumes_read": 1,
+            "publisher": self.publisher.pk,
+            "typology": self.type.pk,
+        }
+        response = self.client.put(
+            reverse("series-detail", kwargs={"slug": self.series.slug}), data
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["name"], "series_test_updated")
+        self.assertEqual(response.data["n_volumes"], 2)
+
+    def test_single_series_update_not_owner(self):
+        self.other_user()
+        data = {
+            "name": "series_test_updated",
+            "n_volumes": 2,
+            "volumes_bought": 1,
+            "volumes_read": 1,
+            "publisher": self.publisher.pk,
+            "typology": self.type.pk,
+        }
+        response = self.client.put(
+            reverse("series-detail", kwargs={"slug": self.series.slug}), data
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_single_series_delete_un_authenticated(self):
+        self.client.force_authenticate(user=None)
+        response = self.client.delete(
+            reverse("series-detail", kwargs={"slug": self.series.slug})
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_single_series_delete_owner(self):
+        response = self.client.delete(
+            reverse("series-detail", kwargs={"slug": self.series.slug})
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_single_series_delete_not_owner(self):
+        self.other_user()
+        response = self.client.delete(
+            reverse("series-detail", kwargs={"slug": self.series.slug})
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
 class ImageSeriesViewsetTestCase(APITestCase):
@@ -226,21 +318,209 @@ class ImageSeriesViewsetTestCase(APITestCase):
     def api_authentication(self):
         self.client.login(username="Test", password="test_password_123")
 
-    def get_test_image(self):
-        buffer = BytesIO()
-        img = Image.new("RGB", (100, 100), color="red")
-        img.save(buffer, format="JPEG")
-        buffer.seek(0)
-        return SimpleUploadedFile(
-            name="test_image.jpg",
-            content=buffer.read(),
-            content_type="image/jpeg",
-        )
+    def other_user(self):
+        user = User.objects.create_user(username="Test2", password="test_password_123")
+        self.client.force_authenticate(user=user)
 
-    def test_image_add(self):
-        data = {"image": self.get_test_image()}
+    def test_image_add_owner(self):
+        data = {"image": get_test_image()}
         response = self.client.put(
             reverse("image-series-detail", kwargs={"slug": self.series.slug}), data
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn("image", response.data)
+
+    def test_image_add_not_owner(self):
+        self.other_user()
+        data = {"image": get_test_image()}
+        response = self.client.put(
+            reverse("image-series-detail", kwargs={"slug": self.series.slug}), data
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertNotIn("image", response.data)
+
+    def test_image_add_un_authenticated(self):
+        self.client.force_authenticate(user=None)
+        data = {"image": get_test_image()}
+        response = self.client.put(
+            reverse("image-series-detail", kwargs={"slug": self.series.slug}), data
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertNotIn("image", response.data)
+
+    def test_image_delete_owner(self):
+        response = self.client.delete(
+            reverse("image-series-detail", kwargs={"slug": self.series.slug})
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_image_delete_not_owner(self):
+        self.other_user()
+        response = self.client.delete(
+            reverse("image-series-detail", kwargs={"slug": self.series.slug})
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_image_delete_un_authenticated(self):
+        self.client.force_authenticate(user=None)
+        response = self.client.put(
+            reverse("image-series-detail", kwargs={"slug": self.series.slug})
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+
+class SeriesListViewTestCase(APITestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="Test", password="test_password_123"
+        )
+        self.type = Typology.objects.create(name="type_test")
+        self.publisher = Publisher.objects.create(name="publisher_test")
+        self.series = Series.objects.create(
+            name="init_series_test",
+            n_volumes=1,
+            volumes_bought=1,
+            volumes_read=1,
+            publisher=self.publisher,
+            typology=self.type,
+            owner=self.user,
+        )
+        self.api_authentication()
+
+    def api_authentication(self):
+        self.client.login(username="Test", password="test_password_123")
+
+    def other_user(self):
+        user = User.objects.create_user(username="Test2", password="test_password_123")
+        self.client.force_authenticate(user=user)
+
+    def test_seriesList_un_authenticated(self):
+        self.client.force_authenticate(user=None)
+        response = self.client.get(
+            reverse("publisher-series-list", kwargs={"publisher": self.publisher.slug})
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+
+    def test_seriesList_owner(self):
+        response = self.client.get(
+            reverse("publisher-series-list", kwargs={"publisher": self.publisher.slug})
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+
+    def test_seriesList_not_owner(self):
+        self.other_user()
+        response = self.client.get(
+            reverse("publisher-series-list", kwargs={"publisher": self.publisher.slug})
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 0)
+
+
+class ImageSeriesListViewTestCase(APITestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="Test", password="test_password_123"
+        )
+        self.type = Typology.objects.create(name="type_test")
+        self.publisher = Publisher.objects.create(name="publisher_test")
+        self.series = Series.objects.create(
+            name="init_series_test",
+            n_volumes=1,
+            volumes_bought=1,
+            volumes_read=1,
+            publisher=self.publisher,
+            typology=self.type,
+            owner=self.user,
+            image=get_test_image(),
+        )
+        self.api_authentication()
+
+    def api_authentication(self):
+        self.client.login(username="Test", password="test_password_123")
+
+    def other_user(self):
+        user = User.objects.create_user(username="Test2", password="test_password_123")
+        self.client.force_authenticate(user=user)
+
+    def test_imageSeriesList_un_authenticated(self):
+        self.client.force_authenticate(user=None)
+        response = self.client.get(
+            reverse(
+                "publisher-image-series-list", kwargs={"publisher": self.publisher.slug}
+            )
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertIsNotNone(response.data["results"][0]["image"])
+
+    def test_imageSeriesList_owner(self):
+        response = self.client.get(
+            reverse(
+                "publisher-image-series-list", kwargs={"publisher": self.publisher.slug}
+            )
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertIsNotNone(response.data["results"][0]["image"])
+
+    def test_imageSeriesList_not_owner(self):
+        self.other_user()
+        response = self.client.get(
+            reverse(
+                "publisher-image-series-list", kwargs={"publisher": self.publisher.slug}
+            )
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 0)
+
+
+class LengthViewTestCase(APITestCase):
+    url = reverse("length-view")
+
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="Test", password="test_password_123"
+        )
+        self.type = Typology.objects.create(name="type_test")
+        self.publisher = Publisher.objects.create(name="publisher_test")
+        self.series = Series.objects.create(
+            name="init_series_test",
+            n_volumes=5,
+            volumes_bought=5,
+            volumes_read=2,
+            publisher=self.publisher,
+            typology=self.type,
+            owner=self.user,
+        )
+        self.api_authentication()
+
+    def api_authentication(self):
+        self.client.login(username="Test", password="test_password_123")
+
+    def other_user(self):
+        user = User.objects.create_user(username="Test2", password="test_password_123")
+        self.client.force_authenticate(user=user)
+
+    def test_lengthView_un_authenticated(self):
+        self.client.force_authenticate(user=None)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["volumes_read_tot"], 2)
+        self.assertEqual(response.data["volumes_bought_tot"], 5)
+
+    def test_lengthView_owner(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["volumes_read_tot"], 2)
+        self.assertEqual(response.data["volumes_bought_tot"], 5)
+
+    def test_lengthView_not_owner(self):
+        self.other_user()
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["volumes_read_tot"], 0)
+        self.assertEqual(response.data["volumes_bought_tot"], 0)
