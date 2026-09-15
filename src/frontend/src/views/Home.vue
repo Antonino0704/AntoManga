@@ -79,7 +79,7 @@
 </template>
 
 <script lang="ts">
-import { apiService } from '../utils/APIService';
+import { APIExpress } from '../utils/APIExpress';
 import type { SeriesViewsetInstance, RequestObject } from '../@types/interfaces';
 import navbar from '../components/Navbar.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
@@ -124,26 +124,34 @@ export default {
 	},
 	methods: {
 		async getDataSeries() {
-			await apiService(endpoints.series + this.filter()).then((data: RequestObject) => {
-				this.series = data.results;
-				this.seriesLength = data.count;
-				this.next.nextCard = data.next;
-			});
+			try {
+				const response = await APIExpress.get<RequestObject>(endpoints.series + this.filter());
+				this.series = response.results;
+				this.seriesLength = response.count;
+				this.next.nextCard = response.next;
+			} catch (err) {
+				console.error(err);
+			}
+
 			if (this.$route.query.dataset != undefined) {
 				let seriesData = await moreData(Number(this.$route.query.dataset), 1, this.next.nextCard);
 				this.series.push(...seriesData.series);
 				this.next.nextCard = seriesData.nextCard;
 			}
-			return this.getDataImageSeries();
+			this.getDataImageSeries();
 		},
 		async getDataImageSeries() {
-			await apiService(endpoints.imgSeries + this.filter()).then((data: RequestObject) => {
-				this.next.nextImageCard = data.next;
+			try {
+				const response = await APIExpress.get<RequestObject>(endpoints.imgSeries + this.filter());
+				this.next.nextImageCard = response.next;
 				this.imagesSeries = [];
-				for (let i = 0; i < data.results.length; i++) {
-					this.imagesSeries.push(data.results[i].image);
+				for (let i = 0; i < response.results.length; i++) {
+					this.imagesSeries.push(response.results[i].image);
 				}
-			});
+			} catch (err) {
+				console.error(err);
+			}
+
 			if (this.$route.query.dataset != undefined) {
 				const seriesDataImg = await moreDataImage(
 					Number(this.$route.query.dataset),
@@ -153,7 +161,7 @@ export default {
 				this.imagesSeries.push(...seriesDataImg.imageSeries);
 				this.next.nextImageCard = seriesDataImg.nextImageCard;
 			}
-			return this.setLayout();
+			this.setLayout();
 		},
 		gridClick() {
 			const nCard = this.series.length;
@@ -299,26 +307,27 @@ export default {
 
 			if (sortByList.length != 0) imageUrl = `${imageUrl}&${this.createOrderByUrl(sortByList)}`;
 
-			apiService(url)
-				.then((data: RequestObject) => {
-					this.series = data.results;
-					this.seriesLength = data.count;
-					this.next.nextCard = data.next;
-				})
-				.then(() => {
-					apiService(imageUrl)
-						.then((data: RequestObject) => {
-							this.next.nextImageCard = data.next;
-							this.imagesSeries = [];
-							for (let i = 0; i < data.results.length; i++) {
-								this.imagesSeries.push(data.results[i].image);
-							}
-						})
-						.then(() => {
-							this.changeUrl(types, searchBarText, publishers, sortByList);
-							return this.setLayout();
-						});
-				});
+			try {
+				const response = await APIExpress.get<RequestObject>(url);
+				this.series = response.results;
+				this.seriesLength = response.count;
+				this.next.nextCard = response.next;
+			} catch (err) {
+				console.error(err);
+			}
+
+			try {
+				const responseImage = await APIExpress.get<RequestObject>(imageUrl);
+				this.next.nextImageCard = responseImage.next;
+				this.imagesSeries = [];
+				for (let i = 0; i < responseImage.results.length; i++) {
+					this.imagesSeries.push(responseImage.results[i].image);
+				}
+			} catch (err) {
+				console.error(err);
+			}
+			this.changeUrl(types, searchBarText, publishers, sortByList);
+			this.setLayout();
 		},
 		/**
 		 * Similar to method search,
