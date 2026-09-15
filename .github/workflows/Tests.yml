@@ -28,4 +28,5 @@ jobs:
           run: python ./src/core/setup.py
 
         - name: Run Tests
-          run: python ./src/manage.py test
+          working-directory: src
+          run: python manage.py test
