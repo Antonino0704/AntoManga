@@ -1,0 +1,31 @@
+name: Django Tests
+on: 
+  pull_request:
+    paths:
+      - src/**
+      - "!src/frontend/**"
+
+jobs:
+    testCheck:
+        name: Test Check
+        runs-on: ubuntu-latest
+        steps:
+        - name: Checkout Project
+          uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+
+        - name: Setup Python
+          uses: actions/setup-python@v5
+          with:
+            python-version: "3.8.3"
+            cache: "pip"
+        
+        - name: Install dependencies
+          run: pip install -r ./requirements.txt
+        
+        - name: Generate .env file
+          run: python ./src/core/setup.py
+
+        - name: Run Tests
+          run: python ./src/manage.py test

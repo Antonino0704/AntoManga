@@ -12,7 +12,7 @@ from publishers.models import Publisher
 
 from series.api.serializers import TypologySerializer, SeriesSerializer
 
-from core.testImage import get_test_image
+from core.methodsForTests import get_test_image, other_user
 
 
 class TypologyViewsetTestCase(APITestCase):
@@ -23,9 +23,6 @@ class TypologyViewsetTestCase(APITestCase):
             username="Test", password="test_password_123"
         )
         self.type = Typology.objects.create(name="init_test")
-        self.api_authentication()
-
-    def api_authentication(self):
         self.client.login(username="Test", password="test_password_123")
 
     def test_typology_list_un_authenticated(self):
@@ -114,14 +111,7 @@ class SeriesViewsetTestCase(APITestCase):
             typology=self.type,
             owner=self.user,
         )
-        self.api_authentication()
-
-    def api_authentication(self):
         self.client.login(username="Test", password="test_password_123")
-
-    def other_user(self):
-        user = User.objects.create_user(username="Test2", password="test_password_123")
-        self.client.force_authenticate(user=user)
 
     def test_series_list_un_authenticated(self):
         self.client.force_authenticate(user=None)
@@ -222,7 +212,7 @@ class SeriesViewsetTestCase(APITestCase):
         self.assertEqual(response_data, serializer_data)
 
     def test_single_series_retrive_not_owner(self):
-        self.other_user()
+        other_user(self.client)
         response = self.client.get(
             reverse("series-detail", kwargs={"slug": self.series.slug})
         )
@@ -260,7 +250,7 @@ class SeriesViewsetTestCase(APITestCase):
         self.assertEqual(response.data["n_volumes"], 2)
 
     def test_single_series_update_not_owner(self):
-        self.other_user()
+        other_user(self.client)
         data = {
             "name": "series_test_updated",
             "n_volumes": 2,
@@ -288,7 +278,7 @@ class SeriesViewsetTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_single_series_delete_not_owner(self):
-        self.other_user()
+        other_user(self.client)
         response = self.client.delete(
             reverse("series-detail", kwargs={"slug": self.series.slug})
         )
@@ -313,14 +303,7 @@ class ImageSeriesViewsetTestCase(APITestCase):
             typology=self.type,
             owner=self.user,
         )
-        self.api_authentication()
-
-    def api_authentication(self):
         self.client.login(username="Test", password="test_password_123")
-
-    def other_user(self):
-        user = User.objects.create_user(username="Test2", password="test_password_123")
-        self.client.force_authenticate(user=user)
 
     def test_image_add_owner(self):
         data = {"image": get_test_image()}
@@ -331,7 +314,7 @@ class ImageSeriesViewsetTestCase(APITestCase):
         self.assertIn("image", response.data)
 
     def test_image_add_not_owner(self):
-        self.other_user()
+        other_user(self.client)
         data = {"image": get_test_image()}
         response = self.client.put(
             reverse("image-series-detail", kwargs={"slug": self.series.slug}), data
@@ -355,7 +338,7 @@ class ImageSeriesViewsetTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_image_delete_not_owner(self):
-        self.other_user()
+        other_user(self.client)
         response = self.client.delete(
             reverse("image-series-detail", kwargs={"slug": self.series.slug})
         )
@@ -386,14 +369,7 @@ class SeriesListViewTestCase(APITestCase):
             typology=self.type,
             owner=self.user,
         )
-        self.api_authentication()
-
-    def api_authentication(self):
         self.client.login(username="Test", password="test_password_123")
-
-    def other_user(self):
-        user = User.objects.create_user(username="Test2", password="test_password_123")
-        self.client.force_authenticate(user=user)
 
     def test_seriesList_un_authenticated(self):
         self.client.force_authenticate(user=None)
@@ -411,7 +387,7 @@ class SeriesListViewTestCase(APITestCase):
         self.assertEqual(response.data["count"], 1)
 
     def test_seriesList_not_owner(self):
-        self.other_user()
+        other_user(self.client)
         response = self.client.get(
             reverse("publisher-series-list", kwargs={"publisher": self.publisher.slug})
         )
@@ -437,14 +413,7 @@ class ImageSeriesListViewTestCase(APITestCase):
             owner=self.user,
             image=get_test_image(),
         )
-        self.api_authentication()
-
-    def api_authentication(self):
         self.client.login(username="Test", password="test_password_123")
-
-    def other_user(self):
-        user = User.objects.create_user(username="Test2", password="test_password_123")
-        self.client.force_authenticate(user=user)
 
     def test_imageSeriesList_un_authenticated(self):
         self.client.force_authenticate(user=None)
@@ -468,7 +437,7 @@ class ImageSeriesListViewTestCase(APITestCase):
         self.assertIsNotNone(response.data["results"][0]["image"])
 
     def test_imageSeriesList_not_owner(self):
-        self.other_user()
+        other_user(self.client)
         response = self.client.get(
             reverse(
                 "publisher-image-series-list", kwargs={"publisher": self.publisher.slug}
@@ -496,14 +465,7 @@ class LengthViewTestCase(APITestCase):
             typology=self.type,
             owner=self.user,
         )
-        self.api_authentication()
-
-    def api_authentication(self):
         self.client.login(username="Test", password="test_password_123")
-
-    def other_user(self):
-        user = User.objects.create_user(username="Test2", password="test_password_123")
-        self.client.force_authenticate(user=user)
 
     def test_lengthView_un_authenticated(self):
         self.client.force_authenticate(user=None)
@@ -519,7 +481,7 @@ class LengthViewTestCase(APITestCase):
         self.assertEqual(response.data["volumes_bought_tot"], 5)
 
     def test_lengthView_not_owner(self):
-        self.other_user()
+        other_user(self.client)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["volumes_read_tot"], 0)

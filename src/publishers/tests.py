@@ -10,7 +10,7 @@ from publishers.models import Publisher
 from publishers.api.serializers import PublisherSerializer
 from series.models import Typology, Series
 
-from core.testImage import get_test_image
+from core.methodsForTests import get_test_image, other_user
 
 
 class PublisherViewsetTestCase(APITestCase):
@@ -23,9 +23,6 @@ class PublisherViewsetTestCase(APITestCase):
         self.publisher = Publisher.objects.create(
             name="publisher_test", description="description test"
         )
-        self.api_authentication()
-
-    def api_authentication(self):
         self.client.login(username="Test", password="test_password_123")
 
     def test_publisher_list_un_authenticated(self):
@@ -128,9 +125,6 @@ class ImagePublisherViewsetTestCase(APITestCase):
         self.publisher = Publisher.objects.create(
             name="publisher_test", description="description test"
         )
-        self.api_authentication()
-
-    def api_authentication(self):
         self.client.login(username="Test", password="test_password_123")
 
     def test_image_add_un_authenticated(self):
@@ -163,3 +157,58 @@ class ImagePublisherViewsetTestCase(APITestCase):
             reverse("image-publisher-detail", kwargs={"slug": self.publisher.slug})
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+
+class PublisherStatsViewTestCase(APITestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="Test", password="test_password_123"
+        )
+        self.publisher = Publisher.objects.create(
+            name="publisher_test", description="description test"
+        )
+        self.type = Typology.objects.create(name="test")
+        Series.objects.create(
+            name="series_test",
+            n_volumes=1,
+            volumes_bought=1,
+            volumes_read=1,
+            publisher=self.publisher,
+            typology=self.type,
+            owner=self.user,
+        )
+
+        self.client.login(username="Test", password="test_password_123")
+
+    def test_publisherStats_un_authenticated(self):
+        self.client.force_authenticate(user=None)
+        response = self.client.get(
+            reverse(
+                "publisherStats-view",
+                kwargs={"publisher": self.publisher.slug, "type": self.type.pk},
+            )
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+
+    def test_publisherStats_owner(self):
+        response = self.client.get(
+            reverse(
+                "publisherStats-view",
+                kwargs={"publisher": self.publisher.slug, "type": self.type.pk},
+            )
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+
+    def test_publisherStats_not_owner(self):
+        other_user(self.client)
+        response = self.client.get(
+            reverse(
+                "publisherStats-view",
+                kwargs={"publisher": self.publisher.slug, "type": self.type.pk},
+            )
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 0)
