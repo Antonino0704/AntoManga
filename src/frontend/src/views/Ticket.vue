@@ -62,7 +62,7 @@
 </template>
 
 <script lang="ts">
-import { apiService } from '../utils/APIService';
+import { apiExpress } from '@/utils/APIExpress';
 import { endpoints } from '@/utils/endpoints';
 import Notification from '../components/Notification.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
@@ -86,30 +86,34 @@ export default {
 	},
 	methods: {
 		async getLabes() {
-			return apiService(endpoints.labels)
-				.then((labels: Array<Label>) => {
-					if (!labels.length) {
-						this.labelError = true;
-					} else {
-						this.labels.push(...labels);
-						this.ticket.label = labels[0].id;
-						document.querySelector('select')!.classList.remove('placeholder');
-					}
-				})
-				.then(() => {
-					(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
-				});
+			try {
+				const response = await apiExpress.get<Array<Label>>(endpoints.labels);
+				if (!response.length) {
+					this.labelError = true;
+				} else {
+					this.labels.push(...response);
+					this.ticket.label = response[0].id;
+					document.querySelector('select')!.classList.remove('placeholder');
+				}
+			} catch (err) {
+				console.log(err);
+			} finally {
+				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
+			}
 		},
-		sendReport() {
+		async sendReport() {
 			if (this.checkData()) {
-				apiService(endpoints.createTicket, 'POST', this.ticket).then((response: any) => {
+				try {
+					const response = await apiExpress.post<Ticket>(endpoints.createTicket, this.ticket);
 					if (response.id) {
 						(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
 							'Report sent'
 						);
 						this.sent = true;
 					}
-				});
+				} catch (err) {
+					console.log(err);
+				}
 			} else {
 				this.resetErrors();
 				this.showErrors();

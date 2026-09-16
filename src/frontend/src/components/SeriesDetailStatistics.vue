@@ -91,7 +91,7 @@
 </template>
 
 <script lang="ts">
-import { apiService } from '../utils/APIService';
+import { apiExpress } from '@/utils/APIExpress';
 import Notification from '../components/Notification.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
 import type { Series } from '../@types/interfaces';
@@ -137,10 +137,12 @@ export default {
 	},
 	methods: {
 		async getDataSeries() {
-			return apiService(`${endpoints.series}${this.slug}/`).then((data: Series) => {
-				this.series = data;
-				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
-			});
+			try {
+				this.series = await apiExpress.get<Series>(`${endpoints.series}${this.slug}/`);
+			} catch (err) {
+				console.log(err);
+			}
+			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 		},
 
 		edit(disabled = false) {
@@ -159,13 +161,16 @@ export default {
 			this.edit(true);
 			this.getDataSeries();
 		},
-		sendData() {
+		async sendData() {
 			if (checkDataStats(this.series)) {
-				apiService(`${endpoints.series}${this.slug}/`, 'PUT', this.series).then(() => {
+				try {
+					await apiExpress.put(`${endpoints.series}${this.slug}/`, this.series);
 					resetErrors();
 					this.edit(true);
 					this.$emit('changeStatsEvent', this.series.volumes_read, this.series.volumes_bought);
-				});
+				} catch (err) {
+					console.log(err);
+				}
 			} else {
 				resetErrors();
 				this.error = showErrors(this.series);

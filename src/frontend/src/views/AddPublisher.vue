@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts">
-import { APIExpress } from '../utils/APIExpress';
+import { apiExpress } from '@/utils/APIExpress';
 import Notification from '../components/Notification.vue';
 import PublisherImagePreview from '../components/PublisherImagePreview.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
@@ -108,8 +108,8 @@ export default {
 			if (this.checkData()) {
 				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
 				try {
-					const response = await APIExpress.post<Publisher>(endpoints.publishers, this.publisher);
-					await APIExpress.putImage(`${endpoints.imgPublishers}${response.slug}/`, this.formData);
+					const response = await apiExpress.post<Publisher>(endpoints.publishers, this.publisher);
+					await apiExpress.putImage(`${endpoints.imgPublishers}${response.slug}/`, this.formData);
 					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
 						'publisher added with success'
 					);

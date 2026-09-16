@@ -68,7 +68,7 @@
 </template>
 
 <script lang="ts">
-import { APIExpress } from '../utils/APIExpress';
+import { apiExpress } from '@/utils/APIExpress';
 import { endpoints } from '@/utils/endpoints';
 
 export default {
@@ -85,7 +85,7 @@ export default {
 	methods: {
 		async getBackendVersion() {
 			try {
-				this.version = await APIExpress.get(endpoints.version);
+				this.version = await apiExpress.get(endpoints.version);
 				document.querySelector('#version')!.classList.remove('placeholder');
 			} catch (err) {
 				console.log(err);
@@ -93,7 +93,7 @@ export default {
 		},
 		async getLicense() {
 			try {
-				this.license = await APIExpress.get<string>(endpoints.license);
+				this.license = await apiExpress.get<string>(endpoints.license);
 				document.querySelector('textarea')!.classList.remove('placeholder');
 			} catch (err) {
 				console.log(err);

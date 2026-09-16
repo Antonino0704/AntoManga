@@ -82,7 +82,7 @@
 </template>
 
 <script lang="ts">
-import { APIExpress } from '../utils/APIExpress';
+import { apiExpress } from '@/utils/APIExpress';
 import { endpoints } from '@/utils/endpoints';
 import { validateImage } from '@/utils/supportedImageExtensions';
 import spinnerLoading from '../components/SpinnerLoading.vue';
@@ -119,7 +119,8 @@ export default {
 			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
 
 			try {
-				await APIExpress.put(endpoints.userMe, {
+				if (this.profile.user.username === '') throw new Error('Please enter a valid username');
+				await apiExpress.put(endpoints.userMe, {
 					username: this.profile.user.username
 				});
 
@@ -129,7 +130,13 @@ export default {
 				document.querySelector('input')!.classList.remove('is-invalid');
 			} catch (err) {
 				console.log(err);
-				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(`${err}`);
+				if (`${err}` === 'Error: Request failed: 409 Conflict')
+					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+						'That username is already taken'
+					);
+				else
+					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(`${err}`);
+
 				document.querySelector('input')!.classList.add('is-invalid');
 			} finally {
 				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
@@ -145,8 +152,7 @@ export default {
 					);
 					const resizedImage = new File(
 						[resizedImageBlob],
-						(event.target as InstanceType<typeof HTMLInputElement>).files![0].name,
-						{ type: 'image/webp' }
+						(event.target as InstanceType<typeof HTMLInputElement>).files![0].name
 					);
 					this.formData.append('avatar', resizedImage);
 					this.profile.avatar = URL.createObjectURL(resizedImage);
@@ -169,7 +175,7 @@ export default {
 			if (reset) this.formData.set('avatar', '');
 
 			try {
-				await APIExpress.putImage(endpoints.myAvatar, this.formData);
+				await apiExpress.putImage(endpoints.myAvatar, this.formData);
 				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
 					'pfp updated'
 				);

@@ -101,7 +101,7 @@
 </template>
 
 <script lang="ts">
-import { APIExpress } from '../utils/APIExpress';
+import { apiExpress } from '@/utils/APIExpress';
 import ActionNotification from '../components/ActionNotification.vue';
 import NotFound from '../views/NotFound.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
@@ -151,11 +151,11 @@ export default {
 	methods: {
 		async getPublisherData() {
 			try {
-				this.publisher = await APIExpress.get<PublisherDetail>(
+				this.publisher = await apiExpress.get<PublisherDetail>(
 					`${endpoints.publishers}${this.slug}/`
 				);
 				this.imagePublisher = (
-					await APIExpress.get<PublisherDetail>(`${endpoints.imgPublishers}${this.slug}/`)
+					await apiExpress.get<PublisherDetail>(`${endpoints.imgPublishers}${this.slug}/`)
 				).image;
 			} catch (err) {
 				console.log(err);
@@ -163,7 +163,7 @@ export default {
 		},
 		async getseriesData() {
 			try {
-				const response = await APIExpress.get<RequestObject>(
+				const response = await apiExpress.get<RequestObject>(
 					`${endpoints.seriesList}${this.slug}/`
 				);
 				this.series = response.results;
@@ -186,7 +186,7 @@ export default {
 		},
 		async getImageseriesData() {
 			try {
-				const response = await APIExpress.get<RequestObject>(
+				const response = await apiExpress.get<RequestObject>(
 					`${endpoints.imgSeriesList}${this.slug}/`
 				);
 				this.next.nextImageCard = response.next;

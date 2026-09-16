@@ -79,7 +79,7 @@
 </template>
 
 <script lang="ts">
-import { APIExpress } from '../utils/APIExpress';
+import { apiExpress } from '@/utils/APIExpress';
 import type { SeriesViewsetInstance, RequestObject } from '../@types/interfaces';
 import navbar from '../components/Navbar.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
@@ -125,7 +125,7 @@ export default {
 	methods: {
 		async getDataSeries() {
 			try {
-				const response = await APIExpress.get<RequestObject>(endpoints.series + this.filter());
+				const response = await apiExpress.get<RequestObject>(endpoints.series + this.filter());
 				this.series = response.results;
 				this.seriesLength = response.count;
 				this.next.nextCard = response.next;
@@ -146,7 +146,7 @@ export default {
 		},
 		async getDataImageSeries() {
 			try {
-				const response = await APIExpress.get<RequestObject>(endpoints.imgSeries + this.filter());
+				const response = await apiExpress.get<RequestObject>(endpoints.imgSeries + this.filter());
 				this.next.nextImageCard = response.next;
 				this.imagesSeries = [];
 				for (let i = 0; i < response.results.length; i++) {
@@ -320,7 +320,7 @@ export default {
 			if (sortByList.length != 0) imageUrl = `${imageUrl}&${this.createOrderByUrl(sortByList)}`;
 
 			try {
-				const response = await APIExpress.get<RequestObject>(url);
+				const response = await apiExpress.get<RequestObject>(url);
 				this.series = response.results;
 				this.seriesLength = response.count;
 				this.next.nextCard = response.next;
@@ -329,7 +329,7 @@ export default {
 			}
 
 			try {
-				const responseImage = await APIExpress.get<RequestObject>(imageUrl);
+				const responseImage = await apiExpress.get<RequestObject>(imageUrl);
 				this.next.nextImageCard = responseImage.next;
 				this.imagesSeries = [];
 				for (let i = 0; i < responseImage.results.length; i++) {

@@ -58,7 +58,7 @@
 </template>
 
 <script lang="ts">
-import { apiService, imageApiService } from '../utils/APIService';
+import { apiExpress } from '@/utils/APIExpress';
 import Notification from '../components/Notification.vue';
 import NotFound from '../views/NotFound.vue';
 import PublisherImagePreview from '../components/PublisherImagePreview.vue';
@@ -92,52 +92,52 @@ export default {
 	},
 	methods: {
 		async getPublisherData() {
-			await apiService(`${endpoints.publishers}${this.slug}/`).then((data: PublisherDetail) => {
-				this.publisher = data;
-			});
-		},
-		async getImagePublisherData() {
-			await apiService(`${endpoints.imgPublishers}${this.slug}/`).then((data: PublisherDetail) => {
-				this.imagePublisher = data.image;
-				(this.$refs.preview as InstanceType<typeof PublisherImagePreview>).setPreview(data.image);
-			});
-		},
-		Update() {
-			if (this.checkData()) {
-				apiService(`${endpoints.publishers}${this.slug}/`, 'PUT', this.publisher).then(
-					(response: PublisherDetail) => {
-						if (this.imageUploaded) {
-							imageApiService(`${endpoints.imgPublishers}${this.slug}/`, 'PUT', this.formData)
-								.then(() => {
-									(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-										'publisher and image updated with success'
-									);
-								})
-								.then(() => {
-									setTimeout(
-										() =>
-											this.$router.push({
-												name: 'PublisherDetail',
-												params: { slug: response.slug }
-											}),
-										1000
-									);
-								});
-						} else {
-							(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-								'publisher updated with success'
-							);
-							setTimeout(
-								() =>
-									this.$router.push({
-										name: 'PublisherDetail',
-										params: { slug: response.slug }
-									}),
-								1000
-							);
-						}
-					}
+			try {
+				this.publisher = await apiExpress.get<PublisherDetail>(
+					`${endpoints.publishers}${this.slug}/`
 				);
+				const response = await apiExpress.get<PublisherDetail>(
+					`${endpoints.imgPublishers}${this.slug}/`
+				);
+				this.imagePublisher = response.image;
+				(this.$refs.preview as InstanceType<typeof PublisherImagePreview>).setPreview(
+					response.image
+				);
+			} catch (err) {
+				console.log(err);
+			} finally {
+				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
+			}
+		},
+		async Update() {
+			if (this.checkData()) {
+				try {
+					const response = await apiExpress.put<PublisherDetail>(
+						`${endpoints.publishers}${this.slug}/`,
+						this.publisher
+					);
+
+					if (this.imageUploaded) {
+						await apiExpress.putImage(`${endpoints.imgPublishers}${response.slug}/`, this.formData);
+						(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+							'publisher and image updated with success'
+						);
+					} else {
+						(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+							'publisher updated with success'
+						);
+					}
+					setTimeout(
+						() =>
+							this.$router.push({
+								name: 'PublisherDetail',
+								params: { slug: response.slug }
+							}),
+						1000
+					);
+				} catch (err) {
+					console.log(err);
+				}
 			} else {
 				document.querySelector('#floatingInputGrid')!.className = 'form-control';
 				document.querySelector('#floatingTextarea')!.className = 'form-control';
@@ -190,8 +190,6 @@ export default {
 	},
 	async created() {
 		await this.getPublisherData();
-		await this.getImagePublisherData();
-		(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 	}
 };
 </script>

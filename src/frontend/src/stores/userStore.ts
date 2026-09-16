@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { apiService } from '@/utils/APIService';
+import { apiExpress } from '@/utils/APIExpress';
 import { endpoints } from '@/utils/endpoints';
 import type { User, Profile } from '@/@types/interfaces';
 
@@ -17,12 +17,8 @@ export const useUserStore = defineStore('user', {
 	},
 	actions: {
 		async userMe() {
-			await apiService(endpoints.userMe).then((response: User) => {
-				this.profile.user = response;
-			});
-			await apiService(endpoints.myAvatar).then((avatarProfile: Profile) => {
-				this.profile.avatar = avatarProfile.avatar;
-			});
+			this.profile.user = await apiExpress.get<User>(endpoints.userMe);
+			this.profile.avatar = (await apiExpress.get<Profile>(endpoints.myAvatar)).avatar;
 			this.loaded = true;
 		}
 	}

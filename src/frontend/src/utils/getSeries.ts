@@ -1,5 +1,5 @@
 import type { SeriesViewsetInstance, RequestObject } from '../@types/interfaces';
-import { APIExpress } from '../utils/APIExpress';
+import { apiExpress } from '@/utils/APIExpress';
 
 async function moreData(
 	dataset: number,
@@ -14,7 +14,7 @@ async function moreData(
 	};
 
 	while ((current < dataset || dataset == -1) && seriesData.next != null) {
-		const response = await APIExpress.get<RequestObject>(
+		const response = await apiExpress.get<RequestObject>(
 			seriesData.next.replace(/\S*\/api\//g, '')
 		);
 		seriesData.results.push(...response.results);
@@ -37,7 +37,7 @@ async function moreDataImage(
 	};
 
 	while ((current < dataset || dataset == -1) && seriesDataImg.next != null) {
-		const response = await APIExpress.get<RequestObject>(
+		const response = await apiExpress.get<RequestObject>(
 			seriesDataImg.next.replace(/\S*\/api\//g, '')
 		);
 		seriesDataImg.next = response.next;

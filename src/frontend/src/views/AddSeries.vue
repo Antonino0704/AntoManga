@@ -115,7 +115,7 @@
 </template>
 
 <script lang="ts">
-import { APIExpress } from '../utils/APIExpress';
+import { apiExpress } from '@/utils/APIExpress';
 import Notification from '../components/Notification.vue';
 import SeriesImagePreview from '../components/SeriesImagePreview.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
@@ -150,7 +150,7 @@ export default {
 	methods: {
 		async getTypes() {
 			try {
-				const response = await APIExpress.get<Array<Type>>(endpoints.types);
+				const response = await apiExpress.get<Array<Type>>(endpoints.types);
 				await this.types.push(...response);
 			} catch (err) {
 				console.log(err);
@@ -165,7 +165,7 @@ export default {
 		},
 		async getPublishers() {
 			try {
-				const response = await APIExpress.get<Array<Publisher>>(endpoints.publishers);
+				const response = await apiExpress.get<Array<Publisher>>(endpoints.publishers);
 				await this.publishers.push(...response);
 			} catch (err) {
 				console.log(err);
@@ -206,8 +206,8 @@ export default {
 				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
 
 				try {
-					const response = await APIExpress.post<Series>(endpoints.series, this.series);
-					await APIExpress.putImage(`${endpoints.imgSeries}${response.slug}/`, this.formData);
+					const response = await apiExpress.post<Series>(endpoints.series, this.series);
+					await apiExpress.putImage(`${endpoints.imgSeries}${response.slug}/`, this.formData);
 
 					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
 						'Manga added with success'

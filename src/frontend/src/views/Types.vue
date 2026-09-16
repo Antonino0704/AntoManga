@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts">
-import { apiService } from '../utils/APIService';
+import { apiExpress } from '@/utils/APIExpress';
 import Notification from '../components/Notification.vue';
 import TypesComponent from '../components/TypesComponent.vue';
 import type { Type } from '../@types/interfaces';
@@ -65,16 +65,23 @@ export default {
 		...mapState(useUserStore, ['user'])
 	},
 	methods: {
-		getTypesData() {
-			apiService(endpoints.types).then((data: Array<Type>) => {
-				this.types = data;
-			});
+		async getTypesData() {
+			try {
+				this.types = await apiExpress.get<Array<Type>>(endpoints.types);
+			} catch (err) {
+				console.log(err);
+			}
 		},
-		editType(id: number) {
+		async editType(id: number) {
 			if (this.checkData(id)) {
 				const type = this.types.find((t) => t.id == id);
 				if (type != undefined) {
-					apiService(`${endpoints.types}${id}/`, 'PUT', type);
+					try {
+						await apiExpress.put(`${endpoints.types}${id}/`, type);
+					} catch (err) {
+						console.log(err);
+					}
+
 					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
 						`type: ${type.name} updated`
 					);
@@ -97,21 +104,20 @@ export default {
 			}
 			return false;
 		},
-		deleteType(id: number) {
+		async deleteType(id: number) {
 			const tmp = this.types.filter((t) => t.id != id);
-			apiService(`${endpoints.types}${id}/`, 'DELETE').then((reason) => {
-				if (reason.protectedErrorDetail) {
-					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-						reason.protectedErrorDetail
-					);
-				} else {
-					const name = this.types.find((t) => t.id == id)!.name;
-					this.types = tmp;
-					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-						`type: ${name} was deleted`
-					);
-				}
-			});
+			try {
+				await apiExpress.delete(`${endpoints.types}${id}/`);
+
+				const name = this.types.find((t) => t.id == id)!.name;
+				this.types = tmp;
+				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+					`type: ${name} was deleted`
+				);
+			} catch (err) {
+				console.log(err);
+				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(`${err}`);
+			}
 		}
 	},
 	created() {
