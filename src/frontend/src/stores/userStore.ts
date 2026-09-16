@@ -17,8 +17,19 @@ export const useUserStore = defineStore('user', {
 	},
 	actions: {
 		async userMe() {
-			this.profile.user = await apiExpress.get<User>(endpoints.userMe);
-			this.profile.avatar = (await apiExpress.get<Profile>(endpoints.myAvatar)).avatar;
+			try {
+				this.profile.user = await apiExpress.get<User>(endpoints.userMe);
+			} catch (err) {
+				console.log(err);
+				this.profile.user = {} as User;
+			}
+			try {
+				this.profile.avatar = (await apiExpress.get<Profile>(endpoints.myAvatar)).avatar;
+			} catch (err) {
+				console.log(err);
+				this.profile.avatar = '';
+			}
+
 			this.loaded = true;
 		}
 	}
