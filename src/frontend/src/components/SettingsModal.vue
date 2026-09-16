@@ -121,8 +121,10 @@ export default {
 		},
 		setGrid() {
 			localStorage.setItem('grid-cookie', String(this.grid));
-			if (this.$route.name === 'Home') this.$router.go(0);
-			else this.gridClick();
+			if (this.$route.name === 'Home') {
+				this.$router.go(0);
+				history.replaceState(null, '', window.location.href);
+			} else this.gridClick();
 		},
 		setReadyToRead() {
 			localStorage.setItem('readytoread-cookie', String(!this.readyToRead));
