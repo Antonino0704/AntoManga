@@ -134,9 +134,13 @@ export default {
 			}
 
 			if (this.$route.query.dataset != undefined) {
-				let seriesData = await moreData(Number(this.$route.query.dataset), 1, this.next.nextCard);
-				this.series.push(...seriesData.series);
-				this.next.nextCard = seriesData.nextCard;
+				try {
+					let seriesData = await moreData(Number(this.$route.query.dataset), 1, this.next.nextCard);
+					this.series.push(...seriesData.results);
+					this.next.nextCard = seriesData.next;
+				} catch (err) {
+					console.log(err);
+				}
 			}
 			this.getDataImageSeries();
 		},
@@ -153,13 +157,17 @@ export default {
 			}
 
 			if (this.$route.query.dataset != undefined) {
-				const seriesDataImg = await moreDataImage(
-					Number(this.$route.query.dataset),
-					1,
-					this.next.nextImageCard
-				);
-				this.imagesSeries.push(...seriesDataImg.imageSeries);
-				this.next.nextImageCard = seriesDataImg.nextImageCard;
+				try {
+					const seriesDataImg = await moreDataImage(
+						Number(this.$route.query.dataset),
+						1,
+						this.next.nextImageCard
+					);
+					this.imagesSeries.push(...seriesDataImg.results);
+					this.next.nextImageCard = seriesDataImg.next;
+				} catch (err) {
+					console.log(err);
+				}
 			}
 			this.setLayout();
 		},
@@ -199,14 +207,18 @@ export default {
 		async moreSeries() {
 			if (this.next.nextCard != null && this.next.nextImageCard != null) {
 				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
-				await moreData(1, 0, this.next.nextCard).then((seriesData) => {
-					this.series.push(...seriesData.series);
-					this.next.nextCard = seriesData.nextCard;
-				});
-				await moreDataImage(1, 0, this.next.nextImageCard).then((seriesDataImg) => {
-					this.imagesSeries.push(...seriesDataImg.imageSeries);
-					this.next.nextImageCard = seriesDataImg.nextImageCard;
-				});
+
+				try {
+					const seriesData = await moreData(1, 0, this.next.nextCard);
+					this.series.push(...seriesData.results);
+					this.next.nextCard = seriesData.next;
+
+					const seriesDataImg = await moreDataImage(1, 0, this.next.nextImageCard);
+					this.imagesSeries.push(...seriesDataImg.results);
+					this.next.nextImageCard = seriesDataImg.next;
+				} catch (err) {
+					console.log(err);
+				}
 
 				let search =
 					this.$route.query.filterbyname != null ? String(this.$route.query.filterbyname) : '';
@@ -235,7 +247,7 @@ export default {
 				}
 
 				this.changeUrl(types, search, publishers, sortByList);
-				return this.setLayout();
+				this.setLayout();
 			}
 		},
 		/**

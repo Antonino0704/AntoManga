@@ -54,20 +54,20 @@ class APIExpress_class {
 		return response.json() as Promise<T>;
 	}
 
-    public async delete<T>(endpoint: string): Promise<T | void>{
+	public async delete<T>(endpoint: string): Promise<T | void> {
 		this.jsonConfig.method = 'DELETE';
-        const response = await fetch(this.baseEndpoint + endpoint, this.fileConfig);
+		const response = await fetch(this.baseEndpoint + endpoint, this.fileConfig);
 		if (!response.ok) {
 			throw new Error(`Request failed: ${response.status} ${response.statusText}`);
 		}
-        if (response.status !== 204) return;
+		if (response.status !== 204) return;
 		return response.json() as Promise<T>;
 	}
 
 	public async putImage<T>(endpoint: string, data: FormData): Promise<T> {
 		this.fileConfig.method = 'PUT';
 		this.fileConfig.body = data;
-        const response = await fetch(this.baseEndpoint + endpoint, this.fileConfig);
+		const response = await fetch(this.baseEndpoint + endpoint, this.fileConfig);
 		if (!response.ok) {
 			throw new Error(`Request failed: ${response.status} ${response.statusText}`);
 		}
