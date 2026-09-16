@@ -169,7 +169,8 @@ export default {
 					console.log(err);
 				}
 			}
-			this.setLayout();
+			await this.setLayout();
+			window.scrollTo(0, history.state?.scroll?.top || 0);
 		},
 		gridClick() {
 			const nCard = this.series.length;
@@ -398,7 +399,6 @@ export default {
 	},
 	async created() {
 		await this.getDataSeries();
-		window.scrollTo(0, history.state?.scroll?.top || 0);
 	}
 };
 </script>

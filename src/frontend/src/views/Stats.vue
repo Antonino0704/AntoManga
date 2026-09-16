@@ -72,16 +72,16 @@ export default {
 		async next() {
 			document.querySelector('#load')!.classList.add('placeholder');
 			this.current++;
-			this.updateStats();
+			await this.updateStats();
 			document.querySelector('#load')!.classList.remove('placeholder');
 		},
 		async previous() {
 			document.querySelector('#load')!.classList.add('placeholder');
 			this.current--;
 			if (this.current == 0) {
-				this.getStats();
+				await this.getStats();
 			} else {
-				this.updateStats();
+				await this.updateStats();
 			}
 			document.querySelector('#load')!.classList.remove('placeholder');
 		},
