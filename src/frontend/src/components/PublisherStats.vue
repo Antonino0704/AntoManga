@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import { apiService } from '../utils/APIService';
+import { apiExpress } from '@/utils/APIExpress';
 import type { PublisherStats, Type, RequestObject } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 
@@ -65,18 +65,20 @@ export default {
 	},
 	methods: {
 		async getStats() {
-			this.types = await apiService(endpoints.types);
-			for (let type of this.types) {
-				await apiService(`${endpoints.publisherStats}${this.slug}/${type.id}/`).then(
-					(data: RequestObject) => {
-						this.stats.push({
-							type: type,
-							nSeries: data.count
-						});
-
-						document.querySelector('#load')!.classList.remove('placeholder');
-					}
-				);
+			try {
+				this.types = await apiExpress.get<Array<Type>>(endpoints.types);
+				for (let type of this.types) {
+					const response = await apiExpress.get<RequestObject>(
+						`${endpoints.publisherStats}${this.slug}/${type.id}/`
+					);
+					await this.stats.push({
+						type: type,
+						nSeries: response.count
+					});
+					document.querySelector('#load')!.classList.remove('placeholder');
+				}
+			} catch (err) {
+				console.log(err);
 			}
 		},
 		async next() {

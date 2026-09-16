@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import { apiService } from '../utils/APIService';
+import { apiExpress } from '@/utils/APIExpress';
 import type { Publisher, PublisherRank, RequestObject } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 
@@ -53,33 +53,41 @@ export default {
 		};
 	},
 	methods: {
-		getPublishers() {
-			apiService(endpoints.publishers).then((publishers: Array<PublisherRank>) => {
-				this.publishers.push(...publishers);
+		async getPublishers() {
+			try {
+				const response = await apiExpress.get<Array<PublisherRank>>(endpoints.publishers);
+				this.publishers.push(...response);
 				this.getImageSeries();
 				this.getSeriesList();
-			});
+			} catch (err) {
+				console.log(err);
+			}
 		},
-		getImageSeries() {
-			this.publishers.forEach((publisher: PublisherRank) => {
-				apiService(`${endpoints.imgPublishers}${publisher.slug}/`).then(
-					(imgPublisher: Publisher) => {
-						publisher.image = imgPublisher.image;
-					}
-				);
-			});
+		async getImageSeries() {
+			for (const publisher of this.publishers) {
+				try {
+					const response = await apiExpress.get<Publisher>(
+						`${endpoints.imgPublishers}${publisher.slug}/`
+					);
+					publisher.image = response.image;
+				} catch (err) {
+					console.log(err);
+				}
+			}
 		},
 		async getSeriesList() {
-			await Promise.all(
-				this.publishers.map((publisher) => {
-					return apiService(`${endpoints.seriesList}${publisher.slug}/`).then(
-						(data: RequestObject) => {
-							this.allVol += data.count;
-							publisher.count = data.count;
-						}
+			for (const publisher of this.publishers) {
+				try {
+					const response = await apiExpress.get<RequestObject>(
+						`${endpoints.seriesList}${publisher.slug}/`
 					);
-				})
-			);
+					this.allVol += response.count;
+					publisher.count = response.count;
+				} catch (err) {
+					console.log(err);
+				}
+			}
+
 			this.sort();
 			document.querySelectorAll('.placeholder').forEach((el) => {
 				el.classList.remove('placeholder');

@@ -168,7 +168,7 @@
 </template>
 
 <script lang="ts">
-import { apiService } from '../utils/APIService';
+import { apiExpress } from '@/utils/APIExpress';
 import type { Type, Typev2, Publisher } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 import MobileSearchComponent from './MobileSearch.vue';
@@ -211,64 +211,69 @@ export default {
 		...mapState(useUserStore, ['user'])
 	},
 	methods: {
-		getTypes() {
+		async getTypes() {
 			this.minimTypesLength = this.types.length;
-			apiService(endpoints.types)
-				.then((data: Array<Type>) => {
-					this.types.push(
-						...data.map((t) => ({
-							...t,
-							applied: false
-						}))
-					);
-				})
-				.then(() => {
-					if (this.$route.query.type != undefined) {
-						this.types.forEach((type) => {
-							type.applied = Array.isArray(this.$route.query.type)
-								? this.$route.query.type!.includes(String(type.id))
-								: [this.$route.query.type]!.includes(String(type.id));
-						});
-					}
-					if (this.$route.query.filterbyname != undefined)
-						document.querySelector<HTMLInputElement>('#searchBar')!.value = String(
-							this.$route.query.filterbyname
-						);
-					if (this.$route.query.purchased_at != undefined) {
-						if (this.$route.query.purchased_at == 'desc') {
-							this.sortByList[0].applied = true;
-							this.sortByList[1].applied = false;
-						} else {
-							this.sortByList[0].applied = false;
-							this.sortByList[1].applied = true;
-						}
-					}
+
+			try {
+				const response = await apiExpress.get<Array<Type>>(endpoints.types);
+				await this.types.push(
+					...response.map((t) => ({
+						...t,
+						applied: false
+					}))
+				);
+			} catch (err) {
+				console.log(err);
+			}
+
+			if (this.$route.query.type != undefined) {
+				this.types.forEach((type) => {
+					type.applied = Array.isArray(this.$route.query.type)
+						? this.$route.query.type!.includes(String(type.id))
+						: [this.$route.query.type]!.includes(String(type.id));
 				});
+			}
+			if (this.$route.query.filterbyname != undefined)
+				document.querySelector<HTMLInputElement>('#searchBar')!.value = String(
+					this.$route.query.filterbyname
+				);
+			if (this.$route.query.purchased_at != undefined) {
+				if (this.$route.query.purchased_at == 'desc') {
+					this.sortByList[0].applied = true;
+					this.sortByList[1].applied = false;
+				} else {
+					this.sortByList[0].applied = false;
+					this.sortByList[1].applied = true;
+				}
+			}
 		},
-		getPublishersList() {
-			apiService(endpoints.publishersShort)
-				.then((data: Array<Type>) => {
-					this.publishersList.push(
-						...data.map((t) => ({
-							...t,
-							applied: false
-						}))
-					);
-				})
-				.then(() => {
-					if (this.$route.query.publisher != undefined) {
-						this.publishersList.forEach((publisher) => {
-							publisher.applied = Array.isArray(this.$route.query.publisher)
-								? this.$route.query.publisher!.includes(String(publisher.id))
-								: [this.$route.query.publisher]!.includes(String(publisher.id));
-						});
-					}
+		async getPublishersList() {
+			try {
+				const response = await apiExpress.get<Array<Type>>(endpoints.publishersShort);
+				await this.publishersList.push(
+					...response.map((t) => ({
+						...t,
+						applied: false
+					}))
+				);
+			} catch (err) {
+				console.log(err);
+			}
+
+			if (this.$route.query.publisher != undefined) {
+				this.publishersList.forEach((publisher) => {
+					publisher.applied = Array.isArray(this.$route.query.publisher)
+						? this.$route.query.publisher!.includes(String(publisher.id))
+						: [this.$route.query.publisher]!.includes(String(publisher.id));
 				});
+			}
 		},
-		getPublishersLength() {
-			apiService(endpoints.publishers).then((data: Array<Publisher>) => {
-				this.publishers = data.length;
-			});
+		async getPublishersLength() {
+			try {
+				this.publishers = (await apiExpress.get<Array<Publisher>>(endpoints.publishers)).length;
+			} catch (err) {
+				console.log(err);
+			}
 		},
 		search() {
 			this.$emit(

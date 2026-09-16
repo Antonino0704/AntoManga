@@ -87,7 +87,7 @@
 </template>
 
 <script lang="ts">
-import { apiService } from '../utils/APIService';
+import { apiExpress } from '@/utils/APIExpress';
 import seriesDetailStats from '../components/SeriesDetailStatistics.vue';
 import ActionNotification from '../components/ActionNotification.vue';
 import NotFound from '../views/NotFound.vue';
@@ -119,15 +119,17 @@ export default {
 		...mapState(useUserStore, ['user'])
 	},
 	methods: {
-		getSeriesData() {
-			apiService(`${endpoints.series}${this.slug}/`).then((data: SeriesViewsetInstance) => {
-				this.series = data;
-			});
-		},
-		getImageSeries() {
-			apiService(`${endpoints.imgSeries}${this.slug}/`).then((data: SeriesViewsetInstance) => {
-				this.imageSeries = data.image;
-			});
+		async getSeriesData() {
+			try {
+				this.series = await apiExpress.get<SeriesViewsetInstance>(
+					`${endpoints.series}${this.slug}/`
+				);
+				this.imageSeries = (
+					await apiExpress.get<SeriesViewsetInstance>(`${endpoints.imgSeries}${this.slug}/`)
+				).image;
+			} catch (err) {
+				console.log(err);
+			}
 		},
 		deleteSeries() {
 			(this.$refs.actionNotification as InstanceType<typeof ActionNotification>).sendNotification(
@@ -158,7 +160,6 @@ export default {
 	},
 	created() {
 		this.getSeriesData();
-		this.getImageSeries();
 	}
 };
 </script>

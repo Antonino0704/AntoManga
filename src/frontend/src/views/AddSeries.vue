@@ -115,7 +115,7 @@
 </template>
 
 <script lang="ts">
-import { apiService, imageApiService } from '../utils/APIService';
+import { apiExpress } from '@/utils/APIExpress';
 import Notification from '../components/Notification.vue';
 import SeriesImagePreview from '../components/SeriesImagePreview.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
@@ -149,36 +149,34 @@ export default {
 	},
 	methods: {
 		async getTypes() {
-			return apiService(endpoints.types)
-				.then((data: Array<Type>) => {
-					for (let i = 0; i < data.length; i++) {
-						this.types.push(data[i]);
-					}
-				})
-				.then(() => {
-					this.series.typology = parseInt(
-						document.querySelector<HTMLOptionElement>('#typeSelect > option')!.value
-					);
-					document.querySelector<HTMLOptionElement>('#typeSelect > option')!.selected = true;
-					document.querySelector<HTMLSelectElement>('#typeSelect')!.className =
-						'form-select form-select-sm w-auto d-inline-block';
-				});
+			try {
+				const response = await apiExpress.get<Array<Type>>(endpoints.types);
+				await this.types.push(...response);
+			} catch (err) {
+				console.log(err);
+			}
+
+			this.series.typology = parseInt(
+				document.querySelector<HTMLOptionElement>('#typeSelect > option')!.value
+			);
+			document.querySelector<HTMLOptionElement>('#typeSelect > option')!.selected = true;
+			document.querySelector<HTMLSelectElement>('#typeSelect')!.className =
+				'form-select form-select-sm w-auto d-inline-block';
 		},
 		async getPublishers() {
-			return apiService(endpoints.publishers)
-				.then((data: Array<any>) => {
-					for (let i = 0; i < data.length; i++) {
-						this.publishers.push(data[i]);
-					}
-				})
-				.then(() => {
-					this.series.publisher = document.querySelector<HTMLOptionElement>(
-						'#publisherSelect > option'
-					)!.value;
-					document.querySelector<HTMLOptionElement>('#publisherSelect > option')!.selected = true;
-					document.querySelector<HTMLSelectElement>('#publisherSelect')!.className =
-						'form-select form-select-sm w-auto d-inline-block';
-				});
+			try {
+				const response = await apiExpress.get<Array<Publisher>>(endpoints.publishers);
+				await this.publishers.push(...response);
+			} catch (err) {
+				console.log(err);
+			}
+
+			this.series.publisher = document.querySelector<HTMLOptionElement>(
+				'#publisherSelect > option'
+			)!.value;
+			document.querySelector<HTMLOptionElement>('#publisherSelect > option')!.selected = true;
+			document.querySelector<HTMLSelectElement>('#publisherSelect')!.className =
+				'form-select form-select-sm w-auto d-inline-block';
 		},
 		async addImage(event: Event) {
 			//doesn't add the image to the server
@@ -203,27 +201,29 @@ export default {
 			}
 			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 		},
-		addSeries() {
+		async addSeries() {
 			if (this.checkData()) {
 				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
-				apiService(endpoints.series, 'POST', this.series).then((response: Series) => {
-					imageApiService(`${endpoints.imgSeries}${response.slug}/`, 'PUT', this.formData).then(
-						() => {
-							(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-								'Manga added with success'
-							);
-							(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
-							setTimeout(
-								() =>
-									this.$router.push({
-										name: 'SeriesDetail',
-										params: { slug: response.slug }
-									}),
-								1000
-							);
-						}
+
+				try {
+					const response = await apiExpress.post<Series>(endpoints.series, this.series);
+					await apiExpress.putImage(`${endpoints.imgSeries}${response.slug}/`, this.formData);
+
+					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+						'Manga added with success'
 					);
-				});
+					(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
+					setTimeout(
+						() =>
+							this.$router.push({
+								name: 'SeriesDetail',
+								params: { slug: response.slug }
+							}),
+						1000
+					);
+				} catch (err) {
+					console.log(err);
+				}
 			} else {
 				this.resetErrors();
 				this.showErrors();

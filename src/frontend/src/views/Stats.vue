@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import { apiService } from '../utils/APIService';
+import { apiExpress } from '@/utils/APIExpress';
 import type { Stats, Type } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 
@@ -44,51 +44,61 @@ export default {
 		};
 	},
 	methods: {
-		getStats() {
-			apiService(endpoints.seriesLength).then((data: any) => {
+		async getStats() {
+			try {
+				const response = await apiExpress.get<{
+					volumes_bought_tot: number;
+					volumes_read_tot: number;
+				}>(endpoints.seriesLength);
+
 				this.stats = {
 					type: this.types[this.current],
-					volumes_bought: data.volumes_bought_tot,
-					volumes_read: data.volumes_read_tot
+					volumes_bought: response.volumes_bought_tot,
+					volumes_read: response.volumes_read_tot
 				};
-				document.querySelector('#load')!.className = '';
-			});
+				document.querySelector('#load')!.classList.remove('placeholder');
+			} catch (err) {
+				console.log(err);
+			}
 		},
-		getTypes() {
-			apiService(endpoints.types).then((data: Array<Type>) => {
-				this.types.push(...data);
-			});
+		async getTypes() {
+			try {
+				const response = await apiExpress.get<Array<Type>>(endpoints.types);
+				await this.types.push(...response);
+			} catch (err) {
+				console.log(err);
+			}
 		},
-		next() {
-			document.querySelector('#load')!.className = 'placeholder';
+		async next() {
+			document.querySelector('#load')!.classList.add('placeholder');
 			this.current++;
-			apiService(`${endpoints.seriesLength}?type=${this.types[this.current].id}`).then(
-				(data: any) => {
-					this.stats = {
-						type: this.types[this.current],
-						volumes_bought: data.volumes_bought_tot,
-						volumes_read: data.volumes_read_tot
-					};
-					document.querySelector('#load')!.className = '';
-				}
-			);
+			this.updateStats();
+			document.querySelector('#load')!.classList.remove('placeholder');
 		},
-		previous() {
-			document.querySelector('#load')!.className = 'placeholder';
+		async previous() {
+			document.querySelector('#load')!.classList.add('placeholder');
 			this.current--;
 			if (this.current == 0) {
 				this.getStats();
 			} else {
-				apiService(`${endpoints.seriesLength}?type=${this.types[this.current].id}`).then(
-					(data: any) => {
-						this.stats = {
-							type: this.types[this.current],
-							volumes_bought: data.volumes_bought_tot,
-							volumes_read: data.volumes_read_tot
-						};
-						document.querySelector('#load')!.className = '';
-					}
-				);
+				this.updateStats();
+			}
+			document.querySelector('#load')!.classList.remove('placeholder');
+		},
+		async updateStats() {
+			try {
+				const response = await apiExpress.get<{
+					volumes_bought_tot: number;
+					volumes_read_tot: number;
+				}>(`${endpoints.seriesLength}?type=${this.types[this.current].id}`);
+
+				this.stats = {
+					type: this.types[this.current],
+					volumes_bought: response.volumes_bought_tot,
+					volumes_read: response.volumes_read_tot
+				};
+			} catch (err) {
+				console.log(err);
 			}
 		}
 	},

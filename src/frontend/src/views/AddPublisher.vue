@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts">
-import { apiService, imageApiService } from '../utils/APIService';
+import { apiExpress } from '@/utils/APIExpress';
 import Notification from '../components/Notification.vue';
 import PublisherImagePreview from '../components/PublisherImagePreview.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
@@ -104,27 +104,27 @@ export default {
 			}
 			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 		},
-		addPublisher() {
+		async addPublisher() {
 			if (this.checkData()) {
 				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
-				apiService(endpoints.publishers, 'POST', this.publisher).then((response: Publisher) => {
-					imageApiService(`${endpoints.imgPublishers}${response.slug}/`, 'PUT', this.formData).then(
-						() => {
-							(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-								'publisher added with success'
-							);
-							(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
-							setTimeout(
-								() =>
-									this.$router.push({
-										name: 'PublisherDetail',
-										params: { slug: response.slug }
-									}),
-								1000
-							);
-						}
+				try {
+					const response = await apiExpress.post<Publisher>(endpoints.publishers, this.publisher);
+					await apiExpress.putImage(`${endpoints.imgPublishers}${response.slug}/`, this.formData);
+					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+						'publisher added with success'
 					);
-				});
+					(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
+					setTimeout(
+						() =>
+							this.$router.push({
+								name: 'PublisherDetail',
+								params: { slug: response.slug }
+							}),
+						1000
+					);
+				} catch (err) {
+					console.log(err);
+				}
 			} else {
 				document.querySelector('#floatingInputGrid')!.className = 'form-control';
 				document.querySelector('#floatingTextarea')!.className = 'form-control';

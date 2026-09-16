@@ -21,7 +21,7 @@
 <script lang="ts">
 import { Toast } from 'bootstrap';
 import Notification from '../components/Notification.vue';
-import { apiService } from '../utils/APIService';
+import { apiExpress } from '@/utils/APIExpress';
 
 export default {
 	name: 'ActionNotification',
@@ -51,24 +51,21 @@ export default {
 			var toast = new Toast(this.$refs.liveToast);
 			toast.show();
 		},
-		deleteObj() {
-			apiService(this.endpoint, 'DELETE').then((reason) => {
-				if (reason.protectedErrorDetail) {
-					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-						reason.protectedErrorDetail
-					);
-				} else {
-					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-						this.confirmMessage
-					);
-
-					setTimeout(() => {
-						return this.$router.push({
-							name: 'Home'
-						});
-					}, 1000);
-				}
-			});
+		async deleteObj() {
+			try {
+				await apiExpress.delete(this.endpoint);
+				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+					this.confirmMessage
+				);
+				setTimeout(() => {
+					return this.$router.push({
+						name: 'Home'
+					});
+				}, 1000);
+			} catch (err) {
+				console.log(err);
+				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(`${err}`);
+			}
 		}
 	}
 };

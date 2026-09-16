@@ -69,6 +69,7 @@ export interface Typev2 extends Type {
 }
 
 export interface Ticket {
+	id: number;
 	title: string;
 	email: string;
 	description: string;

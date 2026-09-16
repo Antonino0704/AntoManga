@@ -87,7 +87,7 @@
 </template>
 
 <script lang="ts">
-import { apiService, imageApiService } from '../utils/APIService';
+import { apiExpress } from '@/utils/APIExpress';
 import Notification from '../components/Notification.vue';
 import NotFound from '../views/NotFound.vue';
 import PreviewComponent from '../components/SeriesImagePreview.vue';
@@ -123,85 +123,80 @@ export default {
 	},
 	methods: {
 		async getSeriesData() {
-			await apiService(`${endpoints.series}${this.slug}/`).then((data: SeriesViewsetInstance) => {
-				this.series = data;
+			try {
+				this.series = await apiExpress.get<SeriesViewsetInstance>(
+					`${endpoints.series}${this.slug}/`
+				);
 				this.getTypes();
 				this.getPublishers();
-			});
+			} catch (err) {
+				console.log(err);
+			}
 		},
 		async getTypes() {
-			await apiService(endpoints.types)
-				.then((data: Array<any>) => {
-					for (let i = 0; i < data.length; i++) {
-						this.types.push(data[i]);
-					}
-				})
-				.then(() => {
-					document.querySelector<HTMLOptionElement>(`#IDType-${this.series.typology}`)!.selected =
-						true;
-					document.querySelector<HTMLSelectElement>('#typeSelect')!.className =
-						'form-select form-select-sm w-auto d-inline-block';
-				});
+			try {
+				const response = await apiExpress.get<Array<Type>>(endpoints.types);
+				await this.types.push(...response);
+			} catch (err) {
+				console.log(err);
+			}
+			document.querySelector<HTMLOptionElement>(`#IDType-${this.series.typology}`)!.selected = true;
+			document.querySelector<HTMLSelectElement>('#typeSelect')!.className =
+				'form-select form-select-sm w-auto d-inline-block';
 		},
 		async getPublishers() {
-			await apiService(endpoints.publishers)
-				.then((data: Array<any>) => {
-					for (let i = 0; i < data.length; i++) {
-						this.publishers.push(data[i]);
-					}
-				})
-				.then(() => {
-					document.querySelector<HTMLOptionElement>(
-						`#IDPublisher-${this.series.publisher}`
-					)!.selected = true;
-					document.querySelector('#publisherSelect')!.className =
-						'form-select form-select-sm w-auto d-inline-block';
-				});
+			try {
+				const response = await apiExpress.get<Array<Publisher>>(endpoints.publishers);
+				await this.publishers.push(...response);
+			} catch (err) {
+				console.log(err);
+			}
+
+			document.querySelector<HTMLOptionElement>(`#IDPublisher-${this.series.publisher}`)!.selected =
+				true;
+			document.querySelector('#publisherSelect')!.className =
+				'form-select form-select-sm w-auto d-inline-block';
 		},
 		async getImageSeries() {
-			await apiService(`${endpoints.imgSeries}${this.slug}/`).then(
-				(data: SeriesViewsetInstance) => {
-					this.imageSeries = data.image;
-					(this.$refs.preview as InstanceType<typeof PreviewComponent>).setPreview(data.image);
-				}
-			);
-		},
-		Update() {
-			if (this.checkData()) {
-				apiService(`${endpoints.series}${this.slug}/`, 'PUT', this.series).then(
-					(response: SeriesViewsetInstance) => {
-						if (this.imageUploaded) {
-							imageApiService(`${endpoints.imgSeries}${this.slug}/`, 'PUT', this.formData)
-								.then(() => {
-									(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-										'series and image updated with success'
-									);
-								})
-								.then(() => {
-									setTimeout(
-										() =>
-											this.$router.push({
-												name: 'SeriesDetail',
-												params: { slug: response.slug }
-											}),
-										1000
-									);
-								});
-						} else {
-							(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-								'series updated with success'
-							);
-							setTimeout(
-								() =>
-									this.$router.push({
-										name: 'SeriesDetail',
-										params: { slug: response.slug }
-									}),
-								1000
-							);
-						}
-					}
+			try {
+				const response = await apiExpress.get<SeriesViewsetInstance>(
+					`${endpoints.imgSeries}${this.slug}/`
 				);
+				this.imageSeries = response.image;
+				(this.$refs.preview as InstanceType<typeof PreviewComponent>).setPreview(response.image);
+			} catch (err) {
+				console.log(err);
+			}
+		},
+		async Update() {
+			if (this.checkData()) {
+				try {
+					const response = await apiExpress.put<SeriesViewsetInstance>(
+						`${endpoints.series}${this.slug}/`,
+						this.series
+					);
+
+					if (this.imageUploaded) {
+						await apiExpress.putImage(`${endpoints.imgSeries}${response.slug}/`, this.formData);
+						(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+							'series and image updated with success'
+						);
+					} else {
+						(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+							'series updated with success'
+						);
+					}
+					setTimeout(
+						() =>
+							this.$router.push({
+								name: 'SeriesDetail',
+								params: { slug: response.slug }
+							}),
+						1000
+					);
+				} catch (err) {
+					console.log(err);
+				}
 			} else {
 				document.querySelector('#floatingInputGrid')!.className = 'form-control is-invalid';
 				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(this.error);

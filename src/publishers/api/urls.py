@@ -9,8 +9,8 @@ from publishers.api.views import (
 )
 
 router = DefaultRouter()
-router.register(r"publishers", PublisherViewSet)
-router.register(r"image/publishers", ImagePublisherViewSet)
+router.register(r"publishers", PublisherViewSet, basename="publisher")
+router.register(r"image/publishers", ImagePublisherViewSet, basename="image-publisher")
 
 urlpatterns = [
     path("", include(router.urls)),

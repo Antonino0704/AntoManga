@@ -12,16 +12,20 @@ from series.api.views import (
 
 router = DefaultRouter()
 router.register("types", TypologyViewset)
-router.register("series", SeriesViewset)
-router.register("image/series", ImageSeriesViewset)
+router.register("series", SeriesViewset, basename="series")
+router.register("image/series", ImageSeriesViewset, basename="image-series")
 
 urlpatterns = [
     path("", include(router.urls)),
-    path("series-list/<slug:publisher>/", SeriesListView.as_view(), name="series-list"),
+    path(
+        "series-list/<slug:publisher>/",
+        SeriesListView.as_view(),
+        name="publisher-series-list",
+    ),
     path(
         "image/series-list/<slug:publisher>/",
         ImageSeriesListView.as_view(),
-        name="image-series-list",
+        name="publisher-image-series-list",
     ),
     path("series-length/", LengthView.as_view(), name="length-view"),
 ]

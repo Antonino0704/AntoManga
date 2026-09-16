@@ -54,7 +54,7 @@
 </template>
 
 <script lang="ts">
-import { apiService } from '../utils/APIService';
+import { apiExpress } from '@/utils/APIExpress';
 import Notification from '../components/Notification.vue';
 import { endpoints } from '@/utils/endpoints';
 import { Modal } from 'bootstrap';
@@ -73,16 +73,20 @@ export default {
 		Notification
 	},
 	methods: {
-		post() {
+		async post() {
 			if (this.checkdata()) {
-				apiService(endpoints.types, 'POST', this.type).then(() => {
-					this.$emit('newTypeEvent');
-					Modal.getInstance(document.getElementById('typeModal')).hide();
-					this.reset();
-					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-						'type created with success'
-					);
-				});
+				try {
+					await apiExpress.post(endpoints.types, this.type);
+				} catch (err) {
+					console.log(err);
+				}
+
+				this.$emit('newTypeEvent');
+				Modal.getInstance(document.getElementById('typeModal')).hide();
+				this.reset();
+				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
+					'type created with success'
+				);
 			}
 		},
 		checkdata() {

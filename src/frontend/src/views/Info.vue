@@ -68,7 +68,7 @@
 </template>
 
 <script lang="ts">
-import { apiService } from '../utils/APIService';
+import { apiExpress } from '@/utils/APIExpress';
 import { endpoints } from '@/utils/endpoints';
 
 export default {
@@ -83,23 +83,21 @@ export default {
 		};
 	},
 	methods: {
-		getBackendVersion() {
-			apiService(endpoints.version)
-				.then((result: any) => {
-					this.version = result;
-				})
-				.then(() => {
-					document.querySelector('#version')!.classList.remove('placeholder');
-				});
+		async getBackendVersion() {
+			try {
+				this.version = await apiExpress.get(endpoints.version);
+				document.querySelector('#version')!.classList.remove('placeholder');
+			} catch (err) {
+				console.log(err);
+			}
 		},
-		getLicense() {
-			apiService(endpoints.license)
-				.then((license: string) => {
-					this.license = license;
-				})
-				.then(() => {
-					document.querySelector('textarea')!.classList.remove('placeholder');
-				});
+		async getLicense() {
+			try {
+				this.license = await apiExpress.get<string>(endpoints.license);
+				document.querySelector('textarea')!.classList.remove('placeholder');
+			} catch (err) {
+				console.log(err);
+			}
 		}
 	},
 	created() {
