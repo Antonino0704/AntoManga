@@ -55,7 +55,7 @@
 			</div>
 			<publisherStats :slug="slug" :seriesLength="seriesLength" v-if="publisher" />
 			<h5 class="mt-3">
-				{{ publisher.name?.toUpperCase() }}'s list
+				Share
 				<a
 					class="bi bi-share-fill ms-1 fs-6"
 					onclick="
@@ -64,33 +64,8 @@
 					"
 					@click="copyAction()"
 				></a>
+				<p text-body-secondary class="mt-2"><i class="bi bi-book"></i> {{ seriesLength }}</p>
 			</h5>
-			<div class="vr">
-				<p text-body-secondary class="ms-2">Length: {{ seriesLength }}</p>
-			</div>
-			<ul class="list-group series-group container">
-				<li class="list-group-item" v-for="(serie, index) in series" :key="serie.id">
-					<router-link :to="{ name: 'SeriesDetail', params: { slug: serie.slug } }">
-						{{ serie.name }}
-					</router-link>
-					<hr class="dropdown-divider" />
-					<p>Number Of Volumes: {{ serie.n_volumes }}</p>
-					<hr class="dropdown-divider" />
-					<img
-						:src="imageSeries[index]"
-						class="card-img-top rounded-pill image-series"
-						alt="logoPublisher"
-					/>
-				</li>
-				<button
-					v-if="next.nextCard"
-					@click="moreSeries()"
-					type="button"
-					class="btn btn-outline-secondary mt-3"
-				>
-					More
-				</button>
-			</ul>
 		</div>
 
 		<ActionNotification
@@ -125,13 +100,8 @@ export default {
 			publisher: {} as PublisherDetail,
 			series: [] as Array<Series>,
 			imagePublisher: '',
-			imageSeries: [] as Array<string>,
 			seriesLength: 0,
-			loading: true,
-			next: {
-				nextCard: null as string | null,
-				nextImageCard: null as string | null
-			}
+			loading: true
 		};
 	},
 	components: {
@@ -139,11 +109,6 @@ export default {
 		NotFound,
 		spinnerLoading,
 		publisherStats
-	},
-	beforeRouteEnter(to, from, next) {
-		if (history.state)
-			if (history.state.scroll) if (from.name !== 'SeriesDetail') history.state.scroll.top = 0;
-		next();
 	},
 	computed: {
 		...mapState(useUserStore, ['user'])
@@ -161,56 +126,17 @@ export default {
 				console.log(err);
 			}
 		},
-		async getseriesData() {
+		async getseriesLength() {
 			try {
 				const response = await apiExpress.get<RequestObject>(
 					`${endpoints.seriesList}${this.slug}/`
 				);
-				this.series = response.results;
 				this.seriesLength = response.count;
-				this.next.nextCard = response.next;
 			} catch (err) {
 				console.log(err);
+			} finally {
+				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 			}
-
-			if (this.$route.query.dataset != undefined) {
-				try {
-					let seriesData = await moreData(Number(this.$route.query.dataset), 1, this.next.nextCard);
-					this.series.push(...seriesData.results);
-					this.next.nextCard = seriesData.next;
-				} catch (err) {
-					console.log(err);
-				}
-			}
-			this.getImageseriesData();
-		},
-		async getImageseriesData() {
-			try {
-				const response = await apiExpress.get<RequestObject>(
-					`${endpoints.imgSeriesList}${this.slug}/`
-				);
-				this.next.nextImageCard = response.next;
-				await response.results.forEach((data: { image: string }) =>
-					this.imageSeries.push(data.image)
-				);
-			} catch (err) {
-				console.log(err);
-			}
-
-			if (this.$route.query.dataset != undefined) {
-				try {
-					const seriesDataImg = await moreDataImage(
-						Number(this.$route.query.dataset),
-						1,
-						this.next.nextImageCard
-					);
-					this.imageSeries.push(...seriesDataImg.results);
-					this.next.nextImageCard = seriesDataImg.next;
-				} catch (err) {
-					console.log(err);
-				}
-			}
-			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 		},
 		deletePublisher() {
 			(this.$refs.actionNotification as InstanceType<typeof ActionNotification>).sendNotification(
@@ -220,40 +146,7 @@ export default {
 			);
 			window.scrollTo(0, 0);
 		},
-		async moreSeries() {
-			if (this.next.nextCard != null && this.next.nextImageCard != null) {
-				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).startLoading();
 
-				try {
-					const seriesData = await moreData(1, 0, this.next.nextCard);
-					const seriesDataImg = await moreDataImage(1, 0, this.next.nextImageCard);
-					this.series.push(...seriesData.results);
-					this.next.nextCard = seriesData.next;
-					this.imageSeries.push(...seriesDataImg.results);
-					this.next.nextImageCard = seriesDataImg.next;
-				} catch (err) {
-					console.log(err);
-				}
-
-				this.changeUrl();
-				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
-			}
-		},
-		changeUrl() {
-			if (this.next.nextCard != null) {
-				this.$router.replace({
-					query: {
-						dataset: Number(this.next.nextCard.replace(/\S*page=/g, '').replace(/&\S*/g, '')) - 1
-					}
-				});
-			} else {
-				this.$router.replace({
-					query: {
-						dataset: -1
-					}
-				});
-			}
-		},
 		copyAction() {
 			let shareButton = document.querySelector('.bi-share-fill') as HTMLElement;
 			shareButton.className = 'bi bi-check-square-fill text-success ms-1 fs-6';
@@ -264,8 +157,7 @@ export default {
 	},
 	async created() {
 		this.getPublisherData();
-		await this.getseriesData();
-		window.scrollTo(0, history.state?.scroll?.top || 0);
+		await this.getseriesLength();
 	}
 };
 </script>
