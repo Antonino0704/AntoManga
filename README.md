@@ -78,6 +78,7 @@ Run
 black .
 npm run lint
 npm run format
+python manage.py test
 ```
 ...And follow the [Angular Conventional Commit](https://www.conventionalcommits.org/en/v1.0.0-beta.4/). Remember to bump the version.json version and package.json version following the [semantic versioning standards](https://semver.org/)
 
