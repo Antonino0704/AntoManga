@@ -299,8 +299,8 @@ export default {
 				return;
 			}
 
-			if (index == 3) this.types[4].applied = false;
-			if (index == 4) this.types[3].applied = false;
+			if (index == 2) this.types[3].applied = false;
+			if (index == 3) this.types[2].applied = false;
 
 			if (index == -1) {
 				this.types.map((t) => (t.applied = false));

@@ -129,6 +129,7 @@ export default {
 				).image;
 			} catch (err) {
 				console.log(err);
+				this.series.detail = `${err}`;
 			}
 		},
 		deleteSeries() {

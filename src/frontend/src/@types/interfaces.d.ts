@@ -86,3 +86,9 @@ export interface Profile {
 	user: User;
 	avatar: string;
 }
+
+export interface IAdminError {
+	isError: boolean;
+	title: string;
+	action: string;
+}

@@ -1,5 +1,8 @@
 <template>
-	<div class="add-series container-sm mt-2">
+	<div v-if="isTypesOrPubMissing">
+		<AdminErrors :title="typesOrPubMissing.title" :action="typesOrPubMissing.action" />
+	</div>
+	<div v-else class="add-series container-sm mt-2">
 		<spinnerLoading ref="spinner" />
 		<form class="list-inline" @submit.prevent="addSeries">
 			<h1 class="list-inline-item">ADD A New Series</h1>
@@ -119,7 +122,8 @@ import { apiExpress } from '@/utils/APIExpress';
 import Notification from '../components/Notification.vue';
 import SeriesImagePreview from '../components/SeriesImagePreview.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
-import type { Series, Type, Publisher } from '../@types/interfaces';
+import AdminErrors from './AdminErrors.vue';
+import type { Series, Type, Publisher, IAdminError } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 import { validateImage } from '@/utils/supportedImageExtensions';
 import { checkDataStats, showErrors, resetErrors } from '@/utils/StatsErrorsChecks';
@@ -139,19 +143,36 @@ export default {
 			imageUploaded: false,
 			types: [] as Array<Type>,
 			publishers: [] as Array<Publisher>,
-			error: ''
+			error: '',
+			typesOrPubMissing: {
+				isError: false,
+				title: '',
+				action: ''
+			} as IAdminError
 		};
 	},
 	components: {
 		Notification,
 		SeriesImagePreview,
-		spinnerLoading
+		spinnerLoading,
+		AdminErrors
+	},
+	computed: {
+		isTypesOrPubMissing() {
+			return this.typesOrPubMissing.isError;
+		}
 	},
 	methods: {
 		async getTypes() {
 			try {
 				const response = await apiExpress.get<Array<Type>>(endpoints.types);
-				await this.types.push(...response);
+				if (!response.length) {
+					this.typesOrPubMissing.title = 'Missing Types';
+					this.typesOrPubMissing.action = 'Add a type to the database';
+					this.typesOrPubMissing.isError = true;
+				} else {
+					await this.types.push(...response);
+				}
 			} catch (err) {
 				console.log(err);
 			}
@@ -166,7 +187,13 @@ export default {
 		async getPublishers() {
 			try {
 				const response = await apiExpress.get<Array<Publisher>>(endpoints.publishers);
-				await this.publishers.push(...response);
+				if (!response.length) {
+					this.typesOrPubMissing.title = 'Missing Publishers';
+					this.typesOrPubMissing.action = 'Add a publisher to the database';
+					this.typesOrPubMissing.isError = true;
+				} else {
+					await this.publishers.push(...response);
+				}
 			} catch (err) {
 				console.log(err);
 			}

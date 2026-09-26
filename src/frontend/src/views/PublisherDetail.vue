@@ -83,7 +83,6 @@ import spinnerLoading from '../components/SpinnerLoading.vue';
 import publisherStats from '../components/PublisherStats.vue';
 import type { Series, PublisherDetail, RequestObject } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
-import { moreData, moreDataImage } from '../utils/getSeries';
 import { useUserStore } from '@/stores/userStore';
 import { mapState } from 'pinia';
 
@@ -124,6 +123,7 @@ export default {
 				).image;
 			} catch (err) {
 				console.log(err);
+				this.publisher.detail = `${err}`;
 			}
 		},
 		async getseriesLength() {

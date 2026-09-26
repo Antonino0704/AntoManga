@@ -4,11 +4,10 @@
 		<Notification ref="notification" />
 		<spinnerLoading ref="spinner" />
 	</div>
-	<div class="alert alert-danger container-sm mt-5 text-center" role="alert" v-if="labelError">
-		Missing Labels<br />
-		If you are an administrator, add a label to the database
+	<div v-if="labelError.isError">
+		<AdminErrors :title="labelError.title" :action="labelError.action" />
 	</div>
-	<div class="ticket container-sm" v-if="!sent && !labelError">
+	<div class="ticket container-sm" v-if="!sent && !labelError.isError">
 		<h1 class="text-center mt-2 mb-3">
 			<i class="bi bi-question-circle text-info"></i> AntoManga Support
 		</h1>
@@ -66,7 +65,8 @@ import { apiExpress } from '@/utils/APIExpress';
 import { endpoints } from '@/utils/endpoints';
 import Notification from '../components/Notification.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
-import type { Ticket, Label } from '../@types/interfaces';
+import type { Ticket, Label, IAdminError } from '../@types/interfaces';
+import AdminErrors from './AdminErrors.vue';
 
 export default {
 	// eslint-disable-next-line vue/multi-word-component-names
@@ -77,19 +77,22 @@ export default {
 			labels: [] as Array<Label>,
 			sent: false,
 			regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-			labelError: false
+			labelError: {} as IAdminError
 		};
 	},
 	components: {
 		Notification,
-		spinnerLoading
+		spinnerLoading,
+		AdminErrors
 	},
 	methods: {
 		async getLabes() {
 			try {
 				const response = await apiExpress.get<Array<Label>>(endpoints.labels);
 				if (!response.length) {
-					this.labelError = true;
+					this.labelError.title = 'Missing Labels';
+					this.labelError.action = 'Add a label to the database';
+					this.labelError.isError = true;
 				} else {
 					this.labels.push(...response);
 					this.ticket.label = response[0].id;
