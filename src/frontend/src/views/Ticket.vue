@@ -7,7 +7,7 @@
 	<div v-if="labelError.isError">
 		<AdminErrors :title="labelError.title" :action="labelError.action" />
 	</div>
-	<div class="ticket container-sm" v-if="!sent && !labelError">
+	<div class="ticket container-sm" v-if="!sent && !labelError.isError">
 		<h1 class="text-center mt-2 mb-3">
 			<i class="bi bi-question-circle text-info"></i> AntoManga Support
 		</h1>
