@@ -130,6 +130,7 @@ export default {
 				this.getTypes();
 				this.getPublishers();
 			} catch (err) {
+				this.series.detail = `${err}`;
 				console.log(err);
 			}
 		},

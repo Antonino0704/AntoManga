@@ -123,6 +123,7 @@ export default {
 				).image;
 			} catch (err) {
 				console.log(err);
+				this.publisher.detail = `${err}`;
 			}
 		},
 		async getseriesLength() {

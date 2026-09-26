@@ -105,6 +105,7 @@ export default {
 				);
 			} catch (err) {
 				console.log(err);
+				this.publisher.detail = `${err}`;
 			} finally {
 				(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 			}
