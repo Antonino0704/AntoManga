@@ -66,7 +66,7 @@ import { endpoints } from '@/utils/endpoints';
 import Notification from '../components/Notification.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
 import type { Ticket, Label, IAdminError } from '../@types/interfaces';
-import AdminErrors from './AdminErrors.vue';
+import AdminErrors from '../components/AdminErrors.vue';
 
 export default {
 	// eslint-disable-next-line vue/multi-word-component-names

@@ -1,6 +1,6 @@
 <template>
 	<div class="typeView container-sm">
-		<h1>Types</h1>
+		<h1>{{ $t('typeMessages.titles.types') }}</h1>
 
 		<TypesComponent v-if="user.is_authenticated" @newTypeEvent="getTypesData()" />
 
@@ -83,12 +83,12 @@ export default {
 					}
 
 					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-						`type: ${type.name} updated`
+						this.$t('typeMessages.messages.typeUpdated', {typeName: type.name})
 					);
 				}
 			} else {
 				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-					'invalid names'
+					this.$t('messages.invalidName')
 				);
 			}
 		},
@@ -112,7 +112,7 @@ export default {
 				const name = this.types.find((t) => t.id == id)!.name;
 				this.types = tmp;
 				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-					`type: ${name} was deleted`
+					this.$t('typeMessages.messages.typeDeleted', {typeName: name})
 				);
 			} catch (err) {
 				console.log(err);

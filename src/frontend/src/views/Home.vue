@@ -13,7 +13,9 @@
 					</div>
 				</div>
 				<div>
-					<span class="badge rounded-pill me-2 placeholder">Length: {{ seriesLength }}</span>
+					<span class="badge rounded-pill me-2 placeholder"
+						>{{ series.length }} / {{ seriesLength }}</span
+					>
 				</div>
 				<SearchNoResults message="it is so empty here" v-if="!seriesLength" class="mt-2" />
 				<div :class="`row ${getLayoutClasses} g-4 mt-3 me-2 ms-2`" id="cardGroup`">

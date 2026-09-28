@@ -122,7 +122,7 @@ import { apiExpress } from '@/utils/APIExpress';
 import Notification from '../components/Notification.vue';
 import SeriesImagePreview from '../components/SeriesImagePreview.vue';
 import spinnerLoading from '../components/SpinnerLoading.vue';
-import AdminErrors from './AdminErrors.vue';
+import AdminErrors from '../components/AdminErrors.vue';
 import type { Series, Type, Publisher, IAdminError } from '../@types/interfaces';
 import { endpoints } from '@/utils/endpoints';
 import { validateImage } from '@/utils/supportedImageExtensions';

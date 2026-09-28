@@ -25,6 +25,9 @@
 						<hr />
 						<i id="gridButton" class="bi bi-card-image fs-5" @click="setGrid()"></i>
 						<hr />
+						<button id="enLang" class="btn btn-success me-3" @click="setLanguage('en')">EN</button
+						><button id="itLang" class="btn btn-secondary" @click="setLanguage('it')">IT</button>
+						<hr />
 						<a
 							type="button"
 							class="btn btn-success"
@@ -85,6 +88,7 @@
 import toggleTheme from './ToggleTheme.vue';
 import { useUserStore } from '@/stores/userStore';
 import { mapState } from 'pinia';
+import { i18n } from '@/i18n/i18n';
 
 export default {
 	name: 'SettingsModal',
@@ -119,6 +123,19 @@ export default {
 					: 'btn btn-secondary';
 			}
 		},
+		getLanguage() {
+			const lang = localStorage.getItem('lang-cookie');
+			if (lang == 'en' || lang == 'it') {
+				i18n.global.locale.value = lang;
+				if (lang == 'en') {
+					document.getElementById('enLang')!.classList.replace('btn-secondary', 'btn-success');
+					document.getElementById('itLang')!.classList.replace('btn-success', 'btn-secondary');
+				} else {
+					document.getElementById('enLang')!.classList.replace('btn-success', 'btn-secondary');
+					document.getElementById('itLang')!.classList.replace('btn-secondary', 'btn-success');
+				}
+			}
+		},
 		setGrid() {
 			localStorage.setItem('grid-cookie', String(this.grid));
 			if (this.$route.name === 'Home') {
@@ -130,6 +147,10 @@ export default {
 			localStorage.setItem('readytoread-cookie', String(!this.readyToRead));
 			if (this.$route.name === 'Home') this.$router.go(0);
 			else this.getReadyToRead();
+		},
+		setLanguage(lang: 'en' | 'it') {
+			localStorage.setItem('lang-cookie', lang);
+			this.getLanguage();
 		}
 	},
 	watch: {
@@ -146,6 +167,7 @@ export default {
 	},
 	mounted() {
 		this.gridClick();
+		this.getLanguage();
 	}
 };
 </script>

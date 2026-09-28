@@ -1,0 +1,27 @@
+{
+	"buttons": {
+		"add": "Aggiungi",
+		"close": "Chiudi"
+	},
+	"titles": {
+		"title": "Titolo"
+	},
+	"messages": {
+		"invalidTitle": "titolo non valido",
+		"invalidName": "nome non valido"
+	},
+	"typeMessages": {
+		"buttons": {
+			"newType": "Aggiungi un nuovo Tipo"
+		},
+		"titles": {
+			"newType": "Nuovo Tipo",
+			"types": "Tipi"
+		},
+		"messages": {
+			"typeCreated": "Tipo creato con successo",
+			"typeUpdated": "tipo: {typeName} aggiornato",
+			"typeDeleted": "tipo: {typeName} è stato cancellato"
+		}
+	}
+}

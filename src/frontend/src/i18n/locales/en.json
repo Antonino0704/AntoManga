@@ -1,0 +1,27 @@
+{
+	"buttons": {
+		"add": "Add",
+		"close": "Close"
+	},
+	"titles": {
+		"title": "Title"
+	},
+	"messages": {
+		"invalidTitle": "invalid title",
+		"invalidName": "invalid name"
+	},
+	"typeMessages": {
+		"buttons": {
+			"newType": "Add a new Type"
+		},
+		"titles": {
+			"newType": "New type",
+			"types": "Types"
+		},
+		"messages": {
+			"typeCreated": "type created with success",
+			"typeUpdated": "type: {typeName} updated",
+			"typeDeleted": "type: {typeName} was deleted"
+		}
+	}
+}
