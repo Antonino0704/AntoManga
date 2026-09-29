@@ -1,25 +1,32 @@
 {
-	"buttons": {
-		"add": "Add",
-		"close": "Close"
+	"common": {
+		"buttons": {
+			"add": "Add",
+			"close": "Close"
+		},
+		"titles": {
+			"title": "Title",
+			"types": "Types"
+		},
+		"messages": {
+			"invalidTitle": "invalid title",
+			"invalidName": "invalid name",
+			"changeLang": "Not all of the site's content has been translated into other languages"
+		}
 	},
-	"titles": {
-		"title": "Title"
-	},
-	"messages": {
-		"invalidTitle": "invalid title",
-		"invalidName": "invalid name"
-	},
-	"typeMessages": {
+	"typeComponent": {
 		"buttons": {
 			"newType": "Add a new Type"
 		},
 		"titles": {
-			"newType": "New type",
-			"types": "Types"
+			"newType": "New type"
 		},
 		"messages": {
-			"typeCreated": "type created with success",
+			"typeCreated": "type created with success"
+		}
+	},
+	"typeView": {
+		"messages": {
 			"typeUpdated": "type: {typeName} updated",
 			"typeDeleted": "type: {typeName} was deleted"
 		}

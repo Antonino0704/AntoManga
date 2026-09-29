@@ -5,7 +5,7 @@ import router from './router';
 import VueCookies from 'vue-cookies';
 import { createPinia } from 'pinia';
 import { useUserStore } from '@/stores/userStore';
-import { i18n } from '@/i18n/i18n'
+import { i18n } from '@/i18n/i18n';
 
 const pinia = createPinia();
 const app = createApp(App);

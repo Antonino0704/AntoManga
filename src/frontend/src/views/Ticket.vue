@@ -50,7 +50,12 @@
 				<div id="descriptionTextArea" class="invalid-feedback">It can't be blank</div>
 			</div>
 
-			<select v-model="ticket.label" class="form-select mb-3 placeholder" aria-label="select_label">
+			<select
+				id="selectLabelId"
+				v-model="ticket.label"
+				class="form-select mb-3 placeholder"
+				aria-label="select_label"
+			>
 				<option v-for="label in labels" :key="label.id" :value="label.id">
 					{{ label.name }}
 				</option>
@@ -96,7 +101,7 @@ export default {
 				} else {
 					this.labels.push(...response);
 					this.ticket.label = response[0].id;
-					document.querySelector('select')!.classList.remove('placeholder');
+					document.querySelector('#selectLabelId')!.classList.remove('placeholder');
 				}
 			} catch (err) {
 				console.log(err);

@@ -92,3 +92,8 @@ export interface IAdminError {
 	title: string;
 	action: string;
 }
+
+export interface Language {
+	code: string;
+	name: string;
+}
