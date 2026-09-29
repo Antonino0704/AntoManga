@@ -1,13 +1,13 @@
 <template>
 	<div class="stats mt-3">
-		<h1 class="fs-1 font-monospace">STATS</h1>
+		<h1 class="fs-1 font-monospace">{{ $t('common.titles.stats').toUpperCase() }}</h1>
 		<div id="load" class="placeholder">
 			<table class="table container-sm">
 				<thead>
 					<tr>
-						<th scope="col">Title</th>
-						<th scope="col">Length(Vol. Read):</th>
-						<th scope="col">Length(Vol. Bought)</th>
+						<th scope="col">{{ $t('common.titles.title') }}</th>
+						<th scope="col">{{ $t('statsView.lVolRead') }}</th>
+						<th scope="col">{{ $t('statsView.lVolBought') }}</th>
 					</tr>
 				</thead>
 				<tbody>

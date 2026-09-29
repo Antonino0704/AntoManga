@@ -2,16 +2,21 @@
 	"common": {
 		"buttons": {
 			"add": "Add",
-			"close": "Close"
+			"close": "Close",
+			"search": "Search"
 		},
 		"titles": {
 			"title": "Title",
-			"type": "Type | Types"
+			"type": "Type | Types",
+			"publisherRank": "Publishers Rank",
+			"stats": "Stats",
+			"publisher": "Publisher | Publishers"
 		},
 		"messages": {
 			"invalidTitle": "invalid title",
 			"invalidName": "invalid name",
-			"changeLang": "Not all of the site's content has been translated into other languages"
+			"changeLang": "Not all of the site's content has been translated into other languages",
+			"nSeries": "N. Series"
 		}
 	},
 	"typesComponent": {
@@ -30,5 +35,31 @@
 			"typeUpdated": "type: {typeName} updated",
 			"typeDeleted": "type: {typeName} was deleted"
 		}
+	},
+	"navbar": {
+		"titles": {
+			"info": "Info",
+			"help": "Help",
+			"newPublisher": "New Publisher",
+			"newSeries": "New Series"
+		},
+		"messages": {
+			"clear": "Clear"
+		},
+		"filters": {
+			"incomplete": "Incomplete",
+			"readyToRead": "Ready To Read",
+			"excludeDiscontinuedSeries": "Exclude Discontinued Series",
+			"discontinuedSeriesOnly": "Discontinued Series Only",
+			"mostRecent": " Most Recent",
+			"leastRecent": " Least Recent"
+		}
+	},
+	"publisherRankView": {
+		"position": "Pos"
+	},
+	"statsView": {
+		"lVolRead": "Length(Vol. Read)",
+		"lVolBought": "Length(Vol. Bought)"
 	}
 }

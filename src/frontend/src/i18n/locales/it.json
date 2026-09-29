@@ -2,16 +2,21 @@
 	"common": {
 		"buttons": {
 			"add": "Aggiungi",
-			"close": "Chiudi"
+			"close": "Chiudi",
+			"search": "Cerca"
 		},
 		"titles": {
 			"title": "Titolo",
-			"type": "Tipo | Tipi"
+			"type": "Tipo | Tipi",
+			"publisherRank": "Classifica Editori",
+			"stats": "Statistiche",
+			"publisher": "Editore | Editori"
 		},
 		"messages": {
 			"invalidTitle": "titolo non valido",
 			"invalidName": "nome non valido",
-			"changeLang": "La traduzione in italiano è una traduzione parziale, alcune parti del sito sono ancora in inglese"
+			"changeLang": "La traduzione in italiano è una traduzione parziale, alcune parti del sito sono ancora in inglese",
+			"nSeries": "N. Serie"
 		}
 	},
 	"typesComponent": {
@@ -30,5 +35,31 @@
 			"typeUpdated": "tipo: {typeName} aggiornato",
 			"typeDeleted": "tipo: {typeName} è stato cancellato"
 		}
+	},
+	"navbar": {
+		"titles": {
+			"info": "Info",
+			"help": "Aiuto",
+			"newPublisher": "Nuovo Editore",
+			"newSeries": "Nuova Serie"
+		},
+		"messages": {
+			"clear": "Cancella"
+		},
+		"filters": {
+			"incomplete": "Incompleto",
+			"readyToRead": "Pronto Da Leggere",
+			"excludeDiscontinuedSeries": "Escludi Serie Interrotte",
+			"discontinuedSeriesOnly": "Solo Serie Interrotte",
+			"mostRecent": " Più Recente",
+			"leastRecent": " Meno Recente"
+		}
+	},
+	"publisherRankView": {
+		"position": "Pos"
+	},
+	"statsView": {
+		"lVolRead": "Lunghezza(Vol. Letti)",
+		"lVolBought": "Lunghezza(Vol. Comprati)"
 	}
 }
