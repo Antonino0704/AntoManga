@@ -6,7 +6,7 @@
 		},
 		"titles": {
 			"title": "Titolo",
-			"types": "Tipi"
+			"type": "Tipo | Tipi"
 		},
 		"messages": {
 			"invalidTitle": "titolo non valido",
@@ -14,7 +14,7 @@
 			"changeLang": "La traduzione in italiano è una traduzione parziale, alcune parti del sito sono ancora in inglese"
 		}
 	},
-	"typeComponent": {
+	"typesComponent": {
 		"buttons": {
 			"newType": "Aggiungi un nuovo Tipo"
 		},
@@ -25,7 +25,7 @@
 			"typeCreated": "Tipo creato con successo"
 		}
 	},
-	"typeView": {
+	"typesView": {
 		"messages": {
 			"typeUpdated": "tipo: {typeName} aggiornato",
 			"typeDeleted": "tipo: {typeName} è stato cancellato"

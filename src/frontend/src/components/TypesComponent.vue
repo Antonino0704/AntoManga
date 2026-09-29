@@ -7,7 +7,7 @@
 			data-bs-target="#typeModal"
 			data-bs-whatever="@mdo"
 		>
-			{{ $t('typeComponent.buttons.newType') }}
+			{{ $t('typesComponent.buttons.newType') }}
 		</button>
 
 		<div
@@ -21,7 +21,7 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<h1 class="modal-title fs-5" id="typeModalLabel">
-							{{ $t('typeComponent.titles.newType') }}
+							{{ $t('typesComponent.titles.newType') }}
 						</h1>
 						<button
 							type="button"
@@ -93,7 +93,7 @@ export default {
 				Modal.getInstance(document.getElementById('typeModal')).hide();
 				this.reset();
 				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-					this.$t('typeComponent.messages.typeCreated')
+					this.$t('typesComponent.messages.typeCreated')
 				);
 			}
 		},

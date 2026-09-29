@@ -6,7 +6,7 @@
 		},
 		"titles": {
 			"title": "Title",
-			"types": "Types"
+			"type": "Type | Types"
 		},
 		"messages": {
 			"invalidTitle": "invalid title",
@@ -14,7 +14,7 @@
 			"changeLang": "Not all of the site's content has been translated into other languages"
 		}
 	},
-	"typeComponent": {
+	"typesComponent": {
 		"buttons": {
 			"newType": "Add a new Type"
 		},
@@ -25,7 +25,7 @@
 			"typeCreated": "type created with success"
 		}
 	},
-	"typeView": {
+	"typesView": {
 		"messages": {
 			"typeUpdated": "type: {typeName} updated",
 			"typeDeleted": "type: {typeName} was deleted"

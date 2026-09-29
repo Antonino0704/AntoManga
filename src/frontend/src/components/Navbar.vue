@@ -107,7 +107,7 @@
 								<a
 									class="dropdown-item border-bottom bi bi-arrow-return-right text-primary-emphasis"
 									@click="showTypes = !showTypes"
-									>{{ $t('common.titles.types').toUpperCase() }}</a
+									>{{ $t('common.titles.type', 2).toUpperCase() }}</a
 								>
 							</li>
 							<li v-for="(type, index) in types" :key="type.id" @click="toggle(index)">
