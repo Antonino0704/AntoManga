@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h1 class="text-center mt-2 text-success" v-if="sent">We have received your request</h1>
+		<h1 class="text-center mt-2 text-success" v-if="sent">{{ $t('help.messages.sentRequest') }}</h1>
 		<Notification ref="notification" />
 		<spinnerLoading ref="spinner" />
 	</div>
@@ -21,8 +21,8 @@
 					maxlength="20"
 					placeholder="there is a bug..."
 				/>
-				<label for="titleInput">Title</label>
-				<div id="titleInput" class="invalid-feedback">It can't be blank or max 20 char</div>
+				<label for="titleInput">{{ $t('common.titles.title') }}</label>
+				<div id="titleInput" class="invalid-feedback">{{ $t('help.errors.titleErrors') }}</div>
 			</div>
 
 			<div class="form-floating mb-3">
@@ -35,7 +35,7 @@
 				/>
 				<label for="emailInputValue">Email</label>
 				<div id="emailInputValue" class="invalid-feedback">
-					Please include an @ in the email address
+					{{ $t('help.errors.emailErrors') }}
 				</div>
 			</div>
 			<div class="form-floating mb-3">
@@ -46,8 +46,10 @@
 					style="height: 100px"
 					v-model="ticket.description"
 				></textarea>
-				<label for="descriptionTextArea">Describe the problem</label>
-				<div id="descriptionTextArea" class="invalid-feedback">It can't be blank</div>
+				<label for="descriptionTextArea">{{ $t('help.messages.descriptionTextArea') }}</label>
+				<div id="descriptionTextArea" class="invalid-feedback">
+					{{ $t('help.errors.textAreaErrors') }}
+				</div>
 			</div>
 
 			<select
@@ -60,7 +62,7 @@
 					{{ label.name }}
 				</option>
 			</select>
-			<button class="btn btn-outline-success">Send</button>
+			<button class="btn btn-outline-success">{{ $t('common.buttons.send') }}</button>
 		</form>
 	</div>
 </template>
@@ -95,8 +97,8 @@ export default {
 			try {
 				const response = await apiExpress.get<Array<Label>>(endpoints.labels);
 				if (!response.length) {
-					this.labelError.title = 'Missing Labels';
-					this.labelError.action = 'Add a label to the database';
+					this.labelError.title = this.$t('help.errors.labelErrors.title');
+					this.labelError.action = this.$t('help.errors.labelErrors.action');
 					this.labelError.isError = true;
 				} else {
 					this.labels.push(...response);
@@ -115,7 +117,7 @@ export default {
 					const response = await apiExpress.post<Ticket>(endpoints.createTicket, this.ticket);
 					if (response.id) {
 						(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-							'Report sent'
+							this.$t('help.messages.reportSent')
 						);
 						this.sent = true;
 					}

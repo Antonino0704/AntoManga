@@ -3,20 +3,28 @@
 		"buttons": {
 			"add": "Aggiungi",
 			"close": "Chiudi",
-			"search": "Cerca"
+			"search": "Cerca",
+			"send": "Invia"
 		},
 		"titles": {
 			"title": "Titolo",
 			"type": "Tipo | Tipi",
 			"publisherRank": "Classifica Editori",
 			"stats": "Statistiche",
-			"publisher": "Editore | Editori"
+			"publisher": "Editore | Editori",
+			"addPublisher": "Aggiungi Un Nuovo Editore"
 		},
 		"messages": {
-			"invalidTitle": "titolo non valido",
-			"invalidName": "nome non valido",
+			"invalidTitle": "Titolo non valido",
+			"invalidName": "Nome non valido",
+			"invalidImage": "Immagine non valida",
+			"invalidDescription": "Descrizione non valida",
 			"changeLang": "La traduzione in italiano è una traduzione parziale, alcune parti del sito sono ancora in inglese",
-			"nSeries": "N. Serie"
+			"nSeries": "N. Serie",
+			"goToAdmin": "VAI SU ADMIN",
+			"goToHome": "VAI NELLA HOME",
+			"publisherTitle": "Titolo Dell'Editore",
+			"description": "Descrizione"
 		}
 	},
 	"typesComponent": {
@@ -61,5 +69,33 @@
 	"statsView": {
 		"lVolRead": "Lunghezza(Vol. Letti)",
 		"lVolBought": "Lunghezza(Vol. Comprati)"
+	},
+	"help": {
+		"errors": {
+			"titleErrors": "Non può essere vuoto o max 20 caratteri",
+			"emailErrors": "Per favore includi una {'@'} all indirizzo email",
+			"textAreaErrors": "Non può essere vuoto",
+			"labelErrors": {
+				"title": "Etichette Mancanti",
+				"action": "Aggiungi un etichetta al database"
+			}
+		},
+		"messages": {
+			"descriptionTextArea": "Descrivi il problema",
+			"sentRequest": "Abbiamo ricevuto la tua richiesta",
+			"reportSent": "Rapporto inviato"
+		}
+	},
+	"adminErrors": {
+		"errors": {
+			"youAreAdmin": "Se sei un amministratore",
+			"youAreNotAdmin": "Se non sei un amministratore, contatta il tuo amministratore o aspetta che risolvino il problema"
+		}
+	},
+	"addPublisherView": {
+		"errors": {
+			"titleOrDescription": "Titolo o descrizione non possono essere vuoti",
+			"imageLoaded": "Immagine non caricata correttamente"
+		}
 	}
 }

@@ -1,13 +1,15 @@
 <template>
 	<div class="adminErrors alert alert-danger container-sm mt-5 text-center" role="alert">
 		<h1>{{ title }}</h1>
-		<p v-if="!user.is_staff">If you are an administrator</p>
+		<p v-if="!user.is_staff">{{ $t('adminErrors.errors.youAreAdmin') }}</p>
 		<b>{{ action }}</b> <br /><br />
 		<p v-if="!user.is_staff">
-			If you're not an administrator, contact your administrator or wait for them to fix the issue
+			{{ $t('adminErrors.errors.youAreNotAdmin') }}
 		</p>
-		<router-link :to="{ name: 'Home' }" v-if="!user.is_staff"> GO TO HOME </router-link>
-		<a href="/admin/" v-else>GO TO ADMIN</a>
+		<router-link :to="{ name: 'Home' }" v-if="!user.is_staff">
+			{{ $t('common.messages.goToHome') }}
+		</router-link>
+		<a href="/admin/" v-else>{{ $t('common.messages.goToAdmin') }} </a>
 	</div>
 </template>
 
