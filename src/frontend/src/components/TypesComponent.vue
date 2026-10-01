@@ -52,7 +52,7 @@
 						</button>
 					</div>
 					<div class="alert alert-danger ms-2 me-2" role="alert" v-if="errors">
-						{{ $t('common.messages.invalidTitle') }}
+						{{ $t('common.errors.invalidTitle') }}
 					</div>
 				</div>
 			</div>

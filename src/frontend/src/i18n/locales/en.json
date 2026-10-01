@@ -15,16 +15,21 @@
 			"addPublisher": "Add A New Publisher"
 		},
 		"messages": {
-			"invalidTitle": "Invalid title",
-			"invalidName": "Invalid name",
-			"invalidImage": "Invalid image",
-			"invalidDescription": "Invalid description",
 			"changeLang": "Not all of the site's content has been translated into other languages",
 			"nSeries": "N. Series",
 			"goToAdmin": "GO TO ADMIN",
 			"goToHome": "GO TO HOME",
 			"publisherTitle": "Publisher's Title",
 			"description": "Description"
+		},
+		"errors": {
+			"invalidTitle": "Invalid title",
+			"invalidName": "Invalid name",
+			"invalidImage": "Invalid image",
+			"invalidDescription": "Invalid description",
+			"titleOrDescription": "Title or description can't be blank",
+			"imageNotLoaded": "Image not loaded correctly",
+			"unsupportedImage": "Unsupported image "
 		}
 	},
 	"typesComponent": {
@@ -93,9 +98,8 @@
 		}
 	},
 	"addPublisherView": {
-		"errors": {
-			"titleOrDescription": "title or description can't be blank",
-			"imageLoaded": "image not loaded correctly"
+		"messages": {
+			"publisherAdded": "Publisher added with success"
 		}
 	}
 }

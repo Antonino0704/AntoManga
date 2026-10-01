@@ -14,7 +14,7 @@
 							maxlength="50"
 						/>
 						<label for="floatingInputGrid">{{ $t('common.messages.publisherTitle') }}</label>
-						<div class="invalid-feedback">{{ $t('common.messages.invalidTitle') }}</div>
+						<div class="invalid-feedback">{{ $t('common.errors.invalidTitle') }}</div>
 					</div>
 				</div>
 			</div>
@@ -31,7 +31,7 @@
 					<label class="input-group-text" for="file-input">
 						<i class="bi bi-images" fill="currentColor"></i>
 					</label>
-					<div class="invalid-feedback">{{ $t('common.messages.invalidImage') }}</div>
+					<div class="invalid-feedback">{{ $t('common.errors.invalidImage') }}</div>
 				</div>
 
 				<PublisherImagePreview class="list-inline-item" ref="preview" />
@@ -45,7 +45,7 @@
 					v-model="publisher.description"
 				></textarea>
 				<label for="floatingTextarea">{{ $t('common.messages.description') }}</label>
-				<div class="invalid-feedback">{{ $t('common.messages.invalidDescription') }}</div>
+				<div class="invalid-feedback">{{ $t('common.errors.invalidDescription') }}</div>
 			</div>
 			<button class="btn btn-outline-success mt-3">{{ $t('common.buttons.add') }}</button>
 		</form>
@@ -96,7 +96,7 @@ export default {
 				this.imageUploaded = true;
 			} else {
 				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-					'unsupported image '
+					this.$t("common.errors.unsupportedImage")
 				);
 				document.querySelector('#file-input')!.className = 'form-control is-invalid';
 				(this.$refs.preview as InstanceType<typeof PublisherImagePreview>).resetPreview();
@@ -111,7 +111,7 @@ export default {
 					const response = await apiExpress.post<Publisher>(endpoints.publishers, this.publisher);
 					await apiExpress.putImage(`${endpoints.imgPublishers}${response.slug}/`, this.formData);
 					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-						'publisher added with success'
+						this.$t("addPublisherView.messages.publisherAdded")
 					);
 					(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 					setTimeout(
@@ -134,11 +134,11 @@ export default {
 		},
 		checkData(): boolean {
 			if (!this.imageUploaded) {
-				this.error = this.$t('addPublisherView.errors.imageLoaded');
+				this.error = this.$t('common.errors.imageNotLoaded');
 				return false;
 			}
 			if (!this.publisher.name || !this.publisher.description) {
-				this.error = this.$t('addPublisherView.errors.titleOrDescription');
+				this.error = this.$t('common.errors.titleOrDescription');
 				return false;
 			}
 			return true;

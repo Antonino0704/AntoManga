@@ -15,16 +15,21 @@
 			"addPublisher": "Aggiungi Un Nuovo Editore"
 		},
 		"messages": {
-			"invalidTitle": "Titolo non valido",
-			"invalidName": "Nome non valido",
-			"invalidImage": "Immagine non valida",
-			"invalidDescription": "Descrizione non valida",
 			"changeLang": "La traduzione in italiano è una traduzione parziale, alcune parti del sito sono ancora in inglese",
 			"nSeries": "N. Serie",
 			"goToAdmin": "VAI SU ADMIN",
 			"goToHome": "VAI NELLA HOME",
 			"publisherTitle": "Titolo Dell'Editore",
 			"description": "Descrizione"
+		},
+		"errors": {
+			"invalidTitle": "Titolo non valido",
+			"invalidName": "Nome non valido",
+			"invalidImage": "Immagine non valida",
+			"invalidDescription": "Descrizione non valida",
+			"titleOrDescription": "Titolo o descrizione non possono essere vuoti",
+			"imageNotLoaded": "Immagine non caricata correttamente",
+			"unsupportedImage": "Immagine non supportata "
 		}
 	},
 	"typesComponent": {
@@ -93,9 +98,8 @@
 		}
 	},
 	"addPublisherView": {
-		"errors": {
-			"titleOrDescription": "Titolo o descrizione non possono essere vuoti",
-			"imageLoaded": "Immagine non caricata correttamente"
+		"messages": {
+			"publisherAdded": "Editore aggiunto con successo"
 		}
 	}
 }
