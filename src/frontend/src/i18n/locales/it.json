@@ -165,5 +165,8 @@
 			"hideReadyToRead": "Nascondi Pronti Da Leggere",
 			"showReadyToRead": "Mostra Pronti Da Leggere"
 		}
+	},
+	"isNotAuth": {
+		"message": "Stai visualizzando il sito in anonimato.</strong> Clicca \n<a href='/account/login/'>qui</a> per accedere così puoi aggiungere e modificare le tue serie"
 	}
 }
