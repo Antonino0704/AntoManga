@@ -157,5 +157,13 @@
 			"unreadVolumes": "Questa serie ha volumi non letti",
 			"isDiscontinued": "Questa serie è interrotta"
 		}
+	},
+	"settingsModal": {
+		"title": "IMPOSTAZIONI",
+		"buttons": {
+			"myAccount": "Area Personale",
+			"hideReadyToRead": "Nascondi Pronti Da Leggere",
+			"showReadyToRead": "Mostra Pronti Da Leggere"
+		}
 	}
 }

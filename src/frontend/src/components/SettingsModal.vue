@@ -12,7 +12,9 @@
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h1 class="modal-title fs-5 text-secondary" id="settingsModalLabel">SETTINGS</h1>
+						<h1 class="modal-title fs-5 text-secondary" id="settingsModalLabel">
+							{{ $t('settingsModal.title') }}
+						</h1>
 						<button
 							type="button"
 							class="btn-close"
@@ -45,11 +47,11 @@
 						<hr v-if="profile.user.is_authenticated" />
 						<a
 							type="button"
-							class="btn btn-secondary bi bi-person-fill-gear"
+							class="btn btn-secondary"
 							v-if="profile.user.is_authenticated"
 							href="/my-account/"
 						>
-							My Account</a
+							<i class="bi bi-person-fill-gear"></i> {{ $t('settingsModal.buttons.myAccount') }}</a
 						>
 						<hr v-if="profile.user.is_authenticated" />
 						<a type="button" class="btn btn-secondary" v-if="profile.user.is_staff" href="/admin/"
@@ -95,7 +97,7 @@ export default {
 		return {
 			grid: true,
 			readyToRead: false,
-			ReadyToReadButtonText: 'Show Ready to Read'
+			ReadyToReadButtonText: this.$t('settingsModal.buttons.showReadyToRead')
 		};
 	},
 	components: {
@@ -117,7 +119,9 @@ export default {
 		getReadyToRead() {
 			if (localStorage.getItem('readytoread-cookie')) {
 				this.readyToRead = localStorage.getItem('readytoread-cookie') == 'true' ? true : false;
-				this.ReadyToReadButtonText = this.readyToRead ? 'Hide Ready to Read' : 'Show Ready to Read';
+				this.ReadyToReadButtonText = this.readyToRead
+					? this.$t('settingsModal.buttons.hideReadyToRead')
+					: this.$t('settingsModal.buttons.showReadyToRead');
 				document.querySelector('#ReadyToReadButton')!.className = this.readyToRead
 					? 'btn btn-success'
 					: 'btn btn-secondary';
@@ -138,6 +142,7 @@ export default {
 	},
 	watch: {
 		profile: {
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			handler(newProfile, oldProfile) {
 				if (newProfile.user.is_authenticated) {
 					this.$nextTick(() => {

@@ -157,5 +157,13 @@
 			"unreadVolumes": "This series has unread volumes",
 			"isDiscontinued": "This series is discontinued"
 		}
+	},
+	"settingsModal": {
+		"title": "SETTINGS",
+		"buttons": {
+			"myAccount": "My Account",
+			"hideReadyToRead": "Hide Ready to Read",
+			"showReadyToRead": "Show Ready to Read"
+		}
 	}
 }
