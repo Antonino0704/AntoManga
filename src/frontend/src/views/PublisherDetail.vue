@@ -1,6 +1,6 @@
 <template>
 	<div v-if="publisher.detail">
-		<NotFound message="PUBLISHER NOT FOUND" />
+		<NotFound :message="$t('common.messages.publisherNotFound')" />
 	</div>
 	<div v-else class="publisher-detail container-sm">
 		<spinnerLoading ref="spinner" />
@@ -9,7 +9,7 @@
 				:to="{ name: 'AddPublisher' }"
 				class="btn btn-outline-info"
 				v-if="user.is_authenticated"
-				>Add New Publisher
+				>{{ $t('common.titles.addPublisher') }}
 			</router-link>
 			<button
 				@click="deletePublisher()"
@@ -18,7 +18,7 @@
 				:disabled="Boolean(seriesLength)"
 				v-if="user.is_authenticated"
 			>
-				Delete
+				{{ $t('common.buttons.delete') }}
 			</button>
 		</div>
 		<div class="accordion pt-4">
@@ -55,7 +55,7 @@
 			</div>
 			<publisherStats :slug="slug" :seriesLength="seriesLength" v-if="publisher" />
 			<h5 class="mt-3">
-				Share
+				{{ $t('common.messages.share') }}
 				<a
 					class="bi bi-share-fill ms-1 fs-6"
 					onclick="
@@ -140,8 +140,8 @@ export default {
 		},
 		deletePublisher() {
 			(this.$refs.actionNotification as InstanceType<typeof ActionNotification>).sendNotification(
-				'are you sure? you will no longer be able to retrieve the data',
-				'Publisher deleted',
+				this.$t('common.messages.ConfirmDeleteMessage'),
+				this.$t('common.messages.deleteMessageConfirmed', { objectToDelete: this.publisher.name }),
 				`${endpoints.publishers}${this.slug}/`
 			);
 			window.scrollTo(0, 0);

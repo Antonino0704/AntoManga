@@ -1,13 +1,13 @@
 <template>
 	<div v-if="series.detail">
-		<NotFound message="SERIES NOT FOUND" />
+		<NotFound :message="$t('common.messages.seriesNotFound')" />
 	</div>
 	<div v-else class="series-detail container-sm mt-3">
 		<router-link
 			:to="{ name: 'AddSeries' }"
 			class="btn btn-outline-info mb-3"
 			v-if="user.is_authenticated"
-			>Add A New Series
+			>{{ $t('common.titles.addSeries') }}
 		</router-link>
 		<div
 			class="card mb-3 card-border-sm"
@@ -21,10 +21,12 @@
 					<div class="card-body">
 						<h5 class="card-title">{{ series.name }}</h5>
 						<p class="card-text">
-							<small class="text-body-secondary">Type: {{ series.typology_name }}</small>
+							<small class="text-body-secondary"
+								>{{ $t('common.titles.type', 1) }}: {{ series.typology_name }}</small
+							>
 							<br />
 							<small class="text-body-secondary">
-								Publisher:
+								{{ $t('common.titles.publisher', 1) }}:
 								<router-link
 									:to="{ name: 'PublisherDetail', params: { slug: series.publisher_slug } }"
 								>
@@ -32,7 +34,9 @@
 								></small
 							>
 							<small class="text-body-secondary">
-								<p v-if="series.purchased_at">Latest purchase: {{ series.purchased_at }}</p>
+								<p v-if="series.purchased_at">
+									{{ $t('common.messages.latestPurchase') }}: {{ series.purchased_at }}
+								</p>
 							</small>
 						</p>
 						<p class="card-text">
@@ -64,10 +68,10 @@
 								></a>
 								<div class="mt-3" v-if="ReadyToRead() || series.is_discontinued">
 									<div class="alert alert-warning" role="alert" v-if="ReadyToRead()">
-										This series has unread volumes
+										{{ $t('seriesDetail.messages.unreadVolumes') }}
 									</div>
 									<div class="alert alert-danger" role="alert" v-if="series.is_discontinued">
-										This series is discontinued
+										{{ $t('seriesDetail.messages.isDiscontinued') }}
 									</div>
 								</div>
 							</small>
@@ -134,8 +138,8 @@ export default {
 		},
 		deleteSeries() {
 			(this.$refs.actionNotification as InstanceType<typeof ActionNotification>).sendNotification(
-				'are you sure? you will no longer be able to retrieve the data',
-				`${this.series.name} deleted`,
+				this.$t('common.messages.ConfirmDeleteMessage'),
+				this.$t('common.messages.deleteMessageConfirmed', { objectToDelete: this.series.name }),
 				`${endpoints.series}${this.slug}/`
 			);
 			window.scrollTo(0, 0);

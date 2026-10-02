@@ -1,0 +1,172 @@
+{
+	"common": {
+		"buttons": {
+			"add": "Aggiungi",
+			"close": "Chiudi",
+			"search": "Cerca",
+			"send": "Invia",
+			"update": "Aggiorna",
+			"delete": "Cancella",
+			"more": "Caricare di più",
+			"confirm": "Conferma",
+			"showMe": "Mostrami"
+		},
+		"titles": {
+			"title": "Titolo",
+			"type": "Tipo | Tipi",
+			"publisherRank": "Classifica Editori",
+			"stats": "Statistiche",
+			"publisher": "Editore | Editori",
+			"addPublisher": "Aggiungi Un Nuovo Editore",
+			"addSeries": "Aggiungi Una Nuova Serie",
+			"editPage": "PAGINA DI MODIFICA"
+		},
+		"messages": {
+			"changeLang": "La traduzione in italiano è una traduzione parziale, alcune parti del sito sono ancora in inglese",
+			"nSeries": "N. Serie",
+			"goToAdmin": "VAI SU ADMIN",
+			"goToHome": "VAI NELLA HOME",
+			"publisherTitle": "Titolo Dell'Editore",
+			"description": "Descrizione",
+			"seriesTitle": "Titolo Della Serie",
+			"nVolumes": "N. Volumi",
+			"volBought": "Vol. Comprati",
+			"volRead": "Vol. Letti",
+			"latestPurchase": "Ultimo acquisto",
+			"ConfirmDeleteMessage": "Sei sicuro? Non potrai più recuperare i dati",
+			"deleteMessageConfirmed": "{objectToDelete} cancellato",
+			"seriesNotFound": "SERIE NON TROVATA",
+			"publisherNotFound": "EDITORE NON TROVATO",
+			"share": "Condividi",
+			"welcome": "Benvenuto {user}",
+			"searchNoResults": "È così vuoto qui",
+			"welcomeComponent": "Antomanga è un sito web che ti permette di gestire i tuoi manga collezione di romanzi in maniera facile e conveniente, ti permette anche di filtrare i contenuti della tua collezzione"
+		},
+		"errors": {
+			"invalidTitle": "Titolo non valido",
+			"invalidName": "Nome non valido",
+			"invalidImage": "Immagine non valida",
+			"invalidDescription": "Descrizione non valida",
+			"titleOrDescription": "Titolo o descrizione non possono essere vuoti",
+			"imageNotLoaded": "Immagine non caricata correttamente",
+			"unsupportedImage": "Immagine non supportata ",
+			"nVolumes": "N volumi non può essere vuoto",
+			"nVolumes0": "N volumi non può essere 0",
+			"nVolumesNegative": "N volumi non può essere negativo",
+			"volBought": "Volumi comprati non possono essere vuoti",
+			"volBoughtNegative": "Volumi comprati non può essere negativo",
+			"volRead": "Volumi letti non possono essere vuoti",
+			"volReadNegative": "Volumi letti non può essere negativo",
+			"volBoughtThanNVolumes": "I volumi comprati non possono essere più dei volumi totali",
+			"volReadThanVolBought": "I volumi letti non possono essere più di quelli comprati totali"
+		}
+	},
+	"typesComponent": {
+		"buttons": {
+			"newType": "Aggiungi un nuovo Tipo"
+		},
+		"titles": {
+			"newType": "Nuovo Tipo"
+		},
+		"messages": {
+			"typeCreated": "Tipo creato con successo"
+		}
+	},
+	"typesView": {
+		"messages": {
+			"typeUpdated": "tipo: {typeName} aggiornato",
+			"typeDeleted": "tipo: {typeName} è stato cancellato"
+		}
+	},
+	"navbar": {
+		"titles": {
+			"info": "Info",
+			"help": "Aiuto",
+			"newPublisher": "Nuovo Editore",
+			"newSeries": "Nuova Serie"
+		},
+		"messages": {
+			"clear": "Cancella"
+		},
+		"filters": {
+			"incomplete": "Incompleto",
+			"readyToRead": "Pronto Da Leggere",
+			"excludeDiscontinuedSeries": "Escludi Serie Interrotte",
+			"discontinuedSeriesOnly": "Solo Serie Interrotte",
+			"mostRecent": " Più Recente",
+			"leastRecent": " Meno Recente"
+		}
+	},
+	"publisherRankView": {
+		"position": "Pos"
+	},
+	"statsView": {
+		"lVolRead": "Lunghezza(Vol. Letti)",
+		"lVolBought": "Lunghezza(Vol. Comprati)"
+	},
+	"help": {
+		"errors": {
+			"titleErrors": "Non può essere vuoto o max 20 caratteri",
+			"emailErrors": "Per favore includi una {'@'} all indirizzo email",
+			"textAreaErrors": "Non può essere vuoto",
+			"labelErrors": {
+				"title": "Etichette Mancanti",
+				"action": "Aggiungi un etichetta al database"
+			}
+		},
+		"messages": {
+			"descriptionTextArea": "Descrivi il problema",
+			"sentRequest": "Abbiamo ricevuto la tua richiesta",
+			"reportSent": "Rapporto inviato"
+		}
+	},
+	"adminErrors": {
+		"errors": {
+			"youAreAdmin": "Se sei un amministratore",
+			"youAreNotAdmin": "Se non sei un amministratore, contatta il tuo amministratore o aspetta che risolvino il problema"
+		}
+	},
+	"addPublisherView": {
+		"messages": {
+			"publisherAdded": "Editore aggiunto con successo"
+		}
+	},
+	"addSeries": {
+		"errors": {
+			"publisherTitle": "Editori Mancanti",
+			"publisherAction": "Aggiungi un editore al database",
+			"typeTitle": "Tipi Mancanti",
+			"typeAction": "Aggiungi un tipo al database"
+		},
+		"messages": {
+			"seriesAdded": "Serie aggiunta con successo"
+		}
+	},
+	"editPage": {
+		"messages": {
+			"discontinued": "Interrotta",
+			"seriesAndImageUpdated": "Serie e immagine aggiornati con successo",
+			"seriesUpdated": "Serie aggiornata con successo",
+			"publisherAndImageUpdated": "Editore e immagine aggiornati con successo",
+			"publisherUpdated": "Editore aggiornato con successo"
+		}
+	},
+	"seriesDetail": {
+		"messages": {
+			"missedVolumes": "Volumi mancanti",
+			"unreadVolumes": "Questa serie ha volumi non letti",
+			"isDiscontinued": "Questa serie è interrotta"
+		}
+	},
+	"settingsModal": {
+		"title": "IMPOSTAZIONI",
+		"buttons": {
+			"myAccount": "Area Personale",
+			"hideReadyToRead": "Nascondi Pronti Da Leggere",
+			"showReadyToRead": "Mostra Pronti Da Leggere"
+		}
+	},
+	"isNotAuth": {
+		"message": "Stai visualizzando il sito in anonimato.</strong> Clicca \n<a href='/account/login/'>qui</a> per accedere così puoi aggiungere e modificare le tue serie"
+	}
+}

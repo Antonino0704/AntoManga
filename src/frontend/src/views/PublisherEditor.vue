@@ -1,11 +1,11 @@
 <template>
 	<div v-if="publisher.detail">
-		<NotFound message="PUBLISHER NOT FOUND" />
+		<NotFound :message="$t('common.messages.publisherNotFound')" />
 	</div>
 	<div v-else class="publisher-editor container-sm mt-3">
 		<spinnerLoading ref="spinner" />
 		<form class="list-inline" @submit.prevent="Update">
-			<h1 class="list-inline-item">EDIT PAGE</h1>
+			<h1 class="list-inline-item">{{ $t('common.titles.editPage') }}</h1>
 			<div class="list-inline-item row g-2">
 				<div class="col-md">
 					<div class="form-floating list-inline-item">
@@ -16,8 +16,8 @@
 							v-model="publisher.name"
 							maxlength="50"
 						/>
-						<label for="floatingInputGrid">Publisher's Title</label>
-						<div class="invalid-feedback">Invalid title</div>
+						<label for="floatingInputGrid">{{ $t('common.messages.publisherTitle') }}</label>
+						<div class="invalid-feedback">{{ $t('common.errors.invalidTitle') }}</div>
 					</div>
 				</div>
 			</div>
@@ -34,7 +34,7 @@
 					<label class="input-group-text" for="file-input">
 						<i fill="currentColor" class="bi bi-images"> </i>
 					</label>
-					<div class="invalid-feedback">Invalid image</div>
+					<div class="invalid-feedback">{{ $t('common.errors.invalidImage') }}</div>
 				</div>
 
 				<PublisherImagePreview class="list-inline-item" ref="preview" />
@@ -47,10 +47,10 @@
 					id="floatingTextarea"
 					v-model="publisher.description"
 				></textarea>
-				<label for="floatingTextarea">Description</label>
-				<div class="invalid-feedback">Invalid description</div>
+				<label for="floatingTextarea">{{ $t('common.messages.description') }}</label>
+				<div class="invalid-feedback">{{ $t('common.errors.invalidDescription') }}</div>
 			</div>
-			<button class="btn btn-outline-success mt-3">Update</button>
+			<button class="btn btn-outline-success mt-3">{{ $t('common.buttons.update') }}</button>
 		</form>
 
 		<Notification ref="notification" />
@@ -121,11 +121,11 @@ export default {
 					if (this.imageUploaded) {
 						await apiExpress.putImage(`${endpoints.imgPublishers}${response.slug}/`, this.formData);
 						(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-							'publisher and image updated with success'
+							this.$t('editPage.messages.publisherAndImageUpdated')
 						);
 					} else {
 						(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-							'publisher updated with success'
+							this.$t('editPage.messages.publisherUpdated')
 						);
 					}
 					setTimeout(
@@ -148,7 +148,7 @@ export default {
 		},
 		checkData(): boolean {
 			if (!this.publisher.name || !this.publisher.description) {
-				this.error = "title or description can't be blank";
+				this.error = this.$t('common.errors.titleOrDescription');
 				return false;
 			}
 			return true;
@@ -175,7 +175,7 @@ export default {
 					this.imageUploaded = true;
 				} else {
 					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-						'unsupported image '
+						this.$t('common.errors.unsupportedImage')
 					);
 					document.querySelector<HTMLInputElement>('#file-input')!.value = '';
 					(this.$refs.preview as InstanceType<typeof PublisherImagePreview>).setPreview(

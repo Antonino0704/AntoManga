@@ -25,7 +25,7 @@
 					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 						<li class="nav-item me-2 mb-2">
 							<router-link :to="{ name: 'TypeView' }" type="button" class="badge text-bg-secondary">
-								Types
+								{{ $t('common.titles.type', 2) }}
 							</router-link>
 						</li>
 						<li class="nav-item me-2 mb-2">
@@ -34,52 +34,49 @@
 								type="button"
 								class="badge text-bg-secondary"
 							>
-								Publishers Rank
+								{{ $t('common.titles.publisherRank') }}
 							</router-link>
 						</li>
 						<li class="nav-item me-2 mb-2">
 							<router-link
 								:to="{ name: 'StatsView' }"
 								type="button"
-								class="badge text-bg-secondary bi bi-bar-chart-line"
+								class="badge text-bg-secondary"
 							>
-								Stats
+								<i class="bi bi-bar-chart-line"></i>
+								{{ $t('common.titles.stats') }}
 							</router-link>
 						</li>
 						<li class="nav-item me-2 mb-2">
-							<router-link
-								:to="{ name: 'InfoView' }"
-								type="button"
-								class="badge text-bg-secondary bi bi-info-circle"
-							>
-								Info
+							<router-link :to="{ name: 'InfoView' }" type="button" class="badge text-bg-secondary">
+								<i class="bi bi-info-circle"></i>
+								{{ $t('navbar.titles.info') }}
 							</router-link>
 						</li>
 						<li class="nav-item me-2 mb-2">
-							<router-link
-								:to="{ name: 'Ticket' }"
-								type="button"
-								class="badge text-bg-secondary bi bi-question-circle"
-							>
-								Help
+							<router-link :to="{ name: 'Ticket' }" type="button" class="badge text-bg-secondary">
+								<i class="bi bi-question-circle"></i>
+								{{ $t('navbar.titles.help') }}
 							</router-link>
 						</li>
 						<li class="nav-item me-2 mb-2" v-if="user.is_authenticated">
 							<router-link
 								:to="{ name: 'AddPublisher' }"
 								type="button"
-								class="badge text-bg-secondary bi bi-plus-circle"
+								class="badge text-bg-secondary"
 							>
-								New Publisher
+								<i class="bi bi-plus-circle"></i>
+								{{ $t('navbar.titles.newPublisher') }}
 							</router-link>
 						</li>
 						<li class="nav-item me-2 mb-2" v-if="isTypesPubslihers">
 							<router-link
 								:to="{ name: 'AddSeries' }"
 								type="button"
-								class="badge text-bg-secondary bi bi-plus-circle"
+								class="badge text-bg-secondary"
 							>
-								New Series
+								<i class="bi bi-plus-circle"></i>
+								{{ $t('navbar.titles.newSeries') }}
 							</router-link>
 						</li>
 					</ul>
@@ -94,12 +91,9 @@
 						</a>
 						<ul class="dropdown-menu">
 							<li>
-								<i
-									class="dropdown-item bi bi-x-circle text-danger"
-									v-if="showClearButton"
-									@click="toggle(-1)"
-								>
-									Clear</i
+								<i class="dropdown-item text-danger" v-if="showClearButton" @click="toggle(-1)">
+									<i class="bi bi-x-circle"></i>
+									{{ $t('navbar.messages.clear') }}</i
 								>
 							</li>
 							<hr class="dropdown-divider" v-if="showClearButton" />
@@ -107,7 +101,7 @@
 								<a
 									class="dropdown-item border-bottom bi bi-arrow-return-right text-primary-emphasis"
 									@click="showTypes = !showTypes"
-									>TYPES</a
+									>{{ $t('common.titles.type', 2).toUpperCase() }}</a
 								>
 							</li>
 							<li v-for="(type, index) in types" :key="type.id" @click="toggle(index)">
@@ -121,7 +115,7 @@
 								<a
 									class="dropdown-item border-bottom bi bi-arrow-return-right text-primary-emphasis"
 									@click="showPublishers = !showPublishers"
-									>PUBLISHERS</a
+									>{{ $t('common.titles.publisher', 2).toUpperCase() }}</a
 								>
 							</li>
 							<li
@@ -154,11 +148,13 @@
 								id="searchBar"
 								class="form-control me-2"
 								type="search"
-								placeholder="Search"
+								:placeholder="$t('common.buttons.search')"
 								aria-label="Search"
 								@keydown.enter="search()"
 							/>
-							<button class="btn btn-outline-success" @click="search()">Search</button>
+							<button class="btn btn-outline-success" @click="search()">
+								{{ $t('common.buttons.search') }}
+							</button>
 						</div>
 					</li>
 				</div>

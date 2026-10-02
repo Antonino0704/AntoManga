@@ -14,41 +14,41 @@ function checkDataStats(series: Series): boolean {
 	return true;
 }
 
-function showErrors(series: Series): string {
+function showErrors(series: Series, t: Function): string {
 	let error = '';
 	if (typeof series.n_volumes != 'number') {
 		document.querySelector('#inputNVol')!.className = 'form-control is-invalid';
-		error = "n volumes can't be blank";
+		error = t('common.errors.nVolumes');
 	} else if (series.n_volumes == 0) {
 		document.querySelector('#inputNVol')!.className = 'form-control is-invalid';
-		error = "n volumes can't be 0";
+		error = t('common.errors.nVolumes0');
 	} else if (series.n_volumes < 0) {
 		document.querySelector('#inputNVol')!.className = 'form-control is-invalid';
-		error = "n volumes can't be negative";
+		error = t('common.errors.nVolumesNegative');
 	}
 	if (series.volumes_bought < 0) {
 		document.querySelector('#inputBought')!.className = 'form-control is-invalid';
-		error = "volumes bought can't be negative";
+		error = t('common.errors.volBoughtNegative');
 	}
 	if (series.volumes_read < 0) {
 		document.querySelector('#inputRead')!.className = 'form-control is-invalid';
-		error = "volumes read can't be negative";
+		error = t('common.errors.volReadNegative');
 	}
 	if (series.n_volumes < series.volumes_bought) {
 		document.querySelector('#inputBought')!.className = 'form-control is-invalid';
-		error = "the volumes bought can't be more than total volumes";
+		error = t('common.errors.volBoughtThanNVolumes');
 	}
 	if (series.volumes_bought < series.volumes_read) {
 		document.querySelector('#inputRead')!.className = 'form-control is-invalid';
-		error = "the volumes read can't be more than total bought";
+		error = t('common.errors.volReadThanVolBought');
 	}
 	if (typeof series.volumes_bought != 'number') {
 		document.querySelector('#inputBought')!.className = 'form-control is-invalid';
-		error = "volumes bought can't be blank";
+		error = t('common.errors.volBought');
 	}
 	if (typeof series.volumes_read != 'number') {
 		document.querySelector('#inputRead')!.className = 'form-control is-invalid';
-		error = "volumes read can't be blank";
+		error = t('common.errors.volRead');
 	}
 	return error;
 }

@@ -7,7 +7,7 @@
 			data-bs-target="#typeModal"
 			data-bs-whatever="@mdo"
 		>
-			Add a new Type
+			{{ $t('typesComponent.buttons.newType') }}
 		</button>
 
 		<div
@@ -20,7 +20,9 @@
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h1 class="modal-title fs-5" id="typeModalLabel">New type</h1>
+						<h1 class="modal-title fs-5" id="typeModalLabel">
+							{{ $t('typesComponent.titles.newType') }}
+						</h1>
 						<button
 							type="button"
 							class="btn-close"
@@ -35,17 +37,23 @@
 									class="form-control"
 									id="titleType"
 									v-model="type.name"
-									placeholder="Title"
+									:placeholder="$t('common.titles.title')"
 									maxlength="20"
 								></textarea>
 							</div>
 						</form>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-outline-success" @click="post">Add</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+							{{ $t('common.buttons.close') }}
+						</button>
+						<button type="button" class="btn btn-outline-success" @click="post">
+							{{ $t('common.buttons.add') }}
+						</button>
 					</div>
-					<div class="alert alert-danger ms-2 me-2" role="alert" v-if="errors">invalid title</div>
+					<div class="alert alert-danger ms-2 me-2" role="alert" v-if="errors">
+						{{ $t('common.errors.invalidTitle') }}
+					</div>
 				</div>
 			</div>
 		</div>
@@ -85,7 +93,7 @@ export default {
 				Modal.getInstance(document.getElementById('typeModal')).hide();
 				this.reset();
 				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-					'type created with success'
+					this.$t('typesComponent.messages.typeCreated')
 				);
 			}
 		},

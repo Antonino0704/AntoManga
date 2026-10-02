@@ -2,7 +2,7 @@
 	<div class="add-publisher container-sm">
 		<spinnerLoading ref="spinner" :startWithLoadingFalse="true" />
 		<form class="list-inline" @submit.prevent="addPublisher">
-			<h1 class="list-inline-item">ADD A New Publisher</h1>
+			<h1 class="list-inline-item">{{ $t('common.titles.addPublisher') }}</h1>
 			<div class="list-inline-item row g-2">
 				<div class="col-md">
 					<div class="form-floating list-inline-item">
@@ -13,8 +13,8 @@
 							v-model="publisher.name"
 							maxlength="50"
 						/>
-						<label for="floatingInputGrid">Publisher's Title</label>
-						<div class="invalid-feedback">Invalid title</div>
+						<label for="floatingInputGrid">{{ $t('common.messages.publisherTitle') }}</label>
+						<div class="invalid-feedback">{{ $t('common.errors.invalidTitle') }}</div>
 					</div>
 				</div>
 			</div>
@@ -31,7 +31,7 @@
 					<label class="input-group-text" for="file-input">
 						<i class="bi bi-images" fill="currentColor"></i>
 					</label>
-					<div class="invalid-feedback">Invalid image</div>
+					<div class="invalid-feedback">{{ $t('common.errors.invalidImage') }}</div>
 				</div>
 
 				<PublisherImagePreview class="list-inline-item" ref="preview" />
@@ -44,10 +44,10 @@
 					id="floatingTextarea"
 					v-model="publisher.description"
 				></textarea>
-				<label for="floatingTextarea">Description</label>
-				<div class="invalid-feedback">Invalid description</div>
+				<label for="floatingTextarea">{{ $t('common.messages.description') }}</label>
+				<div class="invalid-feedback">{{ $t('common.errors.invalidDescription') }}</div>
 			</div>
-			<button class="btn btn-outline-success mt-3">Add</button>
+			<button class="btn btn-outline-success mt-3">{{ $t('common.buttons.add') }}</button>
 		</form>
 
 		<Notification ref="notification" />
@@ -96,7 +96,7 @@ export default {
 				this.imageUploaded = true;
 			} else {
 				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-					'unsupported image '
+					this.$t('common.errors.unsupportedImage')
 				);
 				document.querySelector('#file-input')!.className = 'form-control is-invalid';
 				(this.$refs.preview as InstanceType<typeof PublisherImagePreview>).resetPreview();
@@ -111,7 +111,7 @@ export default {
 					const response = await apiExpress.post<Publisher>(endpoints.publishers, this.publisher);
 					await apiExpress.putImage(`${endpoints.imgPublishers}${response.slug}/`, this.formData);
 					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-						'publisher added with success'
+						this.$t('addPublisherView.messages.publisherAdded')
 					);
 					(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 					setTimeout(
@@ -134,11 +134,11 @@ export default {
 		},
 		checkData(): boolean {
 			if (!this.imageUploaded) {
-				this.error = 'image not loaded correctly';
+				this.error = this.$t('common.errors.imageNotLoaded');
 				return false;
 			}
 			if (!this.publisher.name || !this.publisher.description) {
-				this.error = "title or description can't be blank";
+				this.error = this.$t('common.errors.titleOrDescription');
 				return false;
 			}
 			return true;

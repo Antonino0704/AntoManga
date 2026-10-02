@@ -91,4 +91,10 @@ export interface IAdminError {
 	isError: boolean;
 	title: string;
 	action: string;
+	adminUrl: string;
+}
+
+export interface Language {
+	code: string;
+	name: string;
 }

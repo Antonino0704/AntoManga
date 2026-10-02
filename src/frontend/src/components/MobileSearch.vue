@@ -18,15 +18,19 @@
 								class="form-control"
 								type="search"
 								id="searchText"
-								placeholder="Search"
+								:placeholder="$t('common.buttons.search')"
 								@keydown.enter="search()"
 								v-model="text"
 							/>
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-outline-success" @click="search">Search</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+							{{ $t('common.buttons.close') }}
+						</button>
+						<button type="button" class="btn btn-outline-success" @click="search">
+							{{ $t('common.buttons.search') }}
+						</button>
 					</div>
 				</div>
 			</div>

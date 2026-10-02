@@ -2,12 +2,11 @@
 	<div class="welcome">
 		<h1 class="text-center">AntoManga</h1>
 		<div class="alert alert-success container mt-5" role="alert">
-			Antomanga is a website that lets you manage your manga or novel collection in an easy and
-			convenient way, while also allowing you to filter the contents of your collection
+			{{ $t('common.messages.welcomeComponent') }}
 		</div>
 		<div class="d-flex justify-content-center">
 			<button @click="welcomePageSeen" class="text-center btn btn-outline-success btn-lg">
-				Show me
+				{{ $t('common.buttons.showMe') }}
 			</button>
 		</div>
 	</div>

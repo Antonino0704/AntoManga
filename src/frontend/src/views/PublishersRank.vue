@@ -1,14 +1,14 @@
 <template>
 	<div class="PublisherRank mt-3">
-		<h1 class="fs-1 font-monospace">Publishers Rank</h1>
+		<h1 class="fs-1 font-monospace">{{ $t('common.titles.publisherRank') }}</h1>
 		<div class="placeholder">
 			<table class="table container-sm placeholder">
 				<thead>
 					<tr>
-						<th scope="col">Pos</th>
-						<th scope="col">N. Series</th>
+						<th scope="col">{{ $t('publisherRankView.position') }}</th>
+						<th scope="col">{{ $t('common.messages.nSeries') }}</th>
 						<th scope="col"><i class="bi bi-globe-americas"></i> (%)</th>
-						<th scope="col">Publisher</th>
+						<th scope="col">{{ $t('common.titles.publisher', 1) }}</th>
 						<th scope="col">IMG</th>
 					</tr>
 				</thead>

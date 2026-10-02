@@ -1,8 +1,7 @@
 <template>
 	<div class="isNotAuthenticated container-sm mt-2">
 		<div class="alert alert-warning alert-dismissible fade show" role="alert">
-			You are viewing the site <strong>anonymously.</strong> Click
-			<a href="/account/login/">here</a> to login so you can add and edit your series
+			<div v-html="$t('isNotAuth.message')"></div>
 			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 		</div>
 	</div>

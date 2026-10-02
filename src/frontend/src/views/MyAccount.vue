@@ -159,7 +159,7 @@ export default {
 					this.imageUploaded = true;
 				} else {
 					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-						'unsupported image '
+						this.$t('common.errors.unsupportedImage')
 					);
 					document.querySelector<HTMLInputElement>('#file-input')!.value = '';
 					this.profile.avatar = this.prevAvatar;

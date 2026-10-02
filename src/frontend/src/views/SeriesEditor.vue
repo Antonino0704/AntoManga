@@ -1,11 +1,11 @@
 <template>
 	<div v-if="series.detail">
-		<NotFound message="SERIES NOT FOUND" />
+		<NotFound :message="$t('common.messages.seriesNotFound')" />
 	</div>
 	<div v-else class="series-editor">
 		<spinnerLoading ref="spinner" />
 		<form class="list-inline" @submit.prevent="Update">
-			<h1 class="list-inline-item mt-2">EDIT PAGE</h1>
+			<h1 class="list-inline-item mt-2">{{ $t('common.titles.editPage') }}</h1>
 			<div class="list-inline-item row g-2">
 				<div class="col-md">
 					<div class="form-floating list-inline-item">
@@ -16,8 +16,8 @@
 							id="floatingInputGrid"
 							v-model="series.name"
 						/>
-						<label for="floatingInputGrid">Series's Title</label>
-						<div class="invalid-feedback">Invalid title</div>
+						<label for="floatingInputGrid">{{ $t('common.messages.seriesTitle') }}</label>
+						<div class="invalid-feedback">{{ $t('common.errors.invalidTitle') }}</div>
 					</div>
 				</div>
 			</div>
@@ -34,7 +34,7 @@
 					<label class="input-group-text" for="file-input">
 						<i fill="currentColor" class="bi bi-images"> </i>
 					</label>
-					<div class="invalid-feedback">Invalid image</div>
+					<div class="invalid-feedback">{{ $t('common.errors.invalidImage') }}</div>
 				</div>
 
 				<PreviewComponent class="list-inline-item" ref="preview" />
@@ -76,10 +76,12 @@
 					id="isDiscontinued"
 					v-model="series.is_discontinued"
 				/>
-				<label class="form-check-label" for="isDiscontinued"> Discontinued </label>
+				<label class="form-check-label" for="isDiscontinued">
+					{{ $t('editPage.messages.discontinued') }}
+				</label>
 			</div>
 
-			<button class="btn btn-outline-success mt-3">Update</button>
+			<button class="btn btn-outline-success mt-3">{{ $t('common.buttons.update') }}</button>
 		</form>
 
 		<Notification ref="notification" />
@@ -180,11 +182,11 @@ export default {
 					if (this.imageUploaded) {
 						await apiExpress.putImage(`${endpoints.imgSeries}${response.slug}/`, this.formData);
 						(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-							'series and image updated with success'
+							this.$t('editPage.messages.seriesAndImageUpdated')
 						);
 					} else {
 						(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-							'series updated with success'
+							this.$t('editPage.messages.seriesUpdated')
 						);
 					}
 					setTimeout(
@@ -205,7 +207,7 @@ export default {
 		},
 		checkData(): boolean {
 			if (!this.series.name) {
-				this.error = "title can't be blank";
+				this.error = this.$t('common.errors.invalidTitle');
 				return false;
 			}
 			return true;
@@ -224,7 +226,7 @@ export default {
 					this.imageUploaded = true;
 				} else {
 					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-						'unsupported image '
+						this.$t('common.errors.unsupportedImage')
 					);
 					document.querySelector<HTMLInputElement>('#file-input')!.value = '';
 					(this.$refs.preview as InstanceType<typeof PreviewComponent>).setPreview(
