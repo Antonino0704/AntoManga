@@ -9,7 +9,7 @@
 		<router-link :to="{ name: 'Home' }" v-if="!user.is_staff">
 			{{ $t('common.messages.goToHome') }}
 		</router-link>
-		<a href="/admin/" v-else>{{ $t('common.messages.goToAdmin') }} </a>
+		<a :href="adminUrl" v-else>{{ $t('common.messages.goToAdmin') }} </a>
 	</div>
 </template>
 
@@ -25,6 +25,10 @@ export default {
 			required: true
 		},
 		action: {
+			type: String,
+			required: true
+		},
+		adminUrl: {
 			type: String,
 			required: true
 		}

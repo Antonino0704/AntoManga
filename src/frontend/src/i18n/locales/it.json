@@ -4,7 +4,12 @@
 			"add": "Aggiungi",
 			"close": "Chiudi",
 			"search": "Cerca",
-			"send": "Invia"
+			"send": "Invia",
+			"update": "Aggiorna",
+			"delete": "Cancella",
+			"more": "Caricare di più",
+			"confirm": "Conferma",
+			"showMe": "Mostrami"
 		},
 		"titles": {
 			"title": "Titolo",
@@ -12,7 +17,9 @@
 			"publisherRank": "Classifica Editori",
 			"stats": "Statistiche",
 			"publisher": "Editore | Editori",
-			"addPublisher": "Aggiungi Un Nuovo Editore"
+			"addPublisher": "Aggiungi Un Nuovo Editore",
+			"addSeries": "Aggiungi Una Nuova Serie",
+			"editPage": "PAGINA DI MODIFICA"
 		},
 		"messages": {
 			"changeLang": "La traduzione in italiano è una traduzione parziale, alcune parti del sito sono ancora in inglese",
@@ -20,7 +27,20 @@
 			"goToAdmin": "VAI SU ADMIN",
 			"goToHome": "VAI NELLA HOME",
 			"publisherTitle": "Titolo Dell'Editore",
-			"description": "Descrizione"
+			"description": "Descrizione",
+			"seriesTitle": "Titolo Della Serie",
+			"nVolumes": "N. Volumi",
+			"volBought": "Vol. Comprati",
+			"volRead": "Vol. Letti",
+			"latestPurchase": "Ultimo acquisto",
+			"ConfirmDeleteMessage": "Sei sicuro? Non potrai più recuperare i dati",
+			"deleteMessageConfirmed": "{objectToDelete} cancellato",
+			"seriesNotFound": "SERIE NON TROVATA",
+			"publisherNotFound": "EDITORE NON TROVATO",
+			"share": "Condividi",
+			"welcome": "Benvenuto {user}",
+			"searchNoResults": "È così vuoto qui",
+			"welcomeComponent": "Antomanga è un sito web che ti permette di gestire i tuoi manga collezione di romanzi in maniera facile e conveniente, ti permette anche di filtrare i contenuti della tua collezzione"
 		},
 		"errors": {
 			"invalidTitle": "Titolo non valido",
@@ -29,7 +49,16 @@
 			"invalidDescription": "Descrizione non valida",
 			"titleOrDescription": "Titolo o descrizione non possono essere vuoti",
 			"imageNotLoaded": "Immagine non caricata correttamente",
-			"unsupportedImage": "Immagine non supportata "
+			"unsupportedImage": "Immagine non supportata ",
+			"nVolumes": "N volumi non può essere vuoto",
+			"nVolumes0": "N volumi non può essere 0",
+			"nVolumesNegative": "N volumi non può essere negativo",
+			"volBought": "Volumi comprati non possono essere vuoti",
+			"volBoughtNegative": "Volumi comprati non può essere negativo",
+			"volRead": "Volumi letti non possono essere vuoti",
+			"volReadNegative": "Volumi letti non può essere negativo",
+			"volBoughtThanNVolumes": "I volumi comprati non possono essere più dei volumi totali",
+			"volReadThanVolBought": "I volumi letti non possono essere più di quelli comprati totali"
 		}
 	},
 	"typesComponent": {
@@ -100,6 +129,33 @@
 	"addPublisherView": {
 		"messages": {
 			"publisherAdded": "Editore aggiunto con successo"
+		}
+	},
+	"addSeries": {
+		"errors": {
+			"publisherTitle": "Editori Mancanti",
+			"publisherAction": "Aggiungi un editore al database",
+			"typeTitle": "Tipi Mancanti",
+			"typeAction": "Aggiungi un tipo al database"
+		},
+		"messages": {
+			"seriesAdded": "Serie aggiunta con successo"
+		}
+	},
+	"editPage": {
+		"messages": {
+			"discontinued": "Interrotta",
+			"seriesAndImageUpdated": "Serie e immagine aggiornati con successo",
+			"seriesUpdated": "Serie aggiornata con successo",
+			"publisherAndImageUpdated": "Editore e immagine aggiornati con successo",
+			"publisherUpdated": "Editore aggiornato con successo"
+		}
+	},
+	"seriesDetail": {
+		"messages": {
+			"missedVolumes": "Volumi mancanti",
+			"unreadVolumes": "Questa serie ha volumi non letti",
+			"isDiscontinued": "Questa serie è interrotta"
 		}
 	}
 }

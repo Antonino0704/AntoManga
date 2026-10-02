@@ -3,13 +3,13 @@
 	<div v-else class="HomeView row justify-content-center">
 		<navbar @filterEvent="search" />
 		<spinnerLoading ref="spinner" />
-		<div class="col-auto">
+		<div id="dNoneId" class="col-auto d-none">
 			<div class="container text-center">
 				<div class="fs-1">
 					Home
 					<i class="bi bi-house"></i>
 					<div class="fs-6" v-if="user.is_authenticated">
-						Welcome {{ user.username }}<i class="bi bi-person"></i>
+						{{ $t('common.messages.welcome', { user: user.username }) }}<i class="bi bi-person"></i>
 					</div>
 				</div>
 				<div>
@@ -17,7 +17,11 @@
 						>{{ series.length }} / {{ seriesLength }}</span
 					>
 				</div>
-				<SearchNoResults message="it is so empty here" v-if="!seriesLength" class="mt-2" />
+				<SearchNoResults
+					:message="$t('common.messages.searchNoResults')"
+					v-if="!seriesLength"
+					class="mt-2"
+				/>
 				<div :class="`row ${getLayoutClasses} g-4 mt-3 me-2 ms-2`" id="cardGroup`">
 					<div class="col" v-for="(serie, index) in series" :key="serie.id">
 						<div
@@ -48,10 +52,12 @@
 										class="bi bi-exclamation-triangle-fill text-danger ms-2"
 									></i>
 								</h5>
-								<p class="card-text fst-italic">Type: {{ serie.typology_name }}</p>
+								<p class="card-text fst-italic">
+									{{ $t('common.titles.type', 1) }}: {{ serie.typology_name }}
+								</p>
 								<p class="card-text" v-if="serie.purchased_at">
 									<small class="text-body-secondary"
-										>Latest purchase: {{ serie.purchased_at }}</small
+										>{{ $t('common.messages.latestPurchase') }}: {{ serie.purchased_at }}</small
 									>
 								</p>
 
@@ -61,7 +67,9 @@
 										params: { slug: serie.publisher_slug }
 									}"
 								>
-									<p class="card-text fw-bold">Publisher: {{ serie.publisher_name }}</p>
+									<p class="card-text fw-bold">
+										{{ $t('common.titles.publisher', 1) }}: {{ serie.publisher_name }}
+									</p>
 								</router-link>
 							</div>
 						</div>
@@ -73,7 +81,7 @@
 					type="button"
 					class="btn btn-outline-secondary mt-3"
 				>
-					More
+					{{ $t('common.buttons.more') }}
 				</button>
 			</div>
 		</div>
@@ -196,6 +204,7 @@ export default {
 			this.readReadyToReadCockie();
 			document.querySelectorAll('span')[1]!.className = 'badge rounded-pill text-bg-info me-2';
 			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
+			document.querySelector('#dNoneId')!.classList.remove('d-none');
 		},
 		mouseEnter(id: string) {
 			document

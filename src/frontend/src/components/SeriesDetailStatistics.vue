@@ -33,7 +33,7 @@
 			<!--n volumes-->
 			<li class="list-group-item disabled statistics" aria-disabled="true">
 				<div class="input-group flex-nowrap">
-					<span class="input-group-text">N. Volumes</span>
+					<span class="input-group-text">{{ $t('common.messages.nVolumes') }}</span>
 					<input
 						id="inputNVol"
 						type="number"
@@ -48,7 +48,7 @@
 			<!--volumes_bought-->
 			<li class="list-group-item disabled statistics" aria-disabled="true">
 				<div class="input-group flex-nowrap">
-					<span class="input-group-text">Vol. Bought</span>
+					<span class="input-group-text">{{ $t('common.messages.volBought') }}</span>
 					<input
 						id="inputBought"
 						type="number"
@@ -64,7 +64,7 @@
 			<!--volumes_read-->
 			<li class="list-group-item disabled statistics" aria-disabled="true">
 				<div class="input-group flex-nowrap">
-					<span class="input-group-text">Vol. Read</span>
+					<span class="input-group-text">{{ $t('common.messages.volRead') }}</span>
 					<input
 						id="inputRead"
 						type="number"
@@ -79,7 +79,7 @@
 			<!--missed_volumes-->
 			<li class="list-group-item disabled statistics-x100" aria-disabled="true">
 				<div class="input-group flex-nowrap">
-					<span class="input-group-text">Missed Volumes</span>
+					<span class="input-group-text">{{ $t('seriesDetail.messages.missedVolumes') }}</span>
 					<span class="form-control" aria-describedby="addon-wrapping">{{ getMissedVolumes }}</span>
 					<span class="input-group-text"> {{ getMissedVolumesx100 }} %</span>
 				</div>
@@ -173,7 +173,7 @@ export default {
 				}
 			} else {
 				resetErrors();
-				this.error = showErrors(this.series);
+				this.error = showErrors(this.series, this.$t);
 				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(this.error);
 			}
 		}

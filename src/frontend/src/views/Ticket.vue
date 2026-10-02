@@ -5,7 +5,11 @@
 		<spinnerLoading ref="spinner" />
 	</div>
 	<div v-if="labelError.isError">
-		<AdminErrors :title="labelError.title" :action="labelError.action" />
+		<AdminErrors
+			:title="labelError.title"
+			:action="labelError.action"
+			:admin-url="labelError.adminUrl"
+		/>
 	</div>
 	<div class="ticket container-sm" v-if="!sent && !labelError.isError">
 		<h1 class="text-center mt-2 mb-3">
@@ -99,6 +103,7 @@ export default {
 				if (!response.length) {
 					this.labelError.title = this.$t('help.errors.labelErrors.title');
 					this.labelError.action = this.$t('help.errors.labelErrors.action');
+					this.labelError.adminUrl = '/admin/users/label/add/';
 					this.labelError.isError = true;
 				} else {
 					this.labels.push(...response);

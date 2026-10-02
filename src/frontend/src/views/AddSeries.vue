@@ -1,11 +1,15 @@
 <template>
 	<div v-if="isTypesOrPubMissing">
-		<AdminErrors :title="typesOrPubMissing.title" :action="typesOrPubMissing.action" />
+		<AdminErrors
+			:title="typesOrPubMissing.title"
+			:action="typesOrPubMissing.action"
+			:admin-url="typesOrPubMissing.adminUrl"
+		/>
 	</div>
 	<div v-else class="add-series container-sm mt-2">
 		<spinnerLoading ref="spinner" />
 		<form class="list-inline" @submit.prevent="addSeries">
-			<h1 class="list-inline-item">ADD A New Series</h1>
+			<h1 class="list-inline-item">{{ $t('common.titles.addSeries') }}</h1>
 			<div class="list-inline-item row g-2">
 				<div class="col-md">
 					<div class="form-floating list-inline-item">
@@ -16,8 +20,8 @@
 							id="floatingInputGrid"
 							v-model="series.name"
 						/>
-						<label for="floatingInputGrid">Series's Title</label>
-						<div class="invalid-feedback">Invalid title</div>
+						<label for="floatingInputGrid">{{ $t('common.messages.seriesTitle') }}</label>
+						<div class="invalid-feedback">{{ $t('common.errors.invalidTitle') }}</div>
 					</div>
 				</div>
 			</div>
@@ -34,7 +38,7 @@
 					<label class="input-group-text" for="file-input">
 						<i fill="currentColor" class="bi bi-images"> </i>
 					</label>
-					<div class="invalid-feedback">Invalid image</div>
+					<div class="invalid-feedback">{{ $t('common.errors.invalidImage') }}</div>
 				</div>
 
 				<SeriesImagePreview class="list-inline-item" ref="preview" />
@@ -72,7 +76,9 @@
 			<ul class="list-group mt-5">
 				<li class="list-group-item statistics">
 					<div class="input-group flex-nowrap">
-						<span class="input-group-text" id="addon-wrapping">N. Volumes</span>
+						<span class="input-group-text" id="addon-wrapping">{{
+							$t('common.messages.nVolumes')
+						}}</span>
 						<input
 							id="inputNVol"
 							type="number"
@@ -85,7 +91,9 @@
 				</li>
 				<li class="list-group-item statistics">
 					<div class="input-group flex-nowrap">
-						<span class="input-group-text" id="addon-wrapping">Vol. Bought</span>
+						<span class="input-group-text" id="addon-wrapping">{{
+							$t('common.messages.volBought')
+						}}</span>
 						<input
 							id="inputBought"
 							type="number"
@@ -98,7 +106,9 @@
 				</li>
 				<li class="list-group-item statistics">
 					<div class="input-group flex-nowrap">
-						<span class="input-group-text" id="addon-wrapping">Vol. Read</span>
+						<span class="input-group-text" id="addon-wrapping">{{
+							$t('common.messages.volRead')
+						}}</span>
 						<input
 							id="inputRead"
 							type="number"
@@ -110,7 +120,7 @@
 				</li>
 			</ul>
 
-			<button class="btn btn-outline-success mt-3">Add</button>
+			<button class="btn btn-outline-success mt-3">{{ $t('common.buttons.add') }}</button>
 		</form>
 
 		<Notification ref="notification" />
@@ -147,7 +157,8 @@ export default {
 			typesOrPubMissing: {
 				isError: false,
 				title: '',
-				action: ''
+				action: '',
+				adminUrl: ''
 			} as IAdminError
 		};
 	},
@@ -167,8 +178,9 @@ export default {
 			try {
 				const response = await apiExpress.get<Array<Type>>(endpoints.types);
 				if (!response.length) {
-					this.typesOrPubMissing.title = 'Missing Types';
-					this.typesOrPubMissing.action = 'Add a type to the database';
+					this.typesOrPubMissing.title = this.$t('addSeries.errors.typeTitle');
+					this.typesOrPubMissing.action = this.$t('addSeries.errors.typeAction');
+					this.typesOrPubMissing.adminUrl = '/admin/series/typology/add/';
 					this.typesOrPubMissing.isError = true;
 				} else {
 					await this.types.push(...response);
@@ -188,8 +200,9 @@ export default {
 			try {
 				const response = await apiExpress.get<Array<Publisher>>(endpoints.publishers);
 				if (!response.length) {
-					this.typesOrPubMissing.title = 'Missing Publishers';
-					this.typesOrPubMissing.action = 'Add a publisher to the database';
+					this.typesOrPubMissing.title = this.$t('addSeries.errors.publisherTitle');
+					this.typesOrPubMissing.action = this.$t('addSeries.errors.publisherAction');
+					this.typesOrPubMissing.adminUrl = '/admin/publishers/publisher/add/';
 					this.typesOrPubMissing.isError = true;
 				} else {
 					await this.publishers.push(...response);
@@ -220,7 +233,7 @@ export default {
 				this.imageUploaded = true;
 			} else {
 				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-					'unsupported image '
+					this.$t('common.errors.unsupportedImage')
 				);
 				(this.$refs.preview as InstanceType<typeof SeriesImagePreview>).resetPreview();
 				document.querySelector('#file-input')!.className = 'form-control is-invalid';
@@ -237,7 +250,7 @@ export default {
 					await apiExpress.putImage(`${endpoints.imgSeries}${response.slug}/`, this.formData);
 
 					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-						'Manga added with success'
+						this.$t('addSeries.messages.seriesAdded')
 					);
 					(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 					setTimeout(
@@ -269,24 +282,14 @@ export default {
 			return checkDataStats(this.series);
 		},
 		showErrors() {
-			this.error = showErrors(this.series);
+			this.error = showErrors(this.series, this.$t);
 			if (!this.imageUploaded) {
-				this.error = 'image not loaded correctly';
+				this.error = this.$t('common.errors.imageNotLoaded');
 				document.querySelector('#file-input')!.className = 'form-control is-invalid';
 			}
 			if (!this.series.name) {
-				this.error = "The fields can't be blank";
+				this.error = this.$t('common.errors.invalidTitle');
 				document.querySelector('#floatingInputGrid')!.className = 'form-control is-invalid';
-			}
-			if (!this.types.length) {
-				this.error = 'there is no type';
-				document.querySelector('#typeSelect')!.className =
-					'form-select form-select-sm placeholder bg-danger';
-			}
-			if (!this.publishers.length) {
-				this.error = 'there is no publisher';
-				document.querySelector('#publisherSelect')!.className =
-					'form-select form-select-sm placeholder bg-danger';
 			}
 		},
 		resetErrors() {

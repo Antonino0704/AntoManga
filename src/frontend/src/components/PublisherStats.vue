@@ -9,19 +9,19 @@
 				aria-expanded="false"
 				aria-controls="collapseStats"
 			>
-				Stats
+				{{ $t('common.titles.stats') }}
 				<i class="bi bi-bar-chart"></i>
 			</button>
 		</p>
 		<div class="stats mt-3 collapse" id="collapseStats">
-			<h2 class="fs-5 font-monospace">STATS</h2>
+			<h2 class="fs-5 font-monospace">{{ $t('common.titles.stats').toUpperCase() }}</h2>
 			<div id="load" class="placeholder">
 				<table class="table table-striped-columns container-sm border border-black">
 					<thead>
 						<tr>
-							<th scope="col">Type</th>
-							<th scope="col">N. Series</th>
-							<th scope="col">N. Series (%)</th>
+							<th scope="col">{{ $t('common.titles.type', 1) }}</th>
+							<th scope="col">{{ $t('common.messages.nSeries') }}</th>
+							<th scope="col">{{ $t('common.messages.nSeries') }} (%)</th>
 						</tr>
 					</thead>
 					<tbody>

@@ -4,7 +4,12 @@
 			"add": "Add",
 			"close": "Close",
 			"search": "Search",
-			"send": "Send"
+			"send": "Send",
+			"update": "Update",
+			"delete": "Delete",
+			"more": "More",
+			"confirm": "Confirm",
+			"showMe": "Show me"
 		},
 		"titles": {
 			"title": "Title",
@@ -12,7 +17,9 @@
 			"publisherRank": "Publishers Rank",
 			"stats": "Stats",
 			"publisher": "Publisher | Publishers",
-			"addPublisher": "Add A New Publisher"
+			"addPublisher": "Add A New Publisher",
+			"addSeries": "Add A New Series",
+			"editPage": "EDIT PAGE"
 		},
 		"messages": {
 			"changeLang": "Not all of the site's content has been translated into other languages",
@@ -20,7 +27,20 @@
 			"goToAdmin": "GO TO ADMIN",
 			"goToHome": "GO TO HOME",
 			"publisherTitle": "Publisher's Title",
-			"description": "Description"
+			"description": "Description",
+			"seriesTitle": "Series Title",
+			"nVolumes": "N. Volumes",
+			"volBought": "Vol. Bought",
+			"volRead": "Vol. Read",
+			"latestPurchase": "Latest purchase",
+			"ConfirmDeleteMessage": "Are you sure? You will no longer be able to retrieve the data",
+			"deleteMessageConfirmed": "{objectToDelete} deleted",
+			"seriesNotFound": "SERIES NOT FOUND",
+			"publisherNotFound": "PUBLISHER NOT FOUND",
+			"share": "Share",
+			"welcome": "Welcome {user}",
+			"searchNoResults": "It is so empty here",
+			"welcomeComponent": "Antomanga is a website that lets you manage your manga or novel collection in an easy and convenient way, while also allowing you to filter the contents of your collection"
 		},
 		"errors": {
 			"invalidTitle": "Invalid title",
@@ -29,7 +49,16 @@
 			"invalidDescription": "Invalid description",
 			"titleOrDescription": "Title or description can't be blank",
 			"imageNotLoaded": "Image not loaded correctly",
-			"unsupportedImage": "Unsupported image "
+			"unsupportedImage": "Unsupported image ",
+			"nVolumes": "N volumes can't be blank",
+			"nVolumes0": "N volumes can't be 0",
+			"nVolumesNegative": "N volumes can't be negative",
+			"volBought": "Volumes bought can't be blank",
+			"volBoughtNegative": "Volumes bought can't be negative",
+			"volRead": "Volumes read can't be blank",
+			"volReadNegative": "Volumes read can't be negative",
+			"volBoughtThanNVolumes": "The volumes bought can't be more than total volumes",
+			"volReadThanVolBought": "The volumes read can't be more than total bought"
 		}
 	},
 	"typesComponent": {
@@ -100,6 +129,33 @@
 	"addPublisherView": {
 		"messages": {
 			"publisherAdded": "Publisher added with success"
+		}
+	},
+	"addSeries": {
+		"errors": {
+			"publisherTitle": "Missing Publishers",
+			"publisherAction": "Add a publisher to the database",
+			"typeTitle": "Missing Types",
+			"typeAction": "Add a type to the database"
+		},
+		"messages": {
+			"seriesAdded": "Series added with success"
+		}
+	},
+	"editPage": {
+		"messages": {
+			"discontinued": "Discontinued",
+			"seriesAndImageUpdated": "Series and image updated with success",
+			"seriesUpdated": "Series updated with success",
+			"publisherAndImageUpdated": "Publisher and image updated with success",
+			"publisherUpdated": "Publisher updated with succes"
+		}
+	},
+	"seriesDetail": {
+		"messages": {
+			"missedVolumes": "Missed Volumes",
+			"unreadVolumes": "This series has unread volumes",
+			"isDiscontinued": "This series is discontinued"
 		}
 	}
 }

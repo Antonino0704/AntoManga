@@ -96,7 +96,7 @@ export default {
 				this.imageUploaded = true;
 			} else {
 				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-					this.$t("common.errors.unsupportedImage")
+					this.$t('common.errors.unsupportedImage')
 				);
 				document.querySelector('#file-input')!.className = 'form-control is-invalid';
 				(this.$refs.preview as InstanceType<typeof PublisherImagePreview>).resetPreview();
@@ -111,7 +111,7 @@ export default {
 					const response = await apiExpress.post<Publisher>(endpoints.publishers, this.publisher);
 					await apiExpress.putImage(`${endpoints.imgPublishers}${response.slug}/`, this.formData);
 					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-						this.$t("addPublisherView.messages.publisherAdded")
+						this.$t('addPublisherView.messages.publisherAdded')
 					);
 					(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 					setTimeout(

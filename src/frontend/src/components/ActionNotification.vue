@@ -5,10 +5,10 @@
 				{{ msgNotification }}
 				<div class="mt-4 pt-2 border-top">
 					<button type="button" class="btn btn-outline-warning btn-sm" @click="deleteObj()">
-						Confirm
+						{{ $t('common.buttons.confirm') }}
 					</button>
 					<button type="button" class="btn btn-secondary btn-sm ms-3" data-bs-dismiss="toast">
-						Close
+						{{ $t('common.buttons.close') }}
 					</button>
 				</div>
 			</div>
