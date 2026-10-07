@@ -40,7 +40,7 @@
 			"share": "Condividi",
 			"welcome": "Benvenuto {user}",
 			"searchNoResults": "È così vuoto qui",
-			"welcomeComponent": "Antomanga è un sito web che ti permette di gestire i tuoi manga collezione di romanzi in maniera facile e conveniente, ti permette anche di filtrare i contenuti della tua collezzione"
+			"welcomeComponent": "Antomanga è un sito web che ti permette di gestire i tuoi manga e la tua collezione di romanzi in maniera facile e conveniente, ti permette anche di filtrare i contenuti della tua collezzione"
 		},
 		"errors": {
 			"invalidTitle": "Titolo non valido",

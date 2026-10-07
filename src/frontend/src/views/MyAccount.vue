@@ -165,8 +165,8 @@ export default {
 					this.profile.avatar = this.prevAvatar;
 					this.imageUploaded = false;
 				}
-			} catch (error) {
-				console.log(error, 'ciaoo');
+			} catch (err) {
+				console.log(err);
 			}
 			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
 		},
