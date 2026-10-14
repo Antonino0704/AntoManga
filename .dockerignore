@@ -1,0 +1,15 @@
+src/frontend/
+
+.git/
+**/.idea/
+**/.vscode/
+**/.DS_Store
+**/Thumbs.db
+
+venv/
+
+__pycache__/
+*.pyc
+
+**/.env
+**/.env.*
