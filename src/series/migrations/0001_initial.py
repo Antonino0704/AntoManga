@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ("publishers", "__first__"),
+        ("publishers", "0001_initial"),
     ]
 
     operations = [
@@ -53,6 +53,7 @@ class Migration(migrations.Migration):
                 ("missed_volumes", models.IntegerField()),
                 ("volumes_read", models.IntegerField()),
                 ("is_discontinued", models.BooleanField(default=False)),
+                ("purchased_at", models.DateField(null=True)),
                 (
                     "owner",
                     models.ForeignKey(
