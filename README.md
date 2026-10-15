@@ -33,8 +33,8 @@ python core/setup.py
 ```
 
 # Create Database  
-
-## ! Don't change anything before this
+> [!WARNING]
+> Don't change anything before this
 ```
 python manage.py migrate   
 ```
@@ -43,10 +43,9 @@ Create the superuser
 ```
 python manage.py createsuperuser
 ```
-```diff
-- After doing so, you'll be able to create new apps or edit models
+> [!NOTE]
+> After doing so, you'll be able to create new apps or edit models
 
-```
 # Run Project
 
 ## For Production
