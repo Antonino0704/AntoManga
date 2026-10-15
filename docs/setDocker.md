@@ -20,11 +20,12 @@ Install docker image and create container
 
 ``` docker compose up -d ```
 
+# Run
+Now the website will be available to localhost:8080 (or similar, depending on your configuration)
+
 # More Informations
 
 If you prefer to run the web app behind an external reverse proxy (e.x. for https)
-
-the nginx service inside the Docker container should not publish its ports directly to the host
 
 Change in docker/nginx/default.conf
 
@@ -37,3 +38,4 @@ And in django settings, add
 ```diff
 + SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 ```
+! The nginx service inside the Docker container should not publish its ports directly to the host
