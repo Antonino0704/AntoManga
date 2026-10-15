@@ -15,7 +15,7 @@ Fork and clone the repository
 Enter into AntoManga Folder
 
 You can set up and run the project in one of the following ways:
-- **Manual installation:** Follow the guide
+- **Manual installation:** [Follow the guide](#Create-and-set-the-virtual-environment)
 - ----------------------------------------
 - **Using the setup script:** run the script  ```./shell_scripts/setup.sh```
 > [!IMPORTANT]
