@@ -11,9 +11,12 @@ Fork and clone the repository
 
 Enter into AntoManga Folder
 
-Follow the guide or run the script (debian-like only) 
+You can set up and run the project in one of the following ways:
+- **Manual installation:** Follow the guide
+- **Using the setup script:** run the script (debian-like only) ```./shell_scripts/setup.sh``` (if it doesn't work you use ```chmod +x shell_scripts/setup.sh``` first)
+- [**Docker**](https://github.com/Antonino0704/AntoManga) (production only)
 
-```./shell_scripts/setup.sh``` (if it doesn't work you use ```chmod +x shell_scripts/setup.sh``` first)
+
 # Create and set the virtual environment
 ```
 python -m venv venv
@@ -29,12 +32,6 @@ python core/setup.py
 # Create Database  
 
 ## ! Don't change anything before this
-```
-python manage.py makemigrations series
-python manage.py makemigrations publishers
-python manage.py makemigrations users
-```
-Just one time
 ```
 python manage.py migrate   
 ```
