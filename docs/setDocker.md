@@ -11,7 +11,8 @@ Enter into docker folder
 
 ## Run setupDockerEnv script
 ```./setupDockerEnv.sh ```
-(if it doesn't work you use ```chmod +x setupDockerEnv.sh``` first)
+> [!TIP]
+> If it doesn't work you use ```chmod +x setupDockerEnv.sh``` first
 
 When prompted, answer the questions. This will create a .env file in the docker directory
 
