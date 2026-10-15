@@ -4,7 +4,10 @@ An website to save all owned manga, the site allows you manage (add, edit or del
 
 You can visit the site either anonymously or have an account so you can add your personal manga/novels (in which case you will only see your manga/novels)
 
-
+# Prerequisites
+- Python 3.10 or lower
+- Node 20
+- Git
 
 # Setup Project
 Fork and clone the repository 
@@ -14,7 +17,7 @@ Enter into AntoManga Folder
 You can set up and run the project in one of the following ways:
 - **Manual installation:** Follow the guide
 - **Using the setup script:** run the script (debian-like only) ```./shell_scripts/setup.sh``` (if it doesn't work you use ```chmod +x shell_scripts/setup.sh``` first)
-- [**Docker**](https://github.com/Antonino0704/AntoManga) (production only)
+- [**Docker**](https://github.com/Antonino0704/AntoManga/blob/main/docs/setDocker.md) (production only)
 
 
 # Create and set the virtual environment
