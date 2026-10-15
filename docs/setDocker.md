@@ -38,4 +38,5 @@ And in django settings, add
 ```diff
 + SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 ```
-! The nginx service inside the Docker container should not publish its ports directly to the host
+> [!CAUTION]
+> The nginx service inside the Docker container should not publish its ports directly to the host
