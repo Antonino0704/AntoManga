@@ -11,7 +11,8 @@ Enter into docker folder
 
 ## Run setupDockerEnv script
 ```./setupDockerEnv.sh ```
-(if it doesn't work you use ```chmod +x setupDockerEnv.sh``` first)
+> [!TIP]
+> If it doesn't work you use ```chmod +x setupDockerEnv.sh``` first
 
 When prompted, answer the questions. This will create a .env file in the docker directory
 
@@ -23,7 +24,7 @@ Install docker image and create container
 # Run
 Now the website will be available to localhost:8080 (or similar, depending on your configuration)
 
-# More Informations
+# More Information
 
 If you prefer to run the web app behind an external reverse proxy (e.x. for https)
 
@@ -38,4 +39,5 @@ And in django settings, add
 ```diff
 + SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 ```
-! The nginx service inside the Docker container should not publish its ports directly to the host
+> [!CAUTION]
+> The nginx service inside the Docker container should not publish its ports directly to the host

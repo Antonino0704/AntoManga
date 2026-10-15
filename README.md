@@ -15,10 +15,19 @@ Fork and clone the repository
 Enter into AntoManga Folder
 
 You can set up and run the project in one of the following ways:
-- **Manual installation:** Follow the guide
-- **Using the setup script:** run the script (debian-like only) ```./shell_scripts/setup.sh``` (if it doesn't work you use ```chmod +x shell_scripts/setup.sh``` first)
-- [**Docker**](https://github.com/Antonino0704/AntoManga/blob/main/docs/setDocker.md) (production only)
+- **Manual installation:** [Follow the guide](#Create-and-set-the-virtual-environment)
+- ----------------------------------------
+- **Using the setup script:** run the script  ```./shell_scripts/setup.sh```
+> [!IMPORTANT]
+> The scripts works on debian-like os only
 
+> [!TIP]
+> If it doesn't work you use ```chmod +x shell_scripts/setup.sh``` first
+- ----------------------------------------
+- [**Docker**](https://github.com/Antonino0704/AntoManga/blob/main/docs/setDocker.md)
+> [!NOTE]
+> Production only
+- ----------------------------------------
 
 # Create and set the virtual environment
 ```
@@ -33,8 +42,8 @@ python core/setup.py
 ```
 
 # Create Database  
-
-## ! Don't change anything before this
+> [!WARNING]
+> Don't change anything before this
 ```
 python manage.py migrate   
 ```
@@ -43,10 +52,9 @@ Create the superuser
 ```
 python manage.py createsuperuser
 ```
-```diff
-- After doing so, you'll be able to create new apps or edit models
+> [!NOTE]
+> After doing so, you'll be able to create new apps or edit models
 
-```
 # Run Project
 
 ## For Production
