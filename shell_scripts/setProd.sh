@@ -16,7 +16,7 @@ if [[ $port =~ ^[0-9]+$ ]]; then
 
 	# Collects static files
 	cd src/
-	python manage.py collectstatic
+	python manage.py collectstatic --ignore=rest_framework
 
 	# Gunicorn installation
 	pip install gunicorn
