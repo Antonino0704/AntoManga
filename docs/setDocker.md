@@ -24,7 +24,7 @@ Install docker image and create container
 # Run
 Now the website will be available to localhost:8080 (or similar, depending on your configuration)
 
-# More Informations
+# More Information
 
 If you prefer to run the web app behind an external reverse proxy (e.x. for https)
 
