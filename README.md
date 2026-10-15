@@ -19,7 +19,7 @@ You can set up and run the project in one of the following ways:
 - ----------------------------------------
 - **Using the setup script:** run the script  ```./shell_scripts/setup.sh```
 > [!IMPORTANT]
-> The scripts works on debian-like os only
+> The script works on debian-like os only
 
 > [!TIP]
 > If it doesn't work you use ```chmod +x shell_scripts/setup.sh``` first
