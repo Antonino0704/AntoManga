@@ -10,9 +10,8 @@ venv/Scripts/activate or source venv/bin/activate
 Collects static files
 ```
 cd src/
-python manage.py collectstatic
+python manage.py collectstatic --ignore=rest_framework
 ```
-You can delete the rest_framework folder
 
 # Nginx installation
 We will use the port 8080
