@@ -2,7 +2,7 @@
 In this example we will set up an http server and we will use the debian-like linux os, for https read the nginx and gunicorn docs
 
 ## Prerequisites
-- Docker
+- <img src="https://img.shields.io/badge/Docker-blue?logo=docker&logoColor=white" alt="docker" />
 
 # Installation
 Enter into docker folder
