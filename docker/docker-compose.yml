@@ -1,8 +1,10 @@
 services:
   web:
+    container_name: AntoManga-web
     build:
       context: ..
       dockerfile: docker/Dockerfile
+    image: antomanga:1.0
     restart: unless-stopped
     env_file: .env
     expose:
@@ -12,6 +14,7 @@ services:
       - ../src/static:/app/static
   
   nginx:
+    container_name: AntoManga-nginx
     image: nginx:alpine
     restart: unless-stopped
     ports:
