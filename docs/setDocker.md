@@ -19,7 +19,10 @@ When prompted, answer the questions. This will create a .env file in the docker 
 ## Create docker container
 Install docker image and create container
 
-``` docker compose up -d ```
+``` 
+docker compose build
+docker compose up -d 
+```
 
 # Run
 Now the website will be available to localhost:8080 (or similar, depending on your configuration)
