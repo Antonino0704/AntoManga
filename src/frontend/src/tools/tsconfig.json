@@ -5,6 +5,7 @@
 		"allowSyntheticDefaultImports": true,
 		"moduleResolution": "Bundler",
 		"strict": true,
-		"rootDir": "./"
+		"rootDir": "./",
+		"types": ["node"]
 	}
 }

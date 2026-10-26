@@ -1,6 +1,6 @@
 import { createRequire } from 'node:module';
 import { writeFile } from 'node:fs/promises';
-import actions from '@actions/core';
+import * as actions from '@actions/core';
 import { coerce, inc } from 'semver';
 
 const require = createRequire(import.meta.url);
