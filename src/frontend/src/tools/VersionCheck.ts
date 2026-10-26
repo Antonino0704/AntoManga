@@ -1,5 +1,5 @@
 import { createRequire } from 'node:module';
-import actions from '@actions/core';
+import * as actions from '@actions/core';
 import { compare } from 'semver';
 
 export interface Fileversion {
