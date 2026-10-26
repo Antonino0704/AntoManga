@@ -43,7 +43,7 @@ export default {
 			this.msgNotification = message;
 
 			this.liveToast = true;
-			var toast = new Toast(this.$refs.liveToast);
+			const toast = new Toast(this.$refs.liveToast);
 			toast.show();
 		}
 	}

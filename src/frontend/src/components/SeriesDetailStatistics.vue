@@ -147,8 +147,10 @@ export default {
 
 		edit(disabled = false) {
 			this.changeEditIcon();
-			let statisticsElements = document.getElementsByClassName('statistics');
-			let class_ = disabled ? 'list-group-item disabled statistics' : 'list-group-item statistics';
+			const statisticsElements = document.getElementsByClassName('statistics');
+			const class_ = disabled
+				? 'list-group-item disabled statistics'
+				: 'list-group-item statistics';
 			for (let i = 0; i < statisticsElements.length; i++) {
 				statisticsElements[i].className = class_;
 			}

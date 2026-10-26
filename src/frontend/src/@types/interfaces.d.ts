@@ -13,8 +13,8 @@ export interface Series {
 	image: string;
 	typology: number;
 	publisher: string;
-	is_discontinued: Boolean;
-	purchased_at: String;
+	is_discontinued: boolean;
+	purchased_at: string;
 }
 
 export interface SeriesViewsetInstance extends Series {
@@ -65,7 +65,7 @@ export interface PublisherStats {
 }
 
 export interface Typev2 extends Type {
-	applied: Boolean;
+	applied: boolean;
 }
 
 export interface Ticket {

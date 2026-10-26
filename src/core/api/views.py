@@ -6,6 +6,7 @@ import json
 import os
 from core.minxins import DeprecatedAPIMixin
 from series.api.serializers import ImageSeriesSerializer
+from django.contrib.auth import logout
 
 
 class ReadVersionAPIView(APIView):
@@ -29,15 +30,21 @@ class ReadVersionAPIView(APIView):
         )
 
 
-class getLicenseView(APIView):
+class GetLicenseView(APIView):
 
     def get(self, request):
         with open(f"{os.path.dirname(settings.BASE_DIR)}/LICENSE", "r") as license:
             return Response(license.read())
 
 
-class validateImage(APIView):
+class ValidateImage(APIView):
 
     def post(self, request):
         serializer = ImageSeriesSerializer(data=request.data)
         return Response({"isValid": serializer.is_valid()})
+
+class LogoutView(APIView):
+    
+    def post(self, request):
+        logout(request)
+        return Response({"detail": "Logged out"}, status=status.HTTP_200_OK)

@@ -153,7 +153,7 @@ export default {
 			this.series.volumes_bought = volumes_bought;
 		},
 		copyAction() {
-			let shareButton = document.querySelector('.bi-share-fill') as HTMLElement;
+			const shareButton = document.querySelector('.bi-share-fill') as HTMLElement;
 			shareButton.className = 'bi bi-check-square-fill text-success fs-6';
 			setTimeout(() => {
 				shareButton.className = 'bi bi-share-fill fs-6';
