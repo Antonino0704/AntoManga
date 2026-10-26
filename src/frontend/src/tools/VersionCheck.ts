@@ -2,12 +2,17 @@ import { createRequire } from 'node:module';
 import actions from '@actions/core';
 import { compare } from 'semver';
 
+export interface Fileversion {
+	name: string;
+	version: string;
+}
+
 const require = createRequire(import.meta.url);
 const base = 'https://antomanga.pythonanywhere.com/api/';
 const apiVersions = ['v7/', 'v6/'];
 const urls = [`${base}${apiVersions[0]}version/`, `${base}${apiVersions[1]}version/`];
 
-function requests(file: any, msgSuccess: string, msgNotSuccess: string) {
+function requests(file: Fileversion, msgSuccess: string, msgNotSuccess: string) {
 	urls.forEach((url) => {
 		fetch(url)
 			.then((res) => {

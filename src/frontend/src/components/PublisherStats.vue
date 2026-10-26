@@ -67,7 +67,7 @@ export default {
 		async getStats() {
 			try {
 				this.types = await apiExpress.get<Array<Type>>(endpoints.types);
-				for (let type of this.types) {
+				for (const type of this.types) {
 					const response = await apiExpress.get<RequestObject>(
 						`${endpoints.publisherStats}${this.slug}/${type.id}/`
 					);

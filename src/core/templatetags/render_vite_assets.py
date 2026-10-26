@@ -18,13 +18,13 @@ base_path = (
 @register.simple_tag
 def render_vite_assets():
     if settings.VITE_LIVE_SERVER:
-        return mark_safe(
-            f"""
+        return mark_safe(f"""
             <script type='module' src='http://{base_path}:5173/@vite/client'>
             </script><script type='module' src='http://{base_path}:5173/src/main.ts'></script>
-            """
-        )
-    manifest_json_path = os.path.join(settings.VITE_STATIC_BUNDLE, "manifest.json")
+            """)
+    manifest_json_path = os.path.join(
+        settings.VITE_STATIC_BUNDLE, ".vite", "manifest.json"
+    )
     try:
         with open(manifest_json_path, "r") as f:
             manifest = json.load(f)

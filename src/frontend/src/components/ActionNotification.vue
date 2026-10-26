@@ -48,7 +48,7 @@ export default {
 			this.confirmMessage = confirmMessage;
 
 			this.liveToast = true;
-			var toast = new Toast(this.$refs.liveToast);
+			const toast = new Toast(this.$refs.liveToast);
 			toast.show();
 		},
 		async deleteObj() {

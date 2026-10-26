@@ -148,7 +148,7 @@ export default {
 		},
 
 		copyAction() {
-			let shareButton = document.querySelector('.bi-share-fill') as HTMLElement;
+			const shareButton = document.querySelector('.bi-share-fill') as HTMLElement;
 			shareButton.className = 'bi bi-check-square-fill text-success ms-1 fs-6';
 			setTimeout(() => {
 				shareButton.className = 'bi bi-share-fill ms-1 fs-6';

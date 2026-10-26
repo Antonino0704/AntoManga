@@ -99,7 +99,7 @@ export default {
 			});
 			this.publishers.reverse();
 		},
-		formatX100(publisherCount: any) {
+		formatX100(publisherCount: number) {
 			return this.allVol ? ((publisherCount / this.allVol) * 100).toFixed(2) : 0;
 		}
 	},

@@ -145,7 +145,11 @@ export default {
 
 			if (this.$route.query.dataset != undefined) {
 				try {
-					let seriesData = await moreData(Number(this.$route.query.dataset), 1, this.next.nextCard);
+					const seriesData = await moreData(
+						Number(this.$route.query.dataset),
+						1,
+						this.next.nextCard
+					);
 					this.series.push(...seriesData.results);
 					this.next.nextCard = seriesData.next;
 				} catch (err) {
@@ -232,7 +236,7 @@ export default {
 					console.log(err);
 				}
 
-				let search =
+				const search =
 					this.$route.query.filterbyname != null ? String(this.$route.query.filterbyname) : '';
 
 				let types: number[] = [];
@@ -390,7 +394,7 @@ export default {
 		},
 		createTypeUrl(types: number[]) {
 			let url = `type=${types[0]}`;
-			let newType = types.slice(1); // create a new type array because we don't want to change the 'types' instance
+			const newType = types.slice(1); // create a new type array because we don't want to change the 'types' instance
 			newType.forEach((type) => {
 				url += `%2C${type}`;
 			});
@@ -398,7 +402,7 @@ export default {
 		},
 		createPubslisherUrl(publishers: number[]) {
 			let url = `publisher=${publishers[0]}`;
-			let newPub = publishers.slice(1);
+			const newPub = publishers.slice(1);
 			newPub.forEach((publisher) => {
 				url += `%2C${publisher}`;
 			});

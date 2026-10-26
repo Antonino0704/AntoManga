@@ -62,7 +62,7 @@
 							type="button"
 							class="btn btn-danger"
 							v-if="profile.user.is_authenticated"
-							href="/accounts/logout/"
+							@click="logout()"
 							>LOGOUT</a
 						>
 					</div>
@@ -90,6 +90,8 @@ import toggleTheme from './ToggleTheme.vue';
 import LanguageComponent from '../components/Language.vue';
 import { useUserStore } from '@/stores/userStore';
 import { mapState } from 'pinia';
+import { apiExpress } from '@/utils/APIExpress.js';
+import { endpoints } from '@/utils/endpoints.js';
 
 export default {
 	name: 'SettingsModal',
@@ -138,6 +140,14 @@ export default {
 			localStorage.setItem('readytoread-cookie', String(!this.readyToRead));
 			if (this.$route.name === 'Home') this.$router.go(0);
 			else this.getReadyToRead();
+		},
+		async logout() {
+			try {
+				await apiExpress.post(endpoints.logout, null);
+				window.location.replace('/');
+			} catch (err) {
+				console.log(err);
+			}
 		}
 	},
 	watch: {

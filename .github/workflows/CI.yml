@@ -12,17 +12,20 @@ jobs:
           fetch-depth: 0
 
       - name: Black Check
-        uses: psf/black@24.8.0
+        uses: psf/black@26.10.1
+        with:
+          options: "--check --diff"
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
+          node-version: "24"
+          cache: npm
           cache-dependency-path: ./src/frontend/package-lock.json
 
       - name: Install dependencies
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: ./src/frontend
+        working-directory: ./src/frontend
+        run: npm ci
 
       - name: Type Check
         run: npm run type-check

@@ -74,7 +74,7 @@ class LabelAdmin(admin.ModelAdmin):
     list_display = ["name", "color_display", "description"]
 
     def color_display(self, obj):
-        return format_html(f'<p style="color: {obj.color}">{obj.color}</p>')
+        return format_html('<p style="color: {}">{}</p>', obj.color, obj.color)
 
 
 class TicketAdmin(admin.ModelAdmin):
@@ -142,13 +142,13 @@ class TicketAdmin(admin.ModelAdmin):
         return f"{obj.description[:10]}..."
 
     def label_display(self, obj):
-        return format_html(f'<p style="color: {obj.label.color};">{obj.label}</p>')
+        return format_html('<p style="color: {};">{}</p>', obj.label.color, obj.label)
 
     def status_display(self, obj):
         if obj.status:
-            return format_html(f'<p style="color: green;">Closed</p>')
+            return format_html('<p style="color: green;">{}</p>', "Closed")
         return format_html(
-            f'<p style="color: red;">Open ({obj.date.strftime("%Y-%b-%d")})</p>'
+            '<p style="color: red;">Open ({})</p>', obj.date.strftime("%Y-%b-%d")
         )
 
     def has_add_permission(self, request, obj=None):
