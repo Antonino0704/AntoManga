@@ -12,9 +12,6 @@ pip install -r requirements.txt
 cd src/
 python core/setup.py
 
-python manage.py makemigrations series
-python manage.py makemigrations publishers
-python manage.py makemigrations users
 python manage.py migrate
 
 python manage.py createsuperuser

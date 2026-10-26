@@ -1,7 +1,7 @@
 # Set Production Server
 In this example we will set up an http server and we will use the debian-like linux os, for https read the nginx and gunicorn docs
 
-Follow the guide or run the [script (debian-like only)](https://github.com/Antonino0704/AntoManga/blob/main/docs/setProdScript.md)
+Follow the guide or run the [script](https://github.com/Antonino0704/AntoManga/blob/main/docs/setProdScript.md)
 
 Active virtual env
 ```
@@ -10,9 +10,8 @@ venv/Scripts/activate or source venv/bin/activate
 Collects static files
 ```
 cd src/
-python manage.py collectstatic
+python manage.py collectstatic --ignore=rest_framework
 ```
-You can delete the rest_framework folder
 
 # Nginx installation
 We will use the port 8080
