@@ -14,13 +14,14 @@
 	<div id="app"></div>
 	<scrollTop v-if="scrollY > 300" />
 	<router-view />
-	<footer class="pt-4" style="text-align: center">{{ getFooter() }}</footer>
+	<FooterComponent />
 </template>
 
 <script lang="ts">
 import isNotAuthenticated from './components/IsNotAuthenticated.vue';
 import scrollTop from './components/ScrollTop.vue';
 import SettingsModal from './components/SettingsModal.vue';
+import FooterComponent from './components/Footer.vue';
 import { useUserStore } from '@/stores/userStore';
 import { mapState } from 'pinia';
 
@@ -34,7 +35,8 @@ export default {
 	components: {
 		isNotAuthenticated,
 		scrollTop,
-		SettingsModal
+		SettingsModal,
+		FooterComponent
 	},
 	computed: {
 		isHome() {
@@ -59,9 +61,6 @@ export default {
 		},
 		handleScroll() {
 			this.scrollY = window.scrollY;
-		},
-		getFooter() {
-			return `© 2023 - ${new Date().getFullYear()} Antonino Buscarino`;
 		}
 	},
 	created() {

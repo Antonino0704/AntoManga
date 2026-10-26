@@ -35,7 +35,7 @@
 									<img
 										:src="imagesSeries[index]"
 										class="card-img-top card-fit object-fit-contain object-fit-md-cover"
-										alt="..."
+										:alt="serie.name"
 									/>
 								</div>
 							</router-link>
