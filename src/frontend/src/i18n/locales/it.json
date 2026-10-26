@@ -167,6 +167,8 @@
 		}
 	},
 	"isNotAuth": {
-		"message": "Stai visualizzando il sito in anonimato.</strong> Clicca \n<a href='/account/login/'>qui</a> per accedere così puoi aggiungere e modificare le tue serie"
+		"message": "Stai visualizzando il sito in {highlighted} Clicca \n{link} per accedere così puoi aggiungere e modificare le tue serie",
+		"anonymously": "anonimato",
+		"here": "qui"
 	}
 }
