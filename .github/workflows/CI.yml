@@ -13,6 +13,9 @@ jobs:
 
       - name: Black Check
         uses: psf/black@26.10.1
+        with:
+          options: "--check --diff"
+          src: "./"
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -22,9 +25,8 @@ jobs:
           cache-dependency-path: ./src/frontend/package-lock.json
 
       - name: Install dependencies
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: ./src/frontend
+        working-directory: ./src/frontend
+        run: npm ci
 
       - name: Type Check
         run: npm run type-check
