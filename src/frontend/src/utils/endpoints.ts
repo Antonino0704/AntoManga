@@ -17,7 +17,7 @@ const endpoints = {
 	createTicket: 'ticket/create/',
 	labels: 'ticket/labels/',
 	myAvatar: 'my-avatar/',
-	logout: 'logout/',
+	logout: 'logout/'
 };
 
 Object.keys(endpoints).forEach(

@@ -14,7 +14,10 @@ function checkDataStats(series: Series): boolean {
 	return true;
 }
 
-function showErrors(series: Series, t: (key: string, values?: Record<string, unknown>) => string): string {
+function showErrors(
+	series: Series,
+	t: (key: string, values?: Record<string, unknown>) => string
+): string {
 	let error = '';
 	if (typeof series.n_volumes != 'number') {
 		document.querySelector('#inputNVol')!.className = 'form-control is-invalid';
