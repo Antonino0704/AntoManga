@@ -19,7 +19,7 @@ phonenumbers==8.13.55
 pillow==13.0.0
 platformdirs==4.13.5
 pypng==0.20220715.0
-python-dotenv==1.0.1
+python-dotenv==1.2.2
 pytokens==0.4.1
 pytz==2023.3.post1
 qrcode==7.4.2
