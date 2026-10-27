@@ -90,12 +90,22 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db" / "db.sqlite3",
+if DEBUG:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db" / "db.sqlite3",
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "OPTIONS": {
+                "read_default_file": str(BASE_DIR / "my.cnf"),
+            },
+        }
+    }
 
 
 # Password validation
@@ -144,7 +154,7 @@ else:
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-MEDIA_ROOT = BASE_DIR / "static/images"
+MEDIA_ROOT = BASE_DIR / "media/images"
 MEDIA_URL = "/media/"
 
 # LOGIN_URL = "/accounts/login/"
