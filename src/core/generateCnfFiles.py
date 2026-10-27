@@ -18,6 +18,7 @@ def generateCnfFile():
         keyWords["port"] = "3306"
 
     with open(f"{path}/my.cnf", "w") as f:
+        f.write("[client]\n")
         for key, value in keyWords.items():
             f.write(f"{key}={value}\n")
     print(f"Done, file created in {os.path.join(path, 'my.cnf')}")
