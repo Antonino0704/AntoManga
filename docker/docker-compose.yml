@@ -1,4 +1,19 @@
+name: AntoManga-Stack
+
 services:
+  db:
+    container_name: AntoManga-db
+    image: mariadb:11.4
+    restart: unless-stopped
+    env_file: mariadb.env
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   web:
     container_name: AntoManga-web
     build:
@@ -10,8 +25,12 @@ services:
     expose:
       - "8000"
     volumes:
-      - ../src/db:/app/db
+      - ../src/my.cnf:/app/my.cnf:ro
       - ../src/static:/app/static
+      - ../src/media:/app/media
+    depends_on:
+      db:
+        condition: service_healthy
   
   nginx:
     container_name: AntoManga-nginx
@@ -22,5 +41,9 @@ services:
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
       - ../src/static:/app/static:ro
+      - ../src/media:/app/media:ro
     depends_on:
       - web
+
+volumes:
+  mariadb_data:
