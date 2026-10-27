@@ -28,7 +28,7 @@ if [[ $port =~ ^[0-9]+$ ]]; then
 	    server_name _;
 
 	    location /media/ {
-		alias $PWD/static/images/;
+		alias $PWD/media/images/;
 		try_files \$uri @DjangoServer;
 	    }
 

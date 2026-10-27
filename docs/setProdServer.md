@@ -31,7 +31,7 @@ server {
     server_name _;
 
     location /media/ {
-        alias YourPath/AntoManga/src/static/images/;
+        alias YourPath/AntoManga/src/media/images/;
         try_files $uri @DjangoServer;
     }
 

@@ -11,7 +11,3 @@ pip install -r requirements.txt
 # run setup script
 cd src/
 python core/setup.py
-
-python manage.py migrate
-
-python manage.py createsuperuser

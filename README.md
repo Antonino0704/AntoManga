@@ -10,9 +10,6 @@ You can visit the site either anonymously or have an account so you can add your
 - <a href="https://git-scm.com/" target="_blank"><img style="margin: 10px" src="https://img.shields.io/badge/-Git-F05032?logo=Git&logoColor=white" alt="Git" /></a>
 
 # Setup Project
-> [!WARNING]
-> **Docs outdated:** Database migrated from SQLite to MySQL (Production only), installation, setup script and Docker instructions need updating
-
 Fork and clone the repository 
 
 Enter into AntoManga Folder
@@ -44,10 +41,14 @@ cd src/
 python core/setup.py
 ```
 
-# Create Database  
+# Run Project
+
+## For Production
+### Create Database  
 > [!WARNING]
 > Don't change anything before this
 ```
+python core/generateCnfFiles.py
 python manage.py migrate   
 ```
 
@@ -55,12 +56,7 @@ Create the superuser
 ```
 python manage.py createsuperuser
 ```
-> [!NOTE]
-> After doing so, you'll be able to create new apps or edit models
 
-# Run Project
-
-## For Production
 Change ALLOWED_HOSTS in .env file
 ```diff
 - ALLOWED_HOSTS=*,
@@ -79,6 +75,20 @@ in .env file change:
 - VITE_LIVE_SERVER=False
 + VITE_LIVE_SERVER=True
 ```
+### Create Database  
+> [!WARNING]
+> Don't change anything before this
+```
+python manage.py migrate   
+```
+
+Create the superuser
+```
+python manage.py createsuperuser
+```
+> [!NOTE]
+> After doing so, you'll be able to create new apps or edit models
+
 [Set dev server](https://github.com/Antonino0704/AntoManga/blob/main/docs/setDevServer.md)
 
 # Contribute
