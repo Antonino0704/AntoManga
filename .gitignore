@@ -10,5 +10,5 @@ src/static/build/index.html
 
 db.sqlite3
 
-.env
+*.env
 my.cnf
