@@ -4,10 +4,11 @@ __pycache__
 
 src/static/admin
 src/static/rest_framework
-src/static/images/*
+src/media/images/*
 src/static/build/index.html
-!src/static/images/icon.png
+!src/media/images/icon.png
 
 db.sqlite3
 
 .env
+my.cnf
