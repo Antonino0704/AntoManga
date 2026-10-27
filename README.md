@@ -10,6 +10,9 @@ You can visit the site either anonymously or have an account so you can add your
 - <a href="https://git-scm.com/" target="_blank"><img style="margin: 10px" src="https://img.shields.io/badge/-Git-F05032?logo=Git&logoColor=white" alt="Git" /></a>
 
 # Setup Project
+> [!WARNING]
+> **Docs outdated:** Database migrated from SQLite to MySQL (Production only), installation, setup script and Docker instructions need updating
+
 Fork and clone the repository 
 
 Enter into AntoManga Folder
