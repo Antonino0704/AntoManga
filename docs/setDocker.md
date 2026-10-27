@@ -9,12 +9,18 @@ Enter into docker folder
 
 ``` cd docker/ ```
 
-## Run setupDockerEnv script
+## Run setup scripts
 ```./setupDockerEnv.sh ```
 > [!TIP]
 > If it doesn't work you use ```chmod +x setupDockerEnv.sh``` first
 
 When prompted, answer the questions. This will create a .env file in the docker directory
+
+```./setupDockerDatabase.sh ```
+> [!TIP]
+> If it doesn't work you use ```chmod +x setupDockerDatabase.sh``` first
+
+When prompted, answer the questions. This will create my.cnf and mariadb.env files
 
 ## Create docker container
 Install docker image and create container
