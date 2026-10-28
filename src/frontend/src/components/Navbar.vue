@@ -104,7 +104,7 @@
 									>{{ $t('common.titles.type', 2).toUpperCase() }}</a
 								>
 							</li>
-							<li v-for="(type, index) in types" :key="type.id" @click="toggle(index)">
+							<li v-for="(type, index) in getTypesList" :key="type.id" @click="toggle(index)">
 								<a class="dropdown-item" v-show="showTypes"
 									>{{ type.name }} <i class="bi bi-check-lg text-success" v-show="type.applied"></i
 								></a>
@@ -130,7 +130,7 @@
 							</li>
 							<hr class="dropdown-divider" v-show="showPublishers" />
 							<li
-								v-for="(type, index) in sortByList"
+								v-for="(type, index) in getsortByList"
 								:key="type.id"
 								@click="toggle(index, false, true)"
 							>
@@ -176,14 +176,14 @@ export default {
 	data() {
 		return {
 			types: [
-				{ id: -1, name: 'Incomplete', applied: false },
-				{ id: -2, name: 'Ready To Read', applied: false },
-				{ id: -3, name: 'Exclude Discontinued Series', applied: false },
-				{ id: -4, name: 'Discontinued Series Only', applied: false }
+				{ id: -1, key: 'incomplete', name: '', applied: false },
+				{ id: -2, key: 'readyToRead', name: '', applied: false },
+				{ id: -3, key: 'excludeDiscontinuedSeries', name: '', applied: false },
+				{ id: -4, key: 'discontinuedSeriesOnly', name: '', applied: false }
 			] as Array<Typev2>,
 			sortByList: [
-				{ id: 1, name: ' Most Recent', applied: false, class: 'bi bi-sort-down' },
-				{ id: 2, name: ' Least Recent', applied: false, class: 'bi bi-sort-up' }
+				{ id: 1, name: '', key: 'mostRecent', applied: false, class: 'bi bi-sort-down' },
+				{ id: 2, name: '', key: 'leastRecent', applied: false, class: 'bi bi-sort-up' }
 			],
 			publishersList: [] as Array<Typev2>,
 			publishers: 0,
@@ -204,7 +204,19 @@ export default {
 				this.user.is_authenticated
 			);
 		},
-		...mapState(useUserStore, ['user'])
+		...mapState(useUserStore, ['user']),
+		getsortByList() {
+			this.sortByList.map((el) => (el.name = this.$t(`navbar.filters.${el.key}`)));
+			return this.sortByList;
+		},
+		getTypesList() {
+			this.types.map((el) => {
+				if (el.key) {
+					el.name = this.$t(`navbar.filters.${el.key}`);
+				}
+			});
+			return this.types;
+		}
 	},
 	methods: {
 		async getTypes() {
