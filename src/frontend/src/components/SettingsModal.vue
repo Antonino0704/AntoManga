@@ -42,7 +42,7 @@
 							v-if="profile.user.is_authenticated"
 							@click="setReadyToRead()"
 						>
-							{{ ReadyToReadButtonText }}
+							{{ getReadyToReadButtonText }}
 						</button>
 						<hr v-if="profile.user.is_authenticated" />
 						<a
@@ -99,7 +99,7 @@ export default {
 		return {
 			grid: true,
 			readyToRead: false,
-			ReadyToReadButtonText: this.$t('settingsModal.buttons.showReadyToRead')
+			ReadyToReadButtonText: 'showReadyToRead'
 		};
 	},
 	components: {
@@ -107,7 +107,10 @@ export default {
 		LanguageComponent
 	},
 	computed: {
-		...mapState(useUserStore, ['profile'])
+		...mapState(useUserStore, ['profile']),
+		getReadyToReadButtonText() {
+			return this.$t(`settingsModal.buttons.${this.ReadyToReadButtonText}`);
+		}
 	},
 	methods: {
 		gridClick() {
@@ -121,9 +124,7 @@ export default {
 		getReadyToRead() {
 			if (localStorage.getItem('readytoread-cookie')) {
 				this.readyToRead = localStorage.getItem('readytoread-cookie') == 'true' ? true : false;
-				this.ReadyToReadButtonText = this.readyToRead
-					? this.$t('settingsModal.buttons.hideReadyToRead')
-					: this.$t('settingsModal.buttons.showReadyToRead');
+				this.ReadyToReadButtonText = this.readyToRead ? 'hideReadyToRead' : 'showReadyToRead';
 				document.querySelector('#ReadyToReadButton')!.className = this.readyToRead
 					? 'btn btn-success'
 					: 'btn btn-secondary';

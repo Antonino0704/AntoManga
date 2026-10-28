@@ -15,6 +15,10 @@
 					<p class="mt-2">Backend Version: {{ version.backendVersion }}</p>
 					<p class="mt-2">Frontend Version: {{ version.frontendVersion }}</p>
 				</div>
+				<p>
+					From 2026-10-26 this is a open source project
+					<a class="bi bi-box-arrow-up-right" href="https://github.com/Antonino0704/AntoManga"></a>
+				</p>
 				<p>The Website isn't AI-generated, only license</p>
 				<div class="form-floating">
 					<textarea

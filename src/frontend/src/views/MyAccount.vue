@@ -17,7 +17,7 @@
 				<div class="card-body">
 					<div class="card-title">
 						<div class="w-auto d-inline-block">
-							<h1 class="text-secondary fs-6">Username</h1>
+							<h1 class="text-secondary fs-6">{{ $t('myAccount.messages.username') }}</h1>
 							<div class="input-group mb-3">
 								<span
 									class="input-group-text bi bi-check-lg text-success"
@@ -34,7 +34,7 @@
 								/>
 							</div>
 
-							<h1 class="text-secondary fs-6">Change PFP</h1>
+							<h1 class="text-secondary fs-6">{{ $t('myAccount.messages.changePfp') }}</h1>
 							<input
 								type="file"
 								accept="image/*"
@@ -44,28 +44,25 @@
 							/>
 							<div class="input-group">
 								<p @click="updateAvatar()" class="text-success mt-2" v-if="imageUploaded">
-									change pfp
+									{{ $t('myAccount.messages.changePfp') }}
 								</p>
 								<p @click="updateAvatar(true)" class="text-danger mt-2 ms-2" v-if="prevAvatar">
-									remove pfp
+									{{ $t('myAccount.messages.removePfp') }}
 								</p>
 							</div>
 						</div>
 					</div>
 
-					<div class="card-text">
-						<a
-							type="button"
-							class="btn btn-secondary mb-3 me-md-2 mb-md-0"
-							href="/account/two_factor/"
-							>Two-factor authentication</a
-						>
+					<div class="card-text d-flex flex-wrap gap-2">
+						<a type="button" class="btn btn-secondary" href="/account/two_factor/">{{
+							$t('myAccount.messages.twoFactorauthentication')
+						}}</a>
 
-						<a type="button" class="btn btn-secondary me-2" href="/change-password/"
-							>Change Password</a
-						>
+						<a type="button" class="btn btn-secondary" href="/change-password/">{{
+							$t('myAccount.messages.changePassword')
+						}}</a>
 						<button type="button" class="btn btn-danger" @click="disableAccount()">
-							Disable Account
+							{{ $t('myAccount.messages.disableAccount') }}
 						</button>
 					</div>
 				</div>
@@ -125,14 +122,14 @@ export default {
 				});
 
 				(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-					'Username updated'
+					this.$t('myAccount.messages.usernameUpdated')
 				);
 				document.querySelector('input')!.classList.remove('is-invalid');
 			} catch (err) {
 				console.log(err);
 				if (`${err}` === 'Error: Request failed: 409 Conflict')
 					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(
-						'That username is already taken'
+						this.$t('myAccount.messages.usernameTaken')
 					);
 				else
 					(this.$refs.notification as InstanceType<typeof Notification>).sendNotification(`${err}`);
@@ -186,8 +183,8 @@ export default {
 		},
 		disableAccount() {
 			(this.$refs.actionNotification as InstanceType<typeof ActionNotification>).sendNotification(
-				'Are you sure?',
-				'Account disabled',
+				this.$t('myAccount.messages.confirmDisableAccount'),
+				this.$t('myAccount.messages.accountDisabled'),
 				endpoints.userMe
 			);
 		}

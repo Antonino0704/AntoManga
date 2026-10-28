@@ -66,6 +66,7 @@ export interface PublisherStats {
 
 export interface Typev2 extends Type {
 	applied: boolean;
+	key?: string;
 }
 
 export interface Ticket {

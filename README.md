@@ -8,6 +8,12 @@ You can visit the site either anonymously or have an account so you can add your
 - <img src="https://img.shields.io/badge/Python-3.15-gray?logo=Python&logoColor=yellow&labelColor=darkblue" alt="python" />
 - <img src="https://img.shields.io/badge/Node-24-gray?logo=node.js&logoColor=white&labelColor=darkgreen" alt="node" />
 - <a href="https://git-scm.com/" target="_blank"><img style="margin: 10px" src="https://img.shields.io/badge/-Git-F05032?logo=Git&logoColor=white" alt="Git" /></a>
+- <img src="https://img.shields.io/badge/MariaDB-11.4 (Production DB)-gray?logo=MariaDB&labelColor=c4745c" alt="Maria DB" />
+
+> [!TIP]
+> You can also use:
+>
+> <img src="https://img.shields.io/badge/MySQL-8.4 (Production DB)-gray?logo=MySQL&labelColor=white" alt="MySQL" />
 
 # Setup Project
 Fork and clone the repository 

@@ -170,5 +170,19 @@
 		"message": "Stai visualizzando il sito in {highlighted} Clicca \n{link} per accedere così puoi aggiungere e modificare le tue serie",
 		"anonymously": "anonimato",
 		"here": "qui"
+	},
+	"myAccount": {
+		"messages": {
+			"username": "Nome Utente",
+			"changePfp": "Cambia foto profilo",
+			"removePfp": "Rimuovi foto profilo",
+			"changePassword": "Cambia Password",
+			"disableAccount": "Disabilita Account",
+			"twoFactorauthentication": "Autenticazione a doppio fattore",
+			"usernameUpdated": "Nome utente aggiornato",
+			"usernameTaken": "Quel Nome utente è già stato preso",
+			"confirmDisableAccount": "Sei sicuro?",
+			"accountDisabled": "Account Disabilitato"
+		}
 	}
 }
