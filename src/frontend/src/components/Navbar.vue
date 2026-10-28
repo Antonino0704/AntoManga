@@ -130,7 +130,7 @@
 							</li>
 							<hr class="dropdown-divider" v-show="showPublishers" />
 							<li
-								v-for="(type, index) in getsortByList"
+								v-for="(type, index) in getSortByList"
 								:key="type.id"
 								@click="toggle(index, false, true)"
 							>
@@ -205,7 +205,7 @@ export default {
 			);
 		},
 		...mapState(useUserStore, ['user']),
-		getsortByList() {
+		getSortByList() {
 			this.sortByList.map((el) => (el.name = this.$t(`navbar.filters.${el.key}`)));
 			return this.sortByList;
 		},

@@ -40,7 +40,7 @@ def filters(queryset, request):
 
     if "filterbyname" in request.query_params:
         seriesObjects = seriesObjects.filter(
-            name__contains=request.query_params["filterbyname"]
+            name__icontains=request.query_params["filterbyname"]
         )
 
     if "purchased_at" in request.query_params:
