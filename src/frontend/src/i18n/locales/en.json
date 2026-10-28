@@ -170,5 +170,19 @@
 		"message": "You are viewing the site {highlighted} Click \n{link} to login so you can add and edit your series",
 		"anonymously": "anonymously",
 		"here": "here"
+	},
+	"myAccount": {
+		"messages": {
+			"username": "Username",
+			"changePfp": "Change PFP",
+			"removePfp": "Remove PFP",
+			"changePassword": "Change Password",
+			"disableAccount": "Disable Account",
+			"twoFactorauthentication": "Two-factor authentication",
+			"usernameUpdated": "Username updated",
+			"usernameTaken": "That username is already taken",
+			"confirmDisableAccount": "Are you sure?",
+			"accountDisabled": "Account disabled"
+		}
 	}
 }
