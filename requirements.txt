@@ -7,7 +7,7 @@ dj-inmemorystorage==2.1.0
 Django==6.1.2
 django-formtools==2.7
 django-otp==1.7.5
-django-phonenumber-field>=8,<9
+django-phonenumber-field>=9.0.0,<10
 django-registration==5.2.1
 django-two-factor-auth==1.18.1
 django-widget-tweaks==1.5.1
