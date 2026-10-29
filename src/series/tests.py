@@ -295,6 +295,149 @@ class SeriesViewsetTestCase(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+    def test_series_list_filterbyname(self):
+        # create 2 series
+        series2 = Series.objects.get(pk=self.series.pk)
+        series2.pk = None
+        series2.name = "test 2"
+        series2.save()
+
+        response = self.client.get(f"{self.url}?filterbyname=init")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["id"], self.series.pk)
+
+    def test_series_list_filterby_type(self):
+        # create 2 type
+        type2 = Typology.objects.create(name="type 2")
+        # create 2 series
+        series2 = Series.objects.get(pk=self.series.pk)
+        series2.pk = None
+        series2.typology = type2
+        series2.save()
+
+        response = self.client.get(f"{self.url}?type={self.type.pk}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["id"], self.series.pk)
+
+    def test_series_list_filterby_publisher(self):
+        # create 2 publisher
+        publisher2 = Publisher.objects.create(name="publisher 2")
+        # create 2 series
+        series2 = Series.objects.get(pk=self.series.pk)
+        series2.pk = None
+        series2.publisher = publisher2
+        series2.save()
+
+        response = self.client.get(f"{self.url}?publisher={self.publisher.pk}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["id"], self.series.pk)
+
+    def test_series_list_filterby_special_type_incomplete(self):
+        # create 2 series
+        series2 = Series.objects.get(pk=self.series.pk)
+        series2.pk = None
+        series2.n_volumes = 2
+        series2.save()
+
+        response = self.client.get(f"{self.url}?type=-1")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["id"], series2.pk)
+
+    def test_series_list_filterby_special_type_readyToRead(self):
+        # create 2 series
+        series2 = Series.objects.get(pk=self.series.pk)
+        series2.pk = None
+        series2.n_volumes = 2
+        series2.volumes_bought = 2
+        series2.save()
+
+        response = self.client.get(f"{self.url}?type=-2")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["id"], series2.pk)
+
+    def test_series_list_filterby_special_type_excludeDiscontinuedSeries(self):
+        # create 2 series
+        series2 = Series.objects.get(pk=self.series.pk)
+        series2.pk = None
+        series2.is_discontinued = True
+        series2.save()
+
+        response = self.client.get(f"{self.url}?type=-3")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["id"], self.series.pk)
+
+    def test_series_list_filterby_special_type_discontinuedSeriesOnly(self):
+        # create 2 series
+        series2 = Series.objects.get(pk=self.series.pk)
+        series2.pk = None
+        series2.is_discontinued = True
+        series2.save()
+
+        response = self.client.get(f"{self.url}?type=-4")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["id"], series2.pk)
+
+    def test_series_list_sort_mostRecent(self):
+        # create series
+        series2 = Series.objects.get(pk=self.series.pk)
+        series2.pk = None
+        series2.save()
+
+        series3 = Series.objects.get(pk=self.series.pk)
+        series3.pk = None
+        series3.save()
+
+        # update date
+        Series.objects.filter(pk=series2.pk).update(
+            purchased_at=date(2002, 1, 1).strftime("%Y-%m-%d")
+        )
+        Series.objects.filter(pk=series3.pk).update(
+            purchased_at=date(2002, 1, 2).strftime("%Y-%m-%d")
+        )
+        series2.refresh_from_db()
+        series3.refresh_from_db()
+
+        response = self.client.get(f"{self.url}?purchased_at=desc")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 3)
+        self.assertEqual(response.data["results"][0]["id"], self.series.pk)
+        self.assertEqual(response.data["results"][1]["id"], series3.pk)
+        self.assertEqual(response.data["results"][2]["id"], series2.pk)
+
+    def test_series_list_sort_leastRecent(self):
+        # create series
+        series2 = Series.objects.get(pk=self.series.pk)
+        series2.pk = None
+        series2.save()
+
+        series3 = Series.objects.get(pk=self.series.pk)
+        series3.pk = None
+        series3.save()
+
+        # update date
+        Series.objects.filter(pk=series2.pk).update(
+            purchased_at=date(2002, 1, 1).strftime("%Y-%m-%d")
+        )
+        Series.objects.filter(pk=series3.pk).update(
+            purchased_at=date(2002, 1, 2).strftime("%Y-%m-%d")
+        )
+        series2.refresh_from_db()
+        series3.refresh_from_db()
+
+        response = self.client.get(f"{self.url}?purchased_at=asc")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 3)
+        self.assertEqual(response.data["results"][2]["id"], self.series.pk)
+        self.assertEqual(response.data["results"][1]["id"], series3.pk)
+        self.assertEqual(response.data["results"][0]["id"], series2.pk)
+
 
 class ImageSeriesViewsetTestCase(APITestCase):
     url = reverse("image-series-list")
