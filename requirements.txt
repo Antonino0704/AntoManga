@@ -5,7 +5,7 @@ colorama==0.4.6
 confusable-homoglyphs==3.3.1
 dj-inmemorystorage==2.1.0
 Django==6.1.2
-django-formtools==2.5.1
+django-formtools==2.7
 django-otp==1.7.0
 django-phonenumber-field==8.0.0
 django-registration==3.4
