@@ -5,6 +5,7 @@ jobs:
   formatCheck:
     name: Black and Prettier Format, Lint
     runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
     steps:
       - name: Checkout Project
         uses: actions/checkout@v7
