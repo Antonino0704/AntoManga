@@ -4,6 +4,8 @@ An website to save all owned manga, the site allows you manage (add, edit or del
 
 You can visit the site either anonymously or have an account so you can add your personal manga/novels (in which case you will only see your manga/novels)
 
+[**Roadmap**](https://github.com/Antonino0704/AntoManga/blob/main/docs/ROADMAP.md)
+
 # Prerequisites
 - <img src="https://img.shields.io/badge/Python-3.15-gray?logo=Python&logoColor=yellow&labelColor=darkblue" alt="python" />
 - <img src="https://img.shields.io/badge/Node-24-gray?logo=node.js&logoColor=white&labelColor=darkgreen" alt="node" />
