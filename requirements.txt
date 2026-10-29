@@ -16,7 +16,7 @@ mypy_extensions==1.1.0
 mysqlclient==2.3.0
 packaging==26.3
 pathspec==1.1.1
-phonenumbers==8.13.55
+phonenumbers==9.0.41
 pillow==13.0.0
 platformdirs==4.13.5
 pypng==0.20220715.0
