@@ -48,7 +48,7 @@ class TypologyViewsetTestCase(APITestCase):
 
     def test_single_typology_retrive(self):
         serializer_data = TypologySerializer(self.type).data
-        response = self.client.get(reverse("typology-detail", kwargs={"pk": 1}))
+        response = self.client.get(reverse("typology-detail", kwargs={"pk": self.type.pk}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         response_data = json.loads(response.content)
         self.assertEqual(serializer_data, response_data)
@@ -61,7 +61,7 @@ class TypologyViewsetTestCase(APITestCase):
 
     def test_typology_update_authenticated(self):
         data = {"name": "name changed"}
-        response = self.client.put(reverse("typology-detail", kwargs={"pk": 1}), data)
+        response = self.client.put(reverse("typology-detail", kwargs={"pk": self.type.pk}), data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["name"], "name changed")
 
@@ -71,7 +71,7 @@ class TypologyViewsetTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_typology_delete_authenticated(self):
-        response = self.client.delete(reverse("typology-detail", kwargs={"pk": 1}))
+        response = self.client.delete(reverse("typology-detail", kwargs={"pk": self.type.pk}))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_typology_delete_protectedError(self):
@@ -85,7 +85,7 @@ class TypologyViewsetTestCase(APITestCase):
             typology=self.type,
             owner=self.user,
         )
-        response = self.client.delete(reverse("typology-detail", kwargs={"pk": 1}))
+        response = self.client.delete(reverse("typology-detail", kwargs={"pk": self.type.pk}))
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data["protectedErrorDetail"],
@@ -154,8 +154,8 @@ class SeriesViewsetTestCase(APITestCase):
         self.assertEqual(response.data["volumes_read"], 1)
         self.assertEqual(response.data["missed_volumes"], 0)
 
-        self.assertEqual(response.data["publisher"], 1)
-        self.assertEqual(response.data["typology"], 1)
+        self.assertEqual(response.data["publisher"], self.publisher.pk)
+        self.assertEqual(response.data["typology"], self.type.pk,)
         self.assertEqual(response.data["is_discontinued"], False)
         self.assertEqual(
             response.data["purchased_at"], date.today().strftime("%Y-%m-%d")

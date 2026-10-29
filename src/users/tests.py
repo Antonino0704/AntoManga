@@ -64,7 +64,7 @@ class UserViewTestCase(APITestCase):
         self.client.force_authenticate(user=super_user)
         response = self.client.delete(self.url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(User.objects.get(pk=2), super_user)
+        self.assertEqual(User.objects.get(pk=super_user.pk), super_user)
 
 
 class TicketViewTestCase(APITestCase):
@@ -88,7 +88,7 @@ class TicketViewTestCase(APITestCase):
         response = self.client.post(self.url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data["title"], "test_title")
-        self.assertIsNone(Ticket.objects.get(pk=1).author)
+        self.assertIsNone(Ticket.objects.get(pk=response.data["id"]).author)
 
     def test_ticket_create_authenticated(self):
         data = {
@@ -100,7 +100,7 @@ class TicketViewTestCase(APITestCase):
         response = self.client.post(self.url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data["title"], "test_title")
-        self.assertEqual(Ticket.objects.get(pk=1).author, self.user)
+        self.assertEqual(Ticket.objects.get(pk=response.data["id"]).author, self.user)
 
 
 class LabelViewTestCase(APITestCase):

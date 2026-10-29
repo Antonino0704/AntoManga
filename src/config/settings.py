@@ -191,4 +191,11 @@ VITE_NETWORK = get_bool(
 BETA = get_bool(os.getenv("BETA"))
 
 if "test" in sys.argv:
-    DEFAULT_FILE_STORAGE = "inmemorystorage.InMemoryStorage"
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.InMemoryStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
