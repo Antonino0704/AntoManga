@@ -16,8 +16,6 @@ jobs:
             env:
               MYSQL_ROOT_PASSWORD: root
               MYSQL_DATABASE: antomanga_test_db
-              MYSQL_USER: admin
-              MYSQL_PASSWORD: admin
             ports:
               - 3306:3306
             options: >-
@@ -49,8 +47,8 @@ jobs:
             cat > ./src/my.cnf <<EOF
             [client]
             database = antomanga_test_db
-            user = admin
-            password = admin
+            user = root
+            password = root
             host = 127.0.0.1
             port = 3306
             default-character-set = utf8mb4
