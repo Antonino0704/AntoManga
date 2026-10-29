@@ -9,6 +9,7 @@ jobs:
   versionCheck:
     name: Version Check
     runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
     steps:
       - name: Checkout Project
         uses: actions/checkout@v7
