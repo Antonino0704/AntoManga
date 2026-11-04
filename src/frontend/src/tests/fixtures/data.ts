@@ -1,4 +1,4 @@
-import type { Series } from '@/@types/interfaces';
+import type { Series, RequestObject } from '@/@types/interfaces';
 
 export const seriesFixture: Series = {
 	id: 1,
@@ -12,4 +12,11 @@ export const seriesFixture: Series = {
 	publisher: '2',
 	typology: 1,
 	image: ''
+};
+
+export const seriesData: RequestObject = {
+	results: [{ ...seriesFixture, slug: 'test-get-series' }],
+	count: 0,
+	next: 'http://127.0.0.1/api/v0/series/?page=2',
+	previous: null
 };
