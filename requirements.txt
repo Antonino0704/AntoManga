@@ -25,6 +25,6 @@ pytokens==0.4.1
 pytz==2026.5
 qrcode==8.2
 six==1.17.0
-sqlparse==0.6.0
+sqlparse==0.6.1
 typing_extensions==4.16.0
 tzdata==2026.5
