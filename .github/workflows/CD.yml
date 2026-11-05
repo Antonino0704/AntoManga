@@ -12,6 +12,9 @@ on:
             - "!src/frontend/index.html"
             - "!src/frontend/README.md"
             - "!src/frontend/.gitignore"
+            - "!src/frontend/src/mocks/**"
+            - "!src/frontend/src/tests/**"
+            - "!src/frontend/vitest.config.mts"
 
 jobs:
     build:
