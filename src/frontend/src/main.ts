@@ -15,12 +15,12 @@ app.use(VueCookies);
 app.use(pinia);
 app.use(i18n);
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to) => {
 	const store = useUserStore();
 	if (!store.loaded) await store.userMe();
 
-	if (to.meta.requiresAuth && !store.user.is_authenticated) return next('/not-found');
-	return next();
+	if (to.meta.requiresAuth && !store.user.is_authenticated) return '/not-found';
+	return true;
 });
 
 app.mount('#app');
