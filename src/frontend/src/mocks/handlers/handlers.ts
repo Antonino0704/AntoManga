@@ -21,7 +21,7 @@ export const restHandlers = [
 		// it's a fake url
 		return HttpResponse.json({ protectedErrorDetail: 'fake error' }, { status: 400 });
 	}),
-	http.get(`${baseEndpoint}${seriesData.next!.replace(/\S*\/api\//g, '')}`, () => {
+	http.get(`${seriesData.next}`, () => {
 		return HttpResponse.json(seriesData);
 	})
 ];

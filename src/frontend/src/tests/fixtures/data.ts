@@ -17,6 +17,6 @@ export const seriesFixture: Series = {
 export const seriesData: RequestObject = {
 	results: [{ ...seriesFixture, slug: 'test-get-series' }],
 	count: 0,
-	next: 'http://127.0.0.1/api/v0/series/?page=2',
+	next: '/api/v0/series/?page=2',
 	previous: null
 };
