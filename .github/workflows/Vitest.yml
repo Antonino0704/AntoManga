@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - src/frontend/src/tests/**
+      - src/frontend/src/mocks/**
 
 jobs:
     testCheck:
