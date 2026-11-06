@@ -1,13 +1,13 @@
 import { describe, expect, test } from 'vitest';
 import { checkDataStats, showErrors } from '@/utils/StatsErrorsChecks';
-import { seriesFixture } from './fixtures/data';
+import { createSeriesFixture } from './fixtures/data';
 import { i18n } from '@/i18n/i18n';
 
 const t = i18n.global.t;
 
 describe('tests Stats Errors Checks', () => {
 	test('works', () => {
-		const seriesTest = { ...seriesFixture };
+		const seriesTest = createSeriesFixture();
 
 		const response_checkDataStats = checkDataStats(seriesTest);
 		expect(response_checkDataStats).toBe(true);
@@ -18,7 +18,7 @@ describe('tests Stats Errors Checks', () => {
 
 describe('Stats Errors Checks for n_volumes | tests', () => {
 	test('tests n_volumes < 0', () => {
-		const seriesTest = { ...seriesFixture };
+		const seriesTest = createSeriesFixture();
 		seriesTest.n_volumes = 0;
 		seriesTest.volumes_bought = 0;
 		seriesTest.volumes_read = 0;
@@ -37,7 +37,7 @@ describe('Stats Errors Checks for n_volumes | tests', () => {
 
 describe('Stats Errors Checks for volumes_bought | tests', () => {
 	test('tests volumes_bought > n_volumes', () => {
-		const seriesTest = { ...seriesFixture };
+		const seriesTest = createSeriesFixture();
 		seriesTest.n_volumes = 0;
 		seriesTest.volumes_bought = 1;
 		seriesTest.volumes_read = 0;
@@ -56,7 +56,7 @@ describe('Stats Errors Checks for volumes_bought | tests', () => {
 
 describe('Stats Errors Checks for volumes_read | tests', () => {
 	test('tests volumes_read < 0', () => {
-		const seriesTest = { ...seriesFixture };
+		const seriesTest = createSeriesFixture();
 		seriesTest.volumes_read = -1;
 
 		const input = document.createElement('input');
@@ -70,7 +70,7 @@ describe('Stats Errors Checks for volumes_read | tests', () => {
 		expect(response_showErrors).toBe(t('common.errors.volReadNegative'));
 	});
 	test('tests volumes_read > volumes_bought', () => {
-		const seriesTest = { ...seriesFixture };
+		const seriesTest = createSeriesFixture();
 		seriesTest.n_volumes = 0;
 		seriesTest.volumes_bought = 1;
 		seriesTest.volumes_read = 1;
@@ -86,7 +86,7 @@ describe('Stats Errors Checks for volumes_read | tests', () => {
 		expect(response_showErrors).toBe(t('common.errors.volBoughtThanNVolumes'));
 	});
 	test('tests volumes_read > volumes_bought', () => {
-		const seriesTest = { ...seriesFixture };
+		const seriesTest = createSeriesFixture();
 		seriesTest.n_volumes = 0;
 		seriesTest.volumes_bought = 0;
 		seriesTest.volumes_read = 1;

@@ -1,22 +1,51 @@
-import type { Series, RequestObject } from '@/@types/interfaces';
+import type { Series, RequestObject, SeriesViewsetInstance } from '@/@types/interfaces';
 
-export const seriesFixture: Series = {
-	id: 1,
-	slug: 'test-slug',
-	purchased_at: '2026-09-10',
-	name: 'Test Series',
-	n_volumes: 1,
-	volumes_bought: 1,
-	volumes_read: 1,
-	is_discontinued: false,
-	publisher: '2',
-	typology: 1,
-	image: ''
-};
+export function createSeriesFixture(override: Partial<Series> = {}): Series {
+	return {
+		id: 1,
+		slug: 'test-slug',
+		purchased_at: '2026-09-10',
+		name: 'Test Series',
+		n_volumes: 1,
+		volumes_bought: 1,
+		volumes_read: 1,
+		is_discontinued: false,
+		publisher: '2',
+		typology: 1,
+		image: '',
+		...override
+	};
+}
 
-export const seriesData: RequestObject = {
-	results: [{ ...seriesFixture, slug: 'test-get-series' }],
-	count: 0,
-	next: '/api/v0/series/?page=2',
-	previous: null
-};
+export function createSeriesCompleteFixture(
+	override: Partial<SeriesViewsetInstance> = {}
+): SeriesViewsetInstance {
+	return {
+		id: 1,
+		slug: 'test-series-slug',
+		purchased_at: '2026-09-10',
+		typology_name: 'test type',
+		publisher_name: 'test publisher',
+		publisher_slug: 'test-publisher-slug',
+		name: 'Test series',
+		n_volumes: 1,
+		volumes_bought: 1,
+		volumes_read: 1,
+		is_discontinued: false,
+		publisher: '1',
+		typology: 1,
+		detail: '',
+		image: 'fake-image link',
+		...override
+	};
+}
+
+export function createRequestObject(override: Partial<RequestObject> = {}): RequestObject {
+	return {
+		results: [createSeriesFixture({ slug: 'test-get-series' })],
+		count: 0,
+		next: null,
+		previous: null,
+		...override
+	};
+}

@@ -13,7 +13,7 @@
 					</div>
 				</div>
 				<div>
-					<span class="badge rounded-pill me-2 placeholder"
+					<span id="counterBadge" class="badge rounded-pill me-2 placeholder"
 						>{{ series.length }} / {{ seriesLength }}</span
 					>
 				</div>
@@ -206,9 +206,9 @@ export default {
 		async setLayout() {
 			this.gridClick();
 			this.readReadyToReadCockie();
-			document.querySelectorAll('span')[1]!.className = 'badge rounded-pill text-bg-info me-2';
-			(this.$refs.spinner as InstanceType<typeof spinnerLoading>).finishLoading();
-			document.querySelector('#dNoneId')!.classList.remove('d-none');
+			document.querySelector('#counterBadge')?.classList.replace('placeholder', 'text-bg-info');
+			(this.$refs.spinner as InstanceType<typeof spinnerLoading>)?.finishLoading();
+			document.querySelector('#dNoneId')?.classList.remove('d-none');
 		},
 		mouseEnter(id: string) {
 			document

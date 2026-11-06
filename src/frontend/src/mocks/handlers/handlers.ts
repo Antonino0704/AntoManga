@@ -1,6 +1,16 @@
 import { http, HttpResponse } from 'msw';
 import { endpoints } from '../../utils/endpoints';
-import { seriesFixture, seriesData } from '../../tests/fixtures/data';
+import { createSeriesFixture, createRequestObject } from '../../tests/fixtures/data';
+
+const seriesFixture = createSeriesFixture();
+const seriesDataFixture = createRequestObject({
+	next: '/api/v0/series/?page=2',
+	results: [
+		createSeriesFixture({
+			image: 'fake-image'
+		})
+	]
+});
 
 const baseEndpoint = '/api/';
 
@@ -21,7 +31,7 @@ export const restHandlers = [
 		// it's a fake url
 		return HttpResponse.json({ protectedErrorDetail: 'fake error' }, { status: 400 });
 	}),
-	http.get(`${seriesData.next}`, () => {
-		return HttpResponse.json(seriesData);
+	http.get(`${seriesDataFixture.next}`, () => {
+		return HttpResponse.json(seriesDataFixture);
 	})
 ];
