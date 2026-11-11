@@ -1,4 +1,10 @@
-import type { Series, RequestObject, SeriesViewsetInstance } from '@/@types/interfaces';
+import type {
+	Series,
+	RequestObject,
+	SeriesViewsetInstance,
+	Type,
+	Publisher
+} from '@/@types/interfaces';
 
 export function createSeriesFixture(override: Partial<Series> = {}): Series {
 	return {
@@ -46,6 +52,25 @@ export function createRequestObject(override: Partial<RequestObject> = {}): Requ
 		count: 0,
 		next: null,
 		previous: null,
+		...override
+	};
+}
+
+export function createTypeFixture(override: Partial<Type> = {}): Type {
+	return {
+		id: 0,
+		name: 'type-test',
+		...override
+	};
+}
+
+export function createPublisherFixture(override: Partial<Publisher> = {}): Publisher {
+	return {
+		id: 0,
+		name: 'test pub',
+		slug: 'test-pub-slug',
+		description: 'test',
+		image: 'fake test pub image',
 		...override
 	};
 }

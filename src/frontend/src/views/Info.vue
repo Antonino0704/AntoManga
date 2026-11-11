@@ -19,7 +19,7 @@
 					From 2026-10-26 this is a open source project
 					<a class="bi bi-box-arrow-up-right" href="https://github.com/Antonino0704/AntoManga"></a>
 				</p>
-				<p>The Website isn't AI-generated, only license</p>
+				<p>The Website isn't AI-generated, only Terms Of Service</p>
 				<div class="form-floating">
 					<textarea
 						readonly
@@ -28,7 +28,7 @@
 						:value="license"
 					></textarea>
 					<label for="floatingTextarea2"
-						>LICENSE (partially AI-generated) <i class="bi bi-stars"></i>
+						>Terms Of Service (partially AI-generated) <i class="bi bi-stars"></i>
 					</label>
 				</div>
 			</div>

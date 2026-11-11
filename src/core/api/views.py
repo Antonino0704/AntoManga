@@ -30,10 +30,12 @@ class ReadVersionAPIView(APIView):
         )
 
 
-class GetLicenseView(APIView):
+class GetLicenseView(APIView):  # Actually, it gets the terms of service
 
     def get(self, request):
-        with open(f"{os.path.dirname(settings.BASE_DIR)}/LICENSE", "r") as license:
+        with open(
+            f"{os.path.dirname(settings.BASE_DIR)}/TermsOfService.md", "r"
+        ) as license:
             return Response(license.read())
 
 
