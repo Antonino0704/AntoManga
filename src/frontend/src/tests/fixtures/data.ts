@@ -3,7 +3,8 @@ import type {
 	RequestObject,
 	SeriesViewsetInstance,
 	Type,
-	Publisher
+	Publisher,
+	Label
 } from '@/@types/interfaces';
 
 export function createSeriesFixture(override: Partial<Series> = {}): Series {
@@ -71,6 +72,15 @@ export function createPublisherFixture(override: Partial<Publisher> = {}): Publi
 		slug: 'test-pub-slug',
 		description: 'test',
 		image: 'fake test pub image',
+		...override
+	};
+}
+
+export function createLabel(override: Partial<Label> = {}): Label {
+	return {
+		id: 1,
+		name: 'test label1',
+		color: 'red',
 		...override
 	};
 }

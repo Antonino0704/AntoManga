@@ -31,7 +31,10 @@ export const restHandlers = [
 		// it's a fake url
 		return HttpResponse.json({ protectedErrorDetail: 'fake error' }, { status: 400 });
 	}),
-	http.get(`${seriesDataFixture.next}`, () => {
-		return HttpResponse.json(seriesDataFixture);
+	http.get(`${baseEndpoint}${endpoints.series}`, ({ request }) => {
+		const url = new URL(request.url).searchParams;
+		if (url.get('page')) {
+			return HttpResponse.json(seriesDataFixture);
+		}
 	})
 ];
