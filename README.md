@@ -4,6 +4,10 @@ An website to save all owned manga, the site allows you manage (add, edit or del
 
 You can visit the site either anonymously or have an account so you can add your personal manga/novels (in which case you will only see your manga/novels)
 
+![Dynamic JSON Badge](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fantomanga.pythonanywhere.com%2Fapi%2Fv7%2Fversion%2F&query=%24.backendVersion&label=Backend&labelColor=darkblue&color=gray)
+![Dynamic JSON Badge](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fantomanga.pythonanywhere.com%2Fapi%2Fv7%2Fversion%2F&query=%24.frontendVersion&label=Frontend&labelColor=darkgreen&color=gray)
+
+
 [**Roadmap**](https://github.com/Antonino0704/AntoManga/blob/main/docs/ROADMAP.md)
 
 # Prerequisites
